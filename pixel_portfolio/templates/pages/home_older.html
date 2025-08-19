@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro Desktop Mockup</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000080;
+      font-family: monospace;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Desktop Icons */
+    .desktop-icon {
+      position: absolute;
+      width: 80px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .desktop-icon img {
+      width: 40px;
+      display: block;
+      margin: 0 auto 5px;
+    }
+    /* Taskbar */
+    .taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: #c0c0c0;
+      border-top: 2px outset white;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .start-button {
+      background: #c0c0c0;
+      border: 2px outset white;
+      padding: 4px 10px;
+      margin-right: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .taskbar-tabs {
+      flex: 1;
+      display: flex;
+      gap: 5px;
+    }
+    .taskbar-tab {
+      background: #c0c0c0;
+      border: 2px outset white;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+    .clock {
+      font-weight: bold;
+    }
+    /* Windows */
+    .window {
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      width: 400px;
+      height: 300px;
+      background: #e0e0e0;
+      border: 2px outset white;
+      display: flex;
+      flex-direction: column;
+    }
+    .window-header {
+      background: #000080;
+      color: white;
+      padding: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: move;
+    }
+    .window-content {
+      flex: 1;
+      background: white;
+      color: black;
+      padding: 10px;
+      overflow: auto;
+    }
+    .window-control {
+      cursor: pointer;
+      padding: 0 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Desktop Icons -->
+  <div class="desktop-icon" style="top:80px; left:80px;" onclick="openWindow('home')">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/home.png"/>
+    <span>Home</span>
+  </div>
+
+  <div class="desktop-icon" style="top:80px; left:180px;" onclick="openWindow('projects')">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/code.png"/>
+    <span>Projects</span>
+  </div>
+
+  <div class="desktop-icon" style="top:80px; left:280px;" onclick="openWindow('about')">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/info.png"/>
+    <span>About</span>
+  </div>
+
+  <div class="desktop-icon" style="top:80px; left:380px;" onclick="openWindow('contact')">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/contacts.png"/>
+    <span>Contact</span>
+  </div>
+
+  <!-- Taskbar -->
+  <div class="taskbar">
+    <div class="start-button" onclick="alert('Start menu coming soon!')">START</div>
+    <div class="taskbar-tabs" id="taskbarTabs"></div>
+    <div class="clock" id="clock">00:00</div>
+  </div>
+
+  <script>
+    let windowCount = 0;
+    let windows = {};
+
+    function openWindow(type) {
+      const id = "win" + (++windowCount);
+      const win = document.createElement("div");
+      win.className = "window";
+      win.id = id;
+
+      // Header
+      const header = document.createElement("div");
+      header.className = "window-header";
+      header.innerHTML = `<span>${type.toUpperCase()}</span><span class="window-control" onclick="closeWindow('${id}')">X</span>`;
+      win.appendChild(header);
+
+      // Content
+      const content = document.createElement("div");
+      content.className = "window-content";
+      content.innerHTML = "<p>Loading...</p>";
+      win.appendChild(content);
+
+      document.body.appendChild(win);
+      windows[id] = { type };
+
+      updateTaskbar();
+      makeDraggable(win, header);
+
+      // Fetch dynamic content from Django
+      fetch(`/${type}/`)
+        .then(res => res.text())
+        .then(html => {
+          content.innerHTML = html;
+        })
+        .catch(err => {
+          content.innerHTML = `<p style="color:red;">Error loading ${type}</p>`;
+          console.error(err);
+        });
+    }
+
+    function closeWindow(id) {
+      document.getElementById(id)?.remove();
+      delete windows[id];
+      updateTaskbar();
+    }
+
+    function updateTaskbar() {
+      const tabs = document.getElementById("taskbarTabs");
+      tabs.innerHTML = "";
+      Object.keys(windows).forEach(id => {
+        const tab = document.createElement("div");
+        tab.className = "taskbar-tab";
+        tab.innerText = windows[id].type;
+        tab.onclick = () => {
+          document.getElementById(id).style.zIndex = Date.now();
+        };
+        tabs.appendChild(tab);
+      });
+    }
+
+    function makeDraggable(win, header) {
+      let offsetX = 0, offsetY = 0, dragging = false;
+      header.onmousedown = e => {
+        dragging = true;
+        offsetX = e.clientX - win.offsetLeft;
+        offsetY = e.clientY - win.offsetTop;
+      };
+      document.onmousemove = e => {
+        if (dragging) {
+          win.style.left = (e.clientX - offsetX) + "px";
+          win.style.top = (e.clientY - offsetY) + "px";
+        }
+      };
+      document.onmouseup = () => dragging = false;
+    }
+
+    // Clock
+    setInterval(() => {
+      document.getElementById("clock").innerText =
+        new Date().toLocaleTimeString();
+    }, 1000);
+  </script>
+</body>
+</html>

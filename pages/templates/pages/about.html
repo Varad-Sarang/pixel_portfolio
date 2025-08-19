@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Profile - Pixel Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Retro PC Color Palette */
+            --retro-bg: #0a0a0a;
+            --retro-desktop: #000080;
+            --retro-taskbar: #c0c0c0;
+            --retro-window: #c0c0c0;
+            --retro-border: #808080;
+            --retro-text: #000000;
+            --retro-highlight: #ffffff;
+            --retro-shadow: #404040;
+            --retro-accent: #00ff00;
+            --retro-error: #ff0000;
+            --retro-warning: #ffff00;
+            --retro-info: #0080ff;
+            
+            /* Pixel Portfolio Colors */
+            --pixel-primary: #00ff88;
+            --pixel-secondary: #ff6b6b;
+            --pixel-accent: #4ecdc4;
+            --pixel-warning: #ffd73d;
+            --pixel-success: #51cf66;
+            --pixel-info: #339af0;
+            --pixel-border: #4a4a6a;
+            --pixel-text-dim: #a0a0a0;
+            --pixel-dark: #1a1a2e;
+            
+            /* Animation Variables */
+            --transition-fast: 0.1s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.4s ease;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+            background: var(--retro-desktop);
+            color: var(--retro-highlight);
+            line-height: 1.4;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CRT Monitor Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+                linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 2px 2px, 2px 2px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlines 0.1s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .nav-back a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--retro-taskbar);
+            color: var(--retro-text);
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            border: 3px outset var(--retro-highlight);
+            transition: all var(--transition-fast);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .nav-back a:hover {
+            border-style: inset;
+            background: var(--retro-highlight);
+            transform: scale(1.05);
+        }
+<style>
+    .profile-section {
+        padding: 4rem 0;
+        min-height: 100vh;
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .profile-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 2rem;
+        color: var(--pixel-primary);
+        margin-bottom: 1rem;
+        text-shadow: 0 0 15px var(--pixel-primary);
+    }
+
+    .profile-subtitle {
+        color: var(--pixel-text-dim);
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+
+    .avatar-container {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 2rem;
+        border: 3px solid var(--pixel-primary);
+        background: var(--pixel-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 48px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .avatar-container::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, var(--pixel-primary), var(--pixel-accent));
+        z-index: -1;
+        animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+        100% { transform: rotate(360deg); }
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .skill-category {
+        background: var(--retro-window);
+        padding: 2rem;
+        border: 3px outset var(--retro-highlight);
+        transition: all 0.3s ease;
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .skill-category:hover {
+        border-color: var(--pixel-primary);
+        transform: translateY(-5px);
+    }
+
+    .skill-category h3 {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 14px;
+        color: var(--pixel-accent);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .skill-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 14px;
+    }
+
+    .skill-bar {
+        width: 100px;
+        height: 10px;
+        background: var(--pixel-border);
+        border: 1px solid var(--pixel-primary);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .skill-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--pixel-primary), var(--pixel-accent));
+        transition: width 2s ease-out;
+        position: relative;
+    }
+
+    .skill-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .bio-section {
+        background: var(--retro-window);
+        padding: 3rem;
+        border: 3px outset var(--retro-highlight);
+        margin-bottom: 3rem;
+        position: relative;
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .bio-section::before {
+        content: "PLAYER_BIO.TXT";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: var(--pixel-bg);
+        padding: 0 1rem;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        color: var(--pixel-primary);
+    }
+
+    .bio-text {
+        line-height: 1.8;
+        font-size: 16px;
+        color: var(--pixel-text);
+    }
+
+    .education-timeline {
+        position: relative;
+        margin: 3rem 0;
+    }
+
+    .timeline-item {
+        background: var(--retro-window);
+        padding: 2rem;
+        border-left: 4px solid var(--retro-info);
+        margin-bottom: 2rem;
+        position: relative;
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 2rem;
+        width: 12px;
+        height: 12px;
+        background: var(--pixel-primary);
+        border: 2px solid var(--pixel-bg);
+    }
+
+    .achievement-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 3rem;
+    }
+
+    .badge {
+        font-family: 'VT323', monospace;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        background: var(--retro-window);
+        border: 2px outset var(--retro-highlight);
+        color: var(--retro-text);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .badge::before {
+        content: '🏆';
+        margin-right: 0.5rem;
+    }
+</style>
+
+<section class="profile-section">
+    <!-- Navigation Back to Home -->
+    
+    <div class="container">
+        <div class="profile-header">
+            <h1 class="profile-title typewriter" data-text="PLAYER PROFILE">PLAYER PROFILE</h1>
+            <p class="profile-subtitle">BCA Graduate | Aspiring Full-Stack Developer</p>
+            
+            <div class="avatar-container">
+                🧑‍💻
+            </div>
+        </div>
+
+        <div class="bio-section pixel-card">
+            <p class="bio-text">
+                Greetings, fellow adventurer! I'm a passionate BCA graduate with a quest for creating innovative web solutions. 
+                My journey through the digital realm has equipped me with diverse technical skills and an insatiable curiosity 
+                for emerging technologies. From crafting tourism websites to exploring full-stack development, 
+                I'm always ready for the next coding challenge!
+            </p>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skill-category pixel-card">
+                <h3>PROGRAMMING LANGUAGES</h3>
+                {% for skill in skills %}
+                    {% if skill.category == "programming" %}
+                    <div class="skill-item">
+                        <span>{{ skill.name }} {{ skill.icon }}</span>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: {{ skill.proficiency }}%"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="skill-category pixel-card">
+                <h3>WEB TECHNOLOGIES</h3>
+                {% for skill in skills %}
+                    {% if skill.category == "web" %}
+                    <div class="skill-item">
+                        <span>{{ skill.name }} {{ skill.icon }}</span>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: {{ skill.proficiency }}%"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="skill-category pixel-card">
+                <h3>DATABASES</h3>
+                {% for skill in skills %}
+                    {% if skill.category == "database" %}
+                    <div class="skill-item">
+                        <span>{{ skill.name }} {{ skill.icon }}</span>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: {{ skill.proficiency }}%"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="skill-category pixel-card">
+                <h3>TOOLS & FRAMEWORKS</h3>
+                {% for skill in skills %}
+                    {% if skill.category == "tools" %}
+                    <div class="skill-item">
+                        <span>{{ skill.name }} {{ skill.icon }}</span>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: {{ skill.proficiency }}%"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="education-timeline">
+            <h2 class="pixel-font" style="text-align: center; margin-bottom: 2rem; color: var(--pixel-primary);">EDUCATION QUEST LOG</h2>
+            
+            {% for edu in education %}
+            <div class="timeline-item pixel-card">
+                <h3 class="pixel-font" style="color: var(--pixel-accent); margin-bottom: 1rem;">{{ edu.degree }}</h3>
+                <p style="color: var(--pixel-text-dim); margin-bottom: 0.5rem;">{{ edu.start_year }} - {{ edu.end_year }}</p>
+                <p>{{ edu.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="achievement-badges">
+            <div class="badge">BCA GRADUATE</div>
+            <div class="badge">WEB DEVELOPER</div>
+            <div class="badge">PROBLEM SOLVER</div>
+            <div class="badge">TEAM PLAYER</div>
+            <div class="badge">QUICK LEARNER</div>
+        </div>
+    </div>
+</section>
+
+    <script>
+        // Add some retro PC effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add CRT scanlines effect
+            const body = document.body;
+            body.style.position = 'relative';
+            
+            const scanlines = document.createElement('div');
+            scanlines.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+                background-size: 2px 2px;
+                pointer-events: none;
+                z-index: 9999;
+                animation: scanlines 0.1s linear infinite;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes scanlines {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(2px); }
+                }
+            `;
+            
+            document.head.appendChild(style);
+            body.appendChild(scanlines);
+        });
+    </script>
+</body>
+</html>

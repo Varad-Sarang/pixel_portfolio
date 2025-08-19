@@ -1,0 +1,1378 @@
+/* RETRO PC DESKTOP STYLES - static/css/style.css */
+
+/* Additional Retro PC Enhancements */
+.window {
+    box-shadow: 
+        4px 4px 8px rgba(0,0,0,0.5),
+        inset 1px 1px 0 var(--retro-highlight),
+        inset -1px -1px 0 var(--retro-shadow);
+}
+
+.window-header {
+    background: linear-gradient(180deg, var(--retro-info) 0%, #0066cc 100%);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+.window-control {
+    border: 1px outset var(--retro-highlight);
+    background: linear-gradient(135deg, var(--retro-highlight) 0%, #e0e0e0 100%);
+    color: var(--retro-text);
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.window-control:hover {
+    background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
+    border-style: inset;
+}
+
+.window-control.close:hover {
+    background: linear-gradient(135deg, #ff6666 0%, #cc0000 100%);
+    color: var(--retro-highlight);
+}
+
+/* Enhanced Desktop Icons */
+.desktop-icon {
+    text-align: center;
+    padding: 5px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: all var(--transition-normal);
+}
+
+.desktop-icon:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: var(--retro-accent);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(0,255,0,0.5);
+}
+
+.desktop-icon.selected {
+    background: rgba(0,255,0,0.3);
+    border-color: var(--retro-accent);
+    box-shadow: 0 0 15px rgba(0,255,0,0.4);
+}
+
+/* Enhanced Taskbar */
+.taskbar {
+    background: linear-gradient(180deg, var(--retro-highlight) 0%, var(--retro-taskbar) 100%);
+    box-shadow: 
+        inset 1px 1px 0 var(--retro-highlight),
+        inset -1px -1px 0 var(--retro-shadow);
+}
+
+.start-button {
+    background: linear-gradient(180deg, var(--retro-highlight) 0%, var(--retro-taskbar) 100%);
+    border: 2px outset var(--retro-highlight);
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+.start-button:hover {
+    background: linear-gradient(180deg, #f0f0f0 0%, #d0d0d0 100%);
+    border-style: inset;
+    transform: translateY(1px);
+}
+
+.taskbar-tab {
+    background: linear-gradient(180deg, var(--retro-highlight) 0%, var(--retro-taskbar) 100%);
+    border: 2px outset var(--retro-highlight);
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+.taskbar-tab:hover {
+    background: linear-gradient(180deg, #f0f0f0 0%, #d0d0d0 100%);
+    border-style: inset;
+}
+
+.taskbar-tab.active {
+    background: linear-gradient(180deg, var(--retro-info) 0%, #0066cc 100%);
+    color: var(--retro-highlight);
+    border-style: inset;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+/* Enhanced Start Menu */
+.start-menu {
+    background: linear-gradient(180deg, var(--retro-highlight) 0%, var(--retro-window) 100%);
+    box-shadow: 
+        4px 4px 8px rgba(0,0,0,0.5),
+        inset 1px 1px 0 var(--retro-highlight),
+        inset -1px -1px 0 var(--retro-shadow);
+}
+
+.start-menu-header {
+    background: linear-gradient(180deg, var(--retro-info) 0%, #0066cc 100%);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+.start-menu-item {
+    border-bottom: 1px solid var(--retro-border);
+    transition: all var(--transition-fast);
+}
+
+.start-menu-item:hover {
+    background: linear-gradient(90deg, var(--retro-info) 0%, #0066cc 100%);
+    color: var(--retro-highlight);
+    padding-left: 20px;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+/* Enhanced Context Menu */
+.context-menu {
+    background: linear-gradient(180deg, var(--retro-highlight) 0%, var(--retro-window) 100%);
+    box-shadow: 
+        4px 4px 8px rgba(0,0,0,0.5),
+        inset 1px 1px 0 var(--retro-highlight),
+        inset -1px -1px 0 var(--retro-shadow);
+}
+
+.context-menu-item {
+    border-bottom: 1px solid var(--retro-border);
+    transition: all var(--transition-fast);
+}
+
+.context-menu-item:hover {
+    background: linear-gradient(90deg, var(--retro-info) 0%, #0066cc 100%);
+    color: var(--retro-highlight);
+    padding-left: 15px;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+/* Enhanced Notifications */
+.notification {
+    background: linear-gradient(180deg, var(--retro-highlight) 0%, var(--retro-window) 100%);
+    border: 2px outset var(--retro-highlight);
+    box-shadow: 
+        4px 4px 8px rgba(0,0,0,0.5),
+        inset 1px 1px 0 var(--retro-highlight),
+        inset -1px -1px 0 var(--retro-shadow);
+}
+
+.notification.success {
+    border-left: 5px solid var(--retro-accent);
+}
+
+.notification.error {
+    border-left: 5px solid var(--retro-error);
+}
+
+.notification.info {
+    border-left: 5px solid var(--retro-info);
+}
+
+/* Enhanced Loading Screen */
+.loading-screen {
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(0,255,0,0.1) 0%, transparent 70%),
+        var(--retro-bg);
+}
+
+.loading-logo {
+    animation: pulse 2s infinite, glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px var(--retro-accent); }
+    to { text-shadow: 0 0 30px var(--retro-accent), 0 0 40px var(--retro-accent); }
+}
+
+.loading-bar {
+    border: 2px inset var(--retro-highlight);
+    background: var(--retro-window);
+    box-shadow: 
+        inset 1px 1px 0 var(--retro-shadow),
+        inset -1px -1px 0 var(--retro-highlight);
+}
+
+.loading-progress {
+    background: linear-gradient(90deg, var(--retro-accent) 0%, #00cc00 100%);
+    box-shadow: 
+        inset 0 0 10px rgba(0,255,0,0.5),
+        0 0 10px rgba(0,255,0,0.3);
+}
+
+/* Enhanced Desktop Background */
+.desktop {
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(0,255,0,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0,0,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%),
+        var(--retro-desktop);
+    background-size: 100% 100%;
+}
+
+/* Floating Elements Animation */
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 0.3;
+    }
+    50% { 
+        transform: translateY(-20px) rotate(180deg); 
+        opacity: 0.7;
+    }
+}
+
+/* Enhanced CRT Effects */
+body::before {
+    background: 
+        linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+        linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+        radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.02) 100%);
+    background-size: 2px 2px, 2px 2px, 100% 100%;
+    animation: scanlines 0.1s linear infinite, flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.98; }
+}
+
+/* Enhanced Window Content */
+.window-content {
+    background: var(--retro-window);
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.window-content h2 {
+    color: var(--retro-info);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--retro-border);
+    padding-bottom: 10px;
+}
+
+.window-content p {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border-left: 3px solid var(--retro-accent);
+    border-radius: 3px;
+}
+
+/* Enhanced System Tray */
+.system-tray {
+    border-left: 2px solid var(--retro-shadow);
+    padding-left: 15px;
+}
+
+.clock {
+    background: linear-gradient(180deg, var(--retro-highlight) 0%, var(--retro-window) 100%);
+    border: 2px inset var(--retro-shadow);
+    box-shadow: 
+        inset 1px 1px 0 var(--retro-highlight),
+        inset -1px -1px 0 var(--retro-shadow);
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+/* Enhanced Focus States */
+.window:focus-within {
+    box-shadow: 
+        0 0 0 3px var(--retro-accent),
+        4px 4px 8px rgba(0,0,0,0.5),
+        inset 1px 1px 0 var(--retro-highlight),
+        inset -1px -1px 0 var(--retro-shadow);
+}
+
+/* Enhanced Hover Effects */
+.desktop-icon:hover img {
+    filter: drop-shadow(0 0 10px var(--retro-accent)) brightness(1.2);
+}
+
+.desktop-icon:hover span {
+    color: var(--retro-accent);
+    text-shadow: 0 0 10px var(--retro-accent);
+}
+
+/* Enhanced Transitions */
+.window, .start-menu, .context-menu, .notification {
+    transition: all var(--transition-normal), box-shadow var(--transition-fast);
+}
+
+/* ===== MOBILE OPTIMIZATION STYLES ===== */
+
+/* Mobile-specific CSS Variables */
+:root {
+    --mobile-safe-area-top: env(safe-area-inset-top, 0px);
+    --mobile-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --mobile-safe-area-left: env(safe-area-inset-left, 0px);
+    --mobile-safe-area-right: env(safe-area-inset-right, 0px);
+    
+    /* iOS-style colors for mobile */
+    --ios-primary: #007AFF;
+    --ios-secondary: #5856D6;
+    --ios-success: #34C759;
+    --ios-warning: #FF9500;
+    --ios-error: #FF3B30;
+    --ios-background: #F2F2F7;
+    --ios-card: #FFFFFF;
+    --ios-text: #000000;
+    --ios-text-secondary: #8E8E93;
+    --ios-border: #C6C6C8;
+    
+    /* Mobile touch targets */
+    --mobile-touch-target: 44px;
+    --mobile-icon-size: 60px;
+    --mobile-spacing: 16px;
+    --mobile-border-radius: 12px;
+    --mobile-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --mobile-shadow-large: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* Mobile Detection and Base Styles */
+@media (max-width: 768px) {
+    /* Disable hover effects on mobile */
+    *:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Mobile-optimized body */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--ios-background);
+        color: var(--ios-text);
+        line-height: 1.4;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+        padding-top: var(--mobile-safe-area-top);
+        padding-bottom: var(--mobile-safe-area-bottom);
+        padding-left: var(--mobile-safe-area-left);
+        padding-right: var(--mobile-safe-area-right);
+    }
+    
+    /* Disable CRT effects on mobile for performance */
+    body::before {
+        display: none;
+    }
+    
+    /* Mobile-optimized desktop background */
+    .desktop {
+        background: var(--ios-background);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Mobile floating particles */
+    .particle {
+        display: none; /* Disable for performance */
+    }
+    
+    /* Mobile-optimized desktop icons */
+    .desktop-icon {
+        width: var(--mobile-icon-size);
+        height: var(--mobile-icon-size);
+        min-width: var(--mobile-icon-size);
+        min-height: var(--mobile-icon-size);
+        border-radius: var(--mobile-border-radius);
+        background: var(--ios-card);
+        border: 1px solid var(--ios-border);
+        box-shadow: var(--mobile-shadow);
+        padding: 8px;
+        margin: var(--mobile-spacing);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .desktop-icon:active {
+        transform: scale(0.95);
+        background: var(--ios-background);
+    }
+    
+    .desktop-icon img {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 4px;
+        filter: none;
+    }
+    
+    .desktop-icon span {
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--ios-text);
+        text-align: center;
+        line-height: 1.2;
+        max-width: 100%;
+        word-wrap: break-word;
+        text-shadow: none;
+    }
+    
+    /* Mobile desktop layout */
+    .desktop-icons-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(var(--mobile-icon-size), 1fr));
+        gap: var(--mobile-spacing);
+        padding: var(--mobile-spacing);
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    
+    /* Mobile-optimized taskbar */
+    .taskbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: var(--ios-card);
+        border-top: 1px solid var(--ios-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--mobile-spacing);
+        padding-bottom: var(--mobile-safe-area-bottom);
+        box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+    
+    .start-button {
+        background: var(--ios-primary);
+        color: white;
+        border: none;
+        border-radius: var(--mobile-border-radius);
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        min-height: var(--mobile-touch-target);
+        box-shadow: var(--mobile-shadow);
+    }
+    
+    .start-button:active {
+        transform: scale(0.98);
+        background: #0056CC;
+    }
+    
+    .taskbar-tabs {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
+        margin: 0 var(--mobile-spacing);
+    }
+    
+    .taskbar-tab {
+        background: var(--ios-background);
+        color: var(--ios-text);
+        border: 1px solid var(--ios-border);
+        border-radius: var(--mobile-border-radius);
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        min-width: 80px;
+        text-align: center;
+        white-space: nowrap;
+        min-height: var(--mobile-touch-target);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .taskbar-tab.active {
+        background: var(--ios-primary);
+        color: white;
+        border-color: var(--ios-primary);
+    }
+    
+    .taskbar-tab:active {
+        transform: scale(0.98);
+    }
+    
+    .system-tray {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .clock {
+        background: var(--ios-background);
+        color: var(--ios-text);
+        border: 1px solid var(--ios-border);
+        border-radius: var(--mobile-border-radius);
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: 600;
+        min-height: var(--mobile-touch-target);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Mobile-optimized start menu */
+    .start-menu {
+        position: fixed;
+        bottom: 60px;
+        left: var(--mobile-spacing);
+        right: var(--mobile-spacing);
+        background: var(--ios-card);
+        border-radius: var(--mobile-border-radius);
+        box-shadow: var(--mobile-shadow-large);
+        z-index: 2000;
+        max-height: 70vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid var(--ios-border);
+    }
+    
+    .start-menu-header {
+        background: var(--ios-primary);
+        color: white;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+        border-radius: var(--mobile-border-radius) var(--mobile-border-radius) 0 0;
+        border-bottom: 1px solid var(--ios-border);
+    }
+    
+    .start-menu-item {
+        padding: 16px;
+        border-bottom: 1px solid var(--ios-border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 16px;
+        font-weight: 500;
+        min-height: var(--mobile-touch-target);
+        transition: background-color 0.2s ease;
+    }
+    
+    .start-menu-item:active {
+        background: var(--ios-background);
+    }
+    
+    .start-menu-item:last-child {
+        border-bottom: none;
+    }
+    
+    /* Mobile-optimized windows */
+    .window {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 60px;
+        background: var(--ios-card);
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        max-width: 100vw;
+        max-height: calc(100vh - 60px);
+    }
+    
+    .window-header {
+        background: var(--ios-primary);
+        color: white;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 0;
+        border-bottom: 1px solid var(--ios-border);
+    }
+    
+    .window-controls {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .window-control {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+        min-height: var(--mobile-touch-target);
+        min-width: var(--mobile-touch-target);
+    }
+    
+    .window-control:active {
+        background: rgba(255,255,255,0.3);
+        transform: scale(0.95);
+    }
+    
+    .window-control.close:active {
+        background: var(--ios-error);
+    }
+    
+    .window-content {
+        flex: 1;
+        padding: var(--mobile-spacing);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: var(--ios-card);
+        color: var(--ios-text);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    
+    .window-content h1 {
+        color: var(--ios-text);
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        margin-top: 0;
+    }
+    
+    .window-content h2 {
+        color: var(--ios-text);
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        margin-top: 24px;
+        border-bottom: 1px solid var(--ios-border);
+        padding-bottom: 8px;
+    }
+    
+    .window-content p {
+        margin-bottom: 12px;
+        padding: 0;
+        background: none;
+        border-left: none;
+        border-radius: 0;
+        color: var(--ios-text-secondary);
+    }
+    
+    .window-content .btn {
+        background: var(--ios-primary);
+        color: white;
+        border: none;
+        border-radius: var(--mobile-border-radius);
+        padding: 12px 20px;
+        margin: 8px 8px 8px 0;
+        font-size: 16px;
+        font-weight: 600;
+        min-height: var(--mobile-touch-target);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: var(--mobile-shadow);
+    }
+    
+    .window-content .btn:active {
+        transform: scale(0.98);
+        background: #0056CC;
+    }
+    
+    .window-content .btn.primary {
+        background: var(--ios-primary);
+        color: white;
+    }
+    
+    /* Mobile notifications */
+    .notification {
+        position: fixed;
+        top: calc(var(--mobile-safe-area-top) + 16px);
+        left: var(--mobile-spacing);
+        right: var(--mobile-spacing);
+        background: var(--ios-card);
+        border: 1px solid var(--ios-border);
+        border-radius: var(--mobile-border-radius);
+        padding: 16px;
+        box-shadow: var(--mobile-shadow-large);
+        z-index: 4000;
+        transform: translateY(-100px);
+        transition: transform 0.3s ease;
+        max-width: none;
+    }
+    
+    .notification.show {
+        transform: translateY(0);
+    }
+    
+    .notification.success {
+        border-left: 4px solid var(--ios-success);
+    }
+    
+    .notification.error {
+        border-left: 4px solid var(--ios-error);
+    }
+    
+    .notification.info {
+        border-left: 4px solid var(--ios-primary);
+    }
+    
+    /* Mobile loading screen */
+    .loading-screen {
+        background: var(--ios-background);
+        color: var(--ios-text);
+        padding: var(--mobile-spacing);
+    }
+    
+    .loading-logo {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--ios-primary);
+        text-shadow: none;
+        animation: none;
+    }
+    
+    .loading-bar {
+        width: 100%;
+        max-width: 300px;
+        height: 8px;
+        border: none;
+        background: var(--ios-border);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 16px 0;
+    }
+    
+    .loading-progress {
+        height: 100%;
+        background: var(--ios-primary);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        box-shadow: none;
+    }
+    
+    .loading-text {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 16px;
+        color: var(--ios-text-secondary);
+        text-align: center;
+    }
+    
+    /* Mobile debug panel */
+    .debug-panel {
+        position: fixed;
+        top: calc(var(--mobile-safe-area-top) + 16px);
+        right: var(--mobile-spacing);
+        background: var(--ios-card);
+        color: var(--ios-text);
+        padding: 12px;
+        border-radius: var(--mobile-border-radius);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 12px;
+        z-index: 5000;
+        max-width: 200px;
+        border: 1px solid var(--ios-border);
+        box-shadow: var(--mobile-shadow);
+    }
+    
+    .debug-panel h4 {
+        color: var(--ios-primary);
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .debug-panel .status {
+        margin: 4px 0;
+        font-size: 11px;
+    }
+    
+    .debug-panel .status.ok {
+        color: var(--ios-success);
+    }
+    
+    .debug-panel .status.error {
+        color: var(--ios-error);
+    }
+    
+    .debug-panel .status.warning {
+        color: var(--ios-warning);
+    }
+    
+    /* Mobile fallback content */
+    .fallback-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: var(--ios-text);
+        z-index: 10000;
+        display: none;
+        background: var(--ios-card);
+        padding: 24px;
+        border-radius: var(--mobile-border-radius);
+        border: 1px solid var(--ios-border);
+        box-shadow: var(--mobile-shadow-large);
+        max-width: 90vw;
+    }
+    
+    .fallback-content.show {
+        display: block;
+    }
+    
+    .fallback-content h1 {
+        color: var(--ios-primary);
+        margin-bottom: 16px;
+        font-size: 24px;
+        font-weight: 700;
+    }
+    
+    .fallback-content p {
+        margin-bottom: 12px;
+        font-size: 16px;
+        color: var(--ios-text-secondary);
+    }
+    
+    .fallback-content button {
+        padding: 12px 20px;
+        margin: 8px;
+        background: var(--ios-primary);
+        color: white;
+        border: none;
+        border-radius: var(--mobile-border-radius);
+        cursor: pointer;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        min-height: var(--mobile-touch-target);
+        transition: all 0.2s ease;
+    }
+    
+    .fallback-content button:active {
+        transform: scale(0.98);
+        background: #0056CC;
+    }
+    
+    /* Mobile-specific animations */
+    @keyframes mobileSlideIn {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes mobileSlideOut {
+        from {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes mobileFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    /* Mobile touch feedback */
+    .mobile-touch-feedback {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,122,255,0.1);
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.1s ease;
+        pointer-events: none;
+    }
+    
+    .mobile-touch-feedback.active {
+        opacity: 1;
+    }
+    
+    /* Mobile scroll indicators */
+    .mobile-scroll-indicator {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background: var(--ios-border);
+        border-radius: 2px;
+        opacity: 0.6;
+    }
+    
+    /* Mobile status bar */
+    .mobile-status-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-safe-area-top);
+        background: var(--ios-primary);
+        z-index: 9999;
+    }
+    
+    /* Mobile home indicator area */
+    .mobile-home-indicator {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-safe-area-bottom);
+        background: var(--ios-card);
+        z-index: 9999;
+    }
+    
+    /* Mobile context menu */
+    .context-menu {
+        position: fixed;
+        bottom: 60px;
+        left: var(--mobile-spacing);
+        right: var(--mobile-spacing);
+        background: var(--ios-card);
+        border-radius: var(--mobile-border-radius);
+        box-shadow: var(--mobile-shadow-large);
+        z-index: 2000;
+        border: 1px solid var(--ios-border);
+        animation: mobileSlideIn 0.3s ease;
+    }
+    
+    .context-menu-item {
+        padding: 16px;
+        border-bottom: 1px solid var(--ios-border);
+        font-size: 16px;
+        font-weight: 500;
+        min-height: var(--mobile-touch-target);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .context-menu-item:active {
+        background: var(--ios-background);
+    }
+    
+    .context-menu-item:last-child {
+        border-bottom: none;
+    }
+    
+    /* Mobile-specific utility classes */
+    .mobile-hidden {
+        display: none !important;
+    }
+    
+    .mobile-visible {
+        display: block !important;
+    }
+    
+    .mobile-text-center {
+        text-align: center !important;
+    }
+    
+    .mobile-full-width {
+        width: 100% !important;
+    }
+    
+    .mobile-full-height {
+        height: 100% !important;
+    }
+    
+    /* Mobile performance optimizations */
+    .mobile-reduce-motion * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    /* Mobile accessibility */
+    .mobile-focus-visible:focus-visible {
+        outline: 2px solid var(--ios-primary);
+        outline-offset: 2px;
+    }
+    
+    /* Mobile Chrome specific optimizations */
+    @supports (-webkit-appearance: none) {
+        .mobile-chrome-optimized {
+            -webkit-appearance: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+    }
+}
+
+/* Tablet-specific optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .desktop-icon {
+        width: 80px;
+        height: 100px;
+    }
+    
+    .desktop-icon img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .desktop-icon span {
+        font-size: 11px;
+    }
+    
+    .window {
+        min-width: 400px;
+        min-height: 300px;
+        max-width: 80vw;
+        max-height: 70vh;
+    }
+    
+    .start-menu {
+        width: 300px;
+    }
+}
+
+/* Large mobile devices (iPhone Plus, etc.) */
+@media (min-width: 414px) and (max-width: 768px) {
+    .desktop-icons-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .window-content {
+        font-size: 18px;
+    }
+    
+    .window-content h1 {
+        font-size: 28px;
+    }
+    
+    .window-content h2 {
+        font-size: 24px;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 375px) {
+    .desktop-icons-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .desktop-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        min-height: 50px;
+    }
+    
+    .desktop-icon img {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .desktop-icon span {
+        font-size: 8px;
+    }
+    
+    .window-content {
+        font-size: 14px;
+        padding: 12px;
+    }
+    
+    .window-content h1 {
+        font-size: 20px;
+    }
+    
+    .window-content h2 {
+        font-size: 18px;
+    }
+    
+    .taskbar {
+        height: 50px;
+    }
+    
+    .start-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .taskbar-tab {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 60px;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+    .taskbar {
+        height: 50px;
+    }
+    
+    .window {
+        bottom: 50px;
+        max-height: calc(100vh - 50px);
+    }
+    
+    .start-menu {
+        bottom: 50px;
+        max-height: 60vh;
+    }
+    
+    .desktop-icons-container {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    .desktop-icon {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
+        min-height: 45px;
+    }
+    
+    .desktop-icon img {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .desktop-icon span {
+        font-size: 7px;
+    }
+}
+
+/* High DPI mobile displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .desktop-icon img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    
+    .window-content {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Mobile Chrome specific features */
+@media screen and (max-width: 768px) {
+    /* Enable pull-to-refresh visual feedback */
+    .mobile-pull-refresh {
+        overscroll-behavior-y: contain;
+    }
+    
+    /* Optimize for mobile Chrome's viewport */
+    @supports (height: 100dvh) {
+        .window {
+            max-height: calc(100dvh - 60px);
+        }
+        
+        .start-menu {
+            max-height: 70dvh;
+        }
+    }
+    
+    /* Mobile Chrome's address bar handling */
+    @supports (height: 100dvh) {
+        body {
+            height: 100dvh;
+        }
+        
+        .desktop {
+            height: 100dvh;
+        }
+    }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .desktop-icon {
+        width: 60px;
+        height: 80px;
+    }
+    
+    .desktop-icon img {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .desktop-icon span {
+        font-size: 10px;
+    }
+    
+    .window {
+        min-width: 250px;
+        min-height: 150px;
+        max-width: 90vw;
+        max-height: 80vh;
+    }
+    
+    .start-menu {
+        width: 200px;
+    }
+    
+    .taskbar-tab {
+        min-width: 80px;
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+}
+
+/* Enhanced Print Styles */
+@media print {
+    .taskbar, .desktop-icon, .start-menu, .context-menu, .loading-screen {
+        display: none;
+    }
+    
+    body {
+        background: white;
+        color: black;
+        overflow: visible;
+    }
+    
+    .window {
+        position: static;
+        box-shadow: none;
+        border: 1px solid black;
+        margin: 20px 0;
+    }
+    
+    .window-content {
+        background: white;
+        color: black;
+    }
+}
+
+/* Enhanced Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (prefers-contrast: high) {
+    :root {
+        --retro-accent: #00ff00;
+        --retro-error: #ff0000;
+        --retro-warning: #ffff00;
+        --retro-info: #0080ff;
+        --retro-text: #000000;
+        --retro-highlight: #ffffff;
+    }
+}
+
+/* Enhanced Custom Scrollbar */
+.window-content::-webkit-scrollbar {
+    width: 12px;
+}
+
+.window-content::-webkit-scrollbar-track {
+    background: var(--retro-shadow);
+    border: 1px solid var(--retro-border);
+}
+
+.window-content::-webkit-scrollbar-thumb {
+    background: var(--retro-highlight);
+    border: 1px outset var(--retro-highlight);
+    border-radius: 2px;
+}
+
+.window-content::-webkit-scrollbar-thumb:hover {
+    background: var(--retro-accent);
+}
+
+/* Enhanced Selection */
+::selection {
+    background: var(--retro-accent);
+    color: var(--retro-text);
+}
+
+::-moz-selection {
+    background: var(--retro-accent);
+    color: var(--retro-text);
+}
+
+/* Enhanced Focus Outline */
+*:focus {
+    outline: 2px solid var(--retro-accent);
+    outline-offset: 2px;
+}
+
+/* Enhanced Button States */
+.start-button:active,
+.taskbar-tab:active,
+.window-control:active {
+    transform: translateY(1px);
+    border-style: inset;
+}
+
+/* Enhanced Icon States */
+.desktop-icon:active {
+    transform: scale(0.95);
+}
+
+/* Enhanced Window States */
+.window.minimized {
+    transform: scale(0.1);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.window.maximized {
+    transition: all var(--transition-slow);
+}
+
+/* Enhanced Animation Performance */
+.window,
+.desktop-icon,
+.taskbar-tab {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* Enhanced Loading States */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - Pixel Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Retro PC Color Palette */
+            --retro-bg: #0a0a0a;
+            --retro-desktop: #000080;
+            --retro-taskbar: #c0c0c0;
+            --retro-window: #c0c0c0;
+            --retro-border: #808080;
+            --retro-text: #000000;
+            --retro-highlight: #ffffff;
+            --retro-shadow: #404040;
+            --retro-accent: #00ff00;
+            --retro-error: #ff0000;
+            --retro-warning: #ffff00;
+            --retro-info: #0080ff;
+            
+            /* Pixel Portfolio Colors */
+            --pixel-primary: #00ff88;
+            --pixel-secondary: #ff6b6b;
+            --pixel-accent: #4ecdc4;
+            --pixel-warning: #ffd73d;
+            --pixel-success: #51cf66;
+            --pixel-info: #339af0;
+            --pixel-border: #4a4a6a;
+            --pixel-text-dim: #a0a0a0;
+            --pixel-dark: #1a1a2e;
+            --pixel-darker: #0f0f1a;
+            
+            /* Animation Variables */
+            --transition-fast: 0.1s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.4s ease;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+            background: var(--retro-desktop);
+            color: var(--retro-highlight);
+            line-height: 1.4;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CRT Monitor Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+                linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 2px 2px, 2px 2px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlines 0.1s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .nav-back a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--retro-taskbar);
+            color: var(--retro-text);
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            border: 3px outset var(--retro-highlight);
+            transition: all var(--transition-fast);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .nav-back a:hover {
+            border-style: inset;
+            background: var(--retro-highlight);
+            transform: scale(1.05);
+        }
+<style>
+    .project-detail-section {
+        padding: 4rem 0;
+        min-height: 100vh;
+    }
+
+    .project-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .project-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 2rem;
+        color: var(--pixel-primary);
+        margin-bottom: 1rem;
+        text-shadow: 0 0 15px var(--pixel-primary);
+        animation: glitch 3s infinite;
+    }
+
+    .project-subtitle {
+        color: var(--pixel-text-dim);
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-status {
+        display: inline-block;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        padding: 0.5rem 1rem;
+        border-radius: 0;
+        margin-bottom: 2rem;
+    }
+
+    .project-status.completed {
+        background: var(--retro-info);
+        color: var(--retro-highlight);
+        border: 2px outset var(--retro-highlight);
+        font-family: 'VT323', monospace;
+        font-size: 14px;
+        font-weight: bold;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .project-status.in-progress {
+        background: var(--pixel-warning);
+        color: var(--retro-text);
+        border: 2px outset var(--retro-highlight);
+        font-family: 'VT323', monospace;
+        font-size: 14px;
+        font-weight: bold;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .project-status.planned {
+        background: var(--pixel-accent);
+        color: var(--retro-text);
+        border: 2px outset var(--retro-highlight);
+        font-family: 'VT323', monospace;
+        font-size: 14px;
+        font-weight: bold;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .project-hero {
+        background: var(--retro-window);
+        border: 3px outset var(--retro-highlight);
+        padding: 3rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 6px 6px 15px rgba(0,0,0,0.7);
+    }
+
+    .project-hero::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, var(--pixel-primary), var(--pixel-accent));
+        z-index: -1;
+        animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+        100% { transform: rotate(360deg); }
+    }
+
+    .project-image {
+        width: 100%;
+        height: 300px;
+        background: var(--retro-shadow);
+        border: 3px outset var(--retro-highlight);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 64px;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: contrast(1.2) brightness(0.9);
+        transition: transform 0.3s ease;
+    }
+
+    .project-image:hover img {
+        transform: scale(1.05);
+    }
+
+    .project-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .project-main {
+        background: rgba(26, 26, 46, 0.8);
+        padding: 2rem;
+        border: 2px solid var(--pixel-border);
+        backdrop-filter: blur(10px);
+    }
+
+    .project-sidebar {
+        background: rgba(26, 26, 46, 0.8);
+        padding: 2rem;
+        border: 2px solid var(--pixel-border);
+        backdrop-filter: blur(10px);
+        height: fit-content;
+    }
+
+    .section-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 14px;
+        color: var(--pixel-accent);
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--pixel-accent);
+        padding-bottom: 0.5rem;
+    }
+
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .tech-tag {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        padding: 0.5rem 0.8rem;
+        background: var(--pixel-accent);
+        color: var(--pixel-dark);
+        border: 1px solid var(--pixel-accent);
+        transition: all 0.3s ease;
+    }
+
+    .tech-tag:hover {
+        background: var(--pixel-primary);
+        border-color: var(--pixel-primary);
+        transform: translateY(-2px);
+    }
+
+    .project-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .project-link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(78, 205, 196, 0.1);
+        border: 2px solid var(--pixel-accent);
+        color: var(--pixel-text);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+    }
+
+    .project-link:hover {
+        background: var(--pixel-accent);
+        color: var(--pixel-dark);
+        transform: translateX(10px);
+    }
+
+    .link-icon {
+        font-size: 20px;
+        width: 30px;
+        text-align: center;
+    }
+
+    .challenges-section {
+        background: rgba(26, 26, 46, 0.8);
+        padding: 2rem;
+        border: 2px solid var(--pixel-border);
+        margin-bottom: 3rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .challenge-item {
+        background: rgba(255, 107, 107, 0.1);
+        border-left: 4px solid var(--pixel-secondary);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .challenge-item::before {
+        content: "CHALLENGE: ";
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        color: var(--pixel-secondary);
+        position: absolute;
+        top: -8px;
+        left: 10px;
+        background: var(--pixel-bg);
+        padding: 0 0.5rem;
+    }
+
+    .achievements-section {
+        background: rgba(26, 26, 46, 0.8);
+        padding: 2rem;
+        border: 2px solid var(--pixel-border);
+        backdrop-filter: blur(10px);
+    }
+
+    .achievement-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(0, 255, 136, 0.1);
+        border: 1px solid var(--pixel-primary);
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .achievement-item:hover {
+        background: rgba(0, 255, 136, 0.2);
+        transform: translateX(10px);
+    }
+
+    .achievement-icon {
+        font-size: 24px;
+        width: 40px;
+        text-align: center;
+    }
+
+    .achievement-text {
+        flex: 1;
+    }
+
+    .achievement-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        color: var(--pixel-primary);
+        margin-bottom: 0.3rem;
+    }
+
+    .achievement-desc {
+        font-size: 12px;
+        color: var(--pixel-text-dim);
+    }
+
+    .back-button {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        .project-content {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .project-hero {
+            padding: 2rem 1rem;
+        }
+        
+        .project-image {
+            height: 200px;
+        }
+    }
+</style>
+
+    <!-- Navigation Back to Home -->
+    <div class="nav-back">
+        <a href="{% url 'pages:home' %}">🏠 BACK TO DESKTOP</a>
+    </div>
+
+<section class="project-detail-section">
+    <div class="container">
+        <div class="project-header">
+            <h1 class="project-title typewriter" data-text="PROJECT DETAILS">PROJECT DETAILS</h1>
+            <p class="project-subtitle">Detailed view of your completed quest</p>
+            <div class="project-status {{ project.status }}">{{ project.status|upper }}</div>
+        </div>
+
+        <div class="project-hero">
+            <div class="project-image">
+                {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                {% else %}
+                    {% if "tourism" in project.title|lower %}🏝️
+                    {% elif "portfolio" in project.title|lower %}💼
+                    {% elif "student" in project.title|lower %}📚
+                    {% elif "e-commerce" in project.title|lower %}🛒
+                    {% else %}💻{% endif %}
+                {% endif %}
+            </div>
+            <h2 style="font-family: 'Press Start 2P', monospace; font-size: 18px; color: var(--pixel-primary); margin-bottom: 1rem;">
+                {{ project.title|upper }}
+            </h2>
+            <p style="font-size: 16px; line-height: 1.8; color: var(--pixel-text);">
+                {{ project.description }}
+            </p>
+        </div>
+
+        <div class="project-content">
+            <div class="project-main">
+                <h3 class="section-title">QUEST OBJECTIVE</h3>
+                <p style="line-height: 1.8; margin-bottom: 2rem; color: var(--pixel-text);">
+                    {{ project.objective }}
+                </p>
+
+                <h3 class="section-title">TECHNICAL IMPLEMENTATION</p>
+                <p style="line-height: 1.8; margin-bottom: 2rem; color: var(--pixel-text);">
+                    {{ project.description }}
+                </p>
+
+                <div class="challenges-section">
+                    <h3 class="section-title">CHALLENGES OVERCOME</h3>
+                    <div class="challenge-item">
+                        <p>Implementing real-time ferry availability and booking system with conflict resolution</p>
+                    </div>
+                    <div class="challenge-item">
+                        <p>Designing responsive UI that works seamlessly across all devices and screen sizes</p>
+                    </div>
+                    <div class="challenge-item">
+                        <p>Integrating secure payment gateway while maintaining user experience</p>
+                    </div>
+                </div>
+
+                <div class="achievements-section">
+                    <h3 class="section-title">ACHIEVEMENTS UNLOCKED</h3>
+                    <div class="achievement-item">
+                        <span class="achievement-icon">🏆</span>
+                        <div class="achievement-text">
+                            <div class="achievement-title">FULL-STACK MASTERY</div>
+                            <div class="achievement-desc">Successfully built complete web application from database to UI</div>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <span class="achievement-icon">🔐</span>
+                        <div class="achievement-text">
+                            <div class="achievement-title">SECURITY EXPERT</div>
+                            <div class="achievement-desc">Implemented secure authentication and payment systems</div>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <span class="achievement-icon">📱</span>
+                        <div class="achievement-text">
+                            <div class="achievement-title">RESPONSIVE DESIGN</div>
+                            <div class="achievement-desc">Created mobile-first responsive design</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-sidebar">
+                <h3 class="section-title">TECH STACK</h3>
+                <div class="tech-stack">
+                    {% if "django" in project.description|lower %}<span class="tech-tag">DJANGO</span>{% endif %}
+                    {% if "python" in project.description|lower %}<span class="tech-tag">PYTHON</span>{% endif %}
+                    {% if "html" in project.description|lower %}<span class="tech-tag">HTML5</span>{% endif %}
+                    {% if "css" in project.description|lower %}<span class="tech-tag">CSS3</span>{% endif %}
+                    {% if "javascript" in project.description|lower %}<span class="tech-tag">JAVASCRIPT</span>{% endif %}
+                    {% if "bootstrap" in project.description|lower %}<span class="tech-tag">BOOTSTRAP</span>{% endif %}
+                    {% if "mysql" in project.description|lower %}<span class="tech-tag">MYSQL</span>{% endif %}
+                    {% if "postgresql" in project.description|lower %}<span class="tech-tag">POSTGRESQL</span>{% endif %}
+                    {% if "react" in project.description|lower %}<span class="tech-tag">REACT</span>{% endif %}
+                    {% if "php" in project.description|lower %}<span class="tech-tag">PHP</span>{% endif %}
+                    {% if "git" in project.description|lower %}<span class="tech-tag">GIT</span>{% endif %}
+                </div>
+
+                <h3 class="section-title">PROJECT LINKS</h3>
+                <div class="project-links">
+                    {% if project.live_demo %}
+                    <a href="{{ project.live_demo }}" class="project-link" target="_blank">
+                        <span class="link-icon">🌐</span>
+                        <span>LIVE DEMO</span>
+                    </a>
+                    {% endif %}
+                    {% if project.github_link %}
+                    <a href="{{ project.github_link }}" class="project-link" target="_blank">
+                        <span class="link-icon">📁</span>
+                        <span>SOURCE CODE</span>
+                    </a>
+                    {% endif %}
+                    <a href="#" class="project-link">
+                        <span class="link-icon">📖</span>
+                        <span>DOCUMENTATION</span>
+                    </a>
+                </div>
+
+                <h3 class="section-title">PROJECT STATS</h3>
+                <div style="color: var(--pixel-text-dim); font-size: 14px;">
+                    <p><strong>Created:</strong> {{ project.created_date|date:"M Y" }}</p>
+                    <p><strong>Status:</strong> {{ project.status|title }}</p>
+                    <p><strong>Reward:</strong> {{ project.reward|truncatewords:10 }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="back-button">
+            <a href="{% url 'showcase:projects' %}" class="pixel-btn">← BACK TO QUESTS</a>
+        </div>
+    </div>
+</section>
+
+    <script>
+        // Add retro PC effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add CRT scanlines effect
+            const body = document.body;
+            body.style.position = 'relative';
+            
+            const scanlines = document.createElement('div');
+            scanlines.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+                background-size: 2px 2px;
+                pointer-events: none;
+                z-index: 9999;
+                animation: scanlines 0.1s linear infinite;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes scanlines {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(2px); }
+                }
+            `;
+            
+            document.head.appendChild(style);
+            body.appendChild(scanlines);
+        });
+    </script>
+</body>
+</html>

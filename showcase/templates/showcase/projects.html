@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Log - Pixel Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Retro PC Color Palette */
+            --retro-bg: #0a0a0a;
+            --retro-desktop: #000080;
+            --retro-taskbar: #c0c0c0;
+            --retro-window: #c0c0c0;
+            --retro-border: #808080;
+            --retro-text: #000000;
+            --retro-highlight: #ffffff;
+            --retro-shadow: #404040;
+            --retro-accent: #00ff00;
+            --retro-error: #ff0000;
+            --retro-warning: #ffff00;
+            --retro-info: #0080ff;
+            
+            /* Pixel Portfolio Colors */
+            --pixel-primary: #00ff88;
+            --pixel-secondary: #ff6b6b;
+            --pixel-accent: #4ecdc4;
+            --pixel-warning: #ffd73d;
+            --pixel-success: #51cf66;
+            --pixel-info: #339af0;
+            --pixel-border: #4a4a6a;
+            --pixel-text-dim: #a0a0a0;
+            
+            /* Animation Variables */
+            --transition-fast: 0.1s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.4s ease;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+            background: var(--retro-desktop);
+            color: var(--retro-highlight);
+            line-height: 1.4;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CRT Monitor Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+                linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 2px 2px, 2px 2px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlines 0.1s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .nav-back a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--retro-taskbar);
+            color: var(--retro-text);
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            border: 3px outset var(--retro-highlight);
+            transition: all var(--transition-fast);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .nav-back a:hover {
+            border-style: inset;
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+            transform: scale(1.05);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    .quest-section {
+        padding: 4rem 0;
+        min-height: 100vh;
+    }
+
+    .quest-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .quest-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 2.5rem;
+        color: var(--pixel-primary);
+        margin-bottom: 1rem;
+        text-shadow: 0 0 20px var(--pixel-primary);
+    }
+
+    .quest-stats {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        margin-bottom: 3rem;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 12px;
+    }
+
+    .stat-box {
+        text-align: center;
+        padding: 1rem;
+        border: 3px outset var(--retro-highlight);
+        background: var(--retro-window);
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .stat-number {
+        font-size: 24px;
+        color: var(--pixel-accent);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .quest-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .quest-card {
+        background: var(--retro-window);
+        border: 3px outset var(--retro-highlight);
+        padding: 0;
+        position: relative;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .quest-card:hover {
+        border-color: var(--pixel-primary);
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3);
+    }
+
+    .quest-card:hover .quest-image {
+        transform: scale(1.05);
+    }
+
+    .quest-card:hover .quest-status {
+        animation: pulse 1s infinite;
+    }
+
+    /* Enhanced Button Interactions */
+    .quest-btn {
+        font-family: 'VT323', monospace;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 0.8rem 1.2rem;
+        background: var(--retro-taskbar);
+        color: var(--retro-text);
+        border: 3px outset var(--retro-highlight);
+        text-decoration: none;
+        transition: all var(--transition-normal);
+        flex: 1;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .quest-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--pixel-secondary);
+        transition: left var(--transition-normal);
+        z-index: -1;
+    }
+
+    .quest-btn:hover::before {
+        left: 0;
+    }
+
+    .quest-btn:hover {
+        border-style: inset;
+        background: var(--retro-highlight);
+        color: var(--retro-text);
+        transform: translateY(-3px);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .quest-btn.primary {
+        background: var(--retro-info);
+        color: var(--retro-highlight);
+        border-color: var(--retro-info);
+    }
+
+    .quest-btn.primary:hover {
+        background: var(--retro-highlight);
+        color: var(--retro-text);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Enhanced Tech Tags */
+    .tech-tag {
+        font-family: 'VT323', monospace;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 0.5rem 0.8rem;
+        background: var(--retro-taskbar);
+        color: var(--retro-text);
+        border: 2px outset var(--retro-highlight);
+        transition: all var(--transition-normal);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .tech-tag::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--pixel-primary);
+        transition: left var(--transition-normal);
+        z-index: -1;
+    }
+
+    .tech-tag:hover::before {
+        left: 0;
+    }
+
+    .tech-tag:hover {
+        border-style: inset;
+        background: var(--retro-highlight);
+        color: var(--retro-text);
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Enhanced Quest Status */
+    .quest-status {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-family: 'VT323', monospace;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 0;
+        z-index: 2;
+        transition: all var(--transition-normal);
+        cursor: pointer;
+        border: 2px outset var(--retro-highlight);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .quest-status:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);
+    }
+
+    /* Enhanced Quest Image */
+    .quest-image {
+        width: 100%;
+        height: 200px;
+        background: var(--retro-shadow);
+        border-bottom: 3px outset var(--retro-highlight);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        position: relative;
+        overflow: hidden;
+        transition: all var(--transition-normal);
+    }
+
+    .quest-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+        transform: translateX(-100%);
+        transition: transform var(--transition-slow);
+    }
+
+    .quest-card:hover .quest-image::before {
+        transform: translateX(100%);
+    }
+
+    /* Enhanced Quest Reward */
+    .quest-reward {
+        background: var(--retro-window);
+        border: 2px outset var(--retro-highlight);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        transition: all var(--transition-normal);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .quest-reward:hover {
+        background: rgba(0, 255, 136, 0.2);
+        transform: translateX(5px);
+    }
+
+    .quest-reward::before {
+        content: "REWARD: ";
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        color: var(--pixel-primary);
+        position: absolute;
+        top: -10px;
+        left: 10px;
+        background: var(--pixel-bg);
+        padding: 0 0.5rem;
+    }
+
+    /* Enhanced Quest Name */
+    .quest-name {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 14px;
+        color: var(--pixel-primary);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        transition: all var(--transition-normal);
+        cursor: pointer;
+    }
+
+    .quest-name:hover {
+        text-shadow: 0 0 10px var(--pixel-primary);
+        transform: scale(1.02);
+    }
+
+    /* Enhanced Stats Boxes */
+    .stat-box {
+        text-align: center;
+        padding: 1rem;
+        border: 2px solid var(--pixel-accent);
+        background: rgba(78, 205, 196, 0.1);
+        transition: all var(--transition-normal);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(78, 205, 196, 0.2), transparent);
+        transition: left var(--transition-slow);
+    }
+
+    .stat-box:hover::before {
+        left: 100%;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
+        border-color: var(--pixel-primary);
+    }
+
+    .stat-number {
+        font-size: 24px;
+        color: var(--pixel-accent);
+        display: block;
+        margin-bottom: 0.5rem;
+        transition: all var(--transition-normal);
+    }
+
+    .stat-box:hover .stat-number {
+        color: var(--pixel-primary);
+        transform: scale(1.1);
+    }
+
+    /* Enhanced Quest Grid */
+    .quest-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+        perspective: 1000px;
+    }
+
+    .quest-card {
+        background: rgba(26, 26, 46, 0.9);
+        border: 2px solid var(--pixel-border);
+        padding: 0;
+        position: relative;
+        transition: all var(--transition-normal);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+        transform-style: preserve-3d;
+    }
+
+    /* Loading Animation for Cards */
+    .quest-card {
+        animation: fadeInUp 0.6s ease forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    .quest-card:nth-child(1) { animation-delay: 0.1s; }
+    .quest-card:nth-child(2) { animation-delay: 0.2s; }
+    .quest-card:nth-child(3) { animation-delay: 0.3s; }
+    .quest-card:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Enhanced Quest Header */
+    .quest-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 2.5rem;
+        color: var(--pixel-primary);
+        margin-bottom: 1rem;
+        text-shadow: 0 0 20px var(--pixel-primary);
+        transition: all var(--transition-normal);
+        cursor: pointer;
+    }
+
+    .quest-title:hover {
+        transform: scale(1.05);
+        text-shadow: 0 0 30px var(--pixel-primary);
+    }
+
+    /* Enhanced Quest Subtitle */
+    .quest-subtitle {
+        color: var(--pixel-text-dim);
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        transition: all var(--transition-normal);
+    }
+
+    .quest-header:hover .quest-subtitle {
+        color: var(--pixel-text);
+        transform: translateX(10px);
+    }
+
+    /* Quest Status Colors */
+    .quest-status.completed {
+        background: var(--pixel-primary);
+        color: var(--pixel-dark);
+        border: 1px solid var(--pixel-primary);
+    }
+
+    .quest-status.in-progress {
+        background: var(--pixel-warning);
+        color: var(--pixel-dark);
+        border: 1px solid var(--pixel-warning);
+    }
+
+    /* Quest Content */
+    .quest-content {
+        padding: 2rem;
+    }
+
+    .quest-objective {
+        color: var(--pixel-text-dim);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+        font-size: 14px;
+    }
+
+    /* Tech Tags Container */
+    .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Quest Actions */
+    .quest-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    /* Quest Image Img */
+    .quest-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: contrast(1.2) brightness(0.9);
+        transition: transform 0.3s ease;
+    }
+
+    .quest-card:hover .quest-image img {
+        transform: scale(1.1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .quest-stats {
+            gap: 1rem;
+            font-size: 10px;
+        }
+        
+        .quest-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .quest-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+
+<section class="quest-section">
+    <div class="container">
+        <div class="quest-header">
+            <h1 class="quest-title typewriter" data-text="QUEST LOG">QUEST LOG</h1>
+            <p style="color: var(--pixel-text-dim); font-size: 1.2rem; margin-bottom: 2rem;">
+                Completed adventures and ongoing missions
+            </p>
+        </div>
+
+        <div class="quest-stats">
+            <div class="stat-box">
+                <span class="stat-number">{{ projects.count }}</span>
+                <span>TOTAL QUESTS</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">{{ projects|length }}</span>
+                <span>COMPLETED</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">∞</span>
+                <span>XP GAINED</span>
+            </div>
+        </div>
+
+        <div class="quest-grid">
+            {% for project in projects %}
+            <div class="quest-card" {% if forloop.first %}style="grid-column: span 2;"{% endif %} data-project-id="{{ project.id }}">
+                <div class="quest-status {{ project.status }}">{{ project.status|upper }}</div>
+                <div class="quest-image">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% else %}
+                        {% if "tourism" in project.title|lower %}🏝️
+                        {% elif "portfolio" in project.title|lower %}💼
+                        {% elif "student" in project.title|lower %}📚
+                        {% elif "e-commerce" in project.title|lower %}🛒
+                        {% else %}💻{% endif %}
+                    {% endif %}
+                </div>
+                <div class="quest-content">
+                    <h3 class="quest-name">{{ project.title|upper }}</h3>
+                    <p class="quest-objective">
+                        {{ project.objective }}
+                    </p>
+                    <div class="quest-reward">
+                        <p>{{ project.reward }}</p>
+                    </div>
+                    <div class="tech-tags">
+                        {% if "django" in project.description|lower %}<span class="tech-tag">DJANGO</span>{% endif %}
+                        {% if "python" in project.description|lower %}<span class="tech-tag">PYTHON</span>{% endif %}
+                        {% if "html" in project.description|lower %}<span class="tech-tag">HTML/CSS</span>{% endif %}
+                        {% if "javascript" in project.description|lower %}<span class="tech-tag">JAVASCRIPT</span>{% endif %}
+                        {% if "bootstrap" in project.description|lower %}<span class="tech-tag">BOOTSTRAP</span>{% endif %}
+                        {% if "mysql" in project.description|lower %}<span class="tech-tag">MYSQL</span>{% endif %}
+                        {% if "postgresql" in project.description|lower %}<span class="tech-tag">POSTGRESQL</span>{% endif %}
+                        {% if "react" in project.description|lower %}<span class="tech-tag">REACT</span>{% endif %}
+                        {% if "php" in project.description|lower %}<span class="tech-tag">PHP</span>{% endif %}
+                    </div>
+                    <div class="quest-actions">
+                        <a href="{% url 'showcase:project_detail' pk=project.id %}" class="quest-btn primary">VIEW DETAILS</a>
+                        {% if project.live_demo %}
+                            <a href="{{ project.live_demo }}" class="quest-btn" target="_blank">LIVE DEMO</a>
+                        {% endif %}
+                        {% if project.github_link %}
+                            <a href="{{ project.github_link }}" class="quest-btn" target="_blank">SOURCE CODE</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+    <script>
+        // Add some retro PC effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add CRT scanlines effect
+            const body = document.body;
+            body.style.position = 'relative';
+            
+            const scanlines = document.createElement('div');
+            scanlines.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+                background-size: 2px 2px;
+                pointer-events: none;
+                z-index: 9999;
+                animation: scanlines 0.1s linear infinite;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes scanlines {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(2px); }
+                }
+            `;
+            
+            document.head.appendChild(style);
+            body.appendChild(scanlines);
+            
+            // Add retro button effects
+            const buttons = document.querySelectorAll('.quest-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

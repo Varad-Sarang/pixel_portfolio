@@ -1,0 +1,2770 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Portfolio - Retro PC</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Mobile Optimization CSS -->
+    <link rel="stylesheet" href="{% static 'css/mobile.css' %}">
+    
+    <style>
+        :root {
+            /* Retro PC Color Palette */
+            --retro-bg: #0a0a0a;
+            --retro-desktop: #000080;
+            --retro-taskbar: #c0c0c0;
+            --retro-window: #c0c0c0;
+            --retro-border: #808080;
+            --retro-text: #000000;
+            --retro-highlight: #ffffff;
+            --retro-shadow: #404040;
+            --retro-accent: #00ff00;
+            --retro-error: #ff0000;
+            --retro-warning: #ffff00;
+            --retro-info: #0080ff;
+            
+            /* Pixel Portfolio Colors */
+            --pixel-primary: #00ff88;
+            --pixel-secondary: #ff6b6b;
+            --pixel-accent: #4ecdc4;
+            --pixel-warning: #ffd73d;
+            --pixel-success: #51cf66;
+            --pixel-info: #339af0;
+            
+            /* Animation Variables */
+            --transition-fast: 0.1s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.4s ease;
+
+            /* Surface customization (supports glass themes) */
+            --window-background: var(--retro-window);
+            --taskbar-background: var(--retro-taskbar);
+            --menu-background: var(--retro-window);
+            --window-backdrop: none;
+            --panel-backdrop: none;
+
+            /* Component radii and accents */
+            --radius-window: 6px;
+            --radius-button: 4px;
+            --header-gradient: var(--retro-info);
+            --glow-color: rgba(0,255,136,0.6);
+        }
+
+        /* Enhanced Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+            background: var(--retro-bg);
+            color: var(--retro-text);
+            line-height: 1.4;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            cursor: default;
+        }
+
+        /* CRT Monitor Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+                linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 2px 2px, 2px 2px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlines 0.1s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+
+        /* Desktop Background */
+        .desktop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0,255,0,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,0,255,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 70%),
+                linear-gradient(45deg, var(--retro-desktop) 0%, #0000a0 50%, var(--retro-desktop) 100%);
+            background-size: 100% 100%;
+            z-index: 1;
+            overflow: hidden;
+            animation: desktopPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes desktopPulse {
+            0%, 100% { filter: brightness(1) contrast(1); }
+            50% { filter: brightness(1.1) contrast(1.1); }
+        }
+
+        /* Animated Background Elements */
+        .desktop::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(0,255,136,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255,107,107,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 70% 30%, rgba(78,205,196,0.1) 0%, transparent 20%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(20px) rotate(-1deg); }
+        }
+
+        /* Animated Background Particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--pixel-primary);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: particleFloat 15s ease-in-out infinite;
+            z-index: 3;
+        }
+
+        .particle:nth-child(2) {
+            background: var(--pixel-secondary);
+            width: 6px;
+            height: 6px;
+        }
+
+        .particle:nth-child(3) {
+            background: var(--pixel-accent);
+            width: 3px;
+            height: 3px;
+        }
+
+        .particle:nth-child(4) {
+            background: var(--pixel-warning);
+            width: 5px;
+            height: 5px;
+        }
+
+        .particle:nth-child(5) {
+            background: var(--pixel-success);
+            width: 4px;
+            height: 4px;
+        }
+
+        .particle:nth-child(6) {
+            background: var(--pixel-info);
+            width: 3px;
+            height: 3px;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.6;
+            }
+            25% {
+                transform: translateY(-30px) translateX(20px) scale(1.2);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-60px) translateX(-10px) scale(0.8);
+                opacity: 0.4;
+            }
+            75% {
+                transform: translateY(-30px) translateX(-20px) scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        /* Desktop Icons */
+        .desktop-icon {
+            position: absolute;
+            width: 120px;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            z-index: 10;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+            border: 3px solid transparent;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .desktop-icon:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.15) translateY(-5px);
+            border-color: var(--retro-accent);
+            box-shadow: 0 8px 25px var(--glow-color);
+            z-index: 15;
+        }
+
+        /* Unique Icon Styles */
+        .desktop-icon[data-window="home"] {
+            background: rgba(0,255,136,0.15);
+            border-color: var(--pixel-primary);
+        }
+
+        .desktop-icon[data-window="home"]:hover {
+            background: rgba(0,255,136,0.3);
+            box-shadow: 0 8px 25px rgba(0,255,136,0.6);
+        }
+
+        .desktop-icon[data-window="about"] {
+            background: rgba(255,107,107,0.15);
+            border-color: var(--pixel-secondary);
+        }
+
+        .desktop-icon[data-window="about"]:hover {
+            background: rgba(255,107,107,0.3);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.6);
+        }
+
+        .desktop-icon[data-window="projects"] {
+            background: rgba(78,205,196,0.15);
+            border-color: var(--pixel-accent);
+        }
+
+        .desktop-icon[data-window="projects"]:hover {
+            background: rgba(78,205,196,0.3);
+            box-shadow: 0 8px 25px rgba(78,205,196,0.6);
+        }
+
+        .desktop-icon[data-window="contact"] {
+            background: rgba(255,215,61,0.15);
+            border-color: var(--pixel-warning);
+        }
+
+        .desktop-icon[data-window="contact"]:hover {
+            background: rgba(255,215,61,0.3);
+            box-shadow: 0 8px 25px rgba(255,215,61,0.6);
+        }
+
+        .desktop-icon[data-window="games"] {
+            background: rgba(255,107,107,0.15);
+            border-color: var(--pixel-secondary);
+        }
+
+        .desktop-icon[data-window="games"]:hover {
+            background: rgba(255,107,107,0.3);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.6);
+        }
+
+        .desktop-icon[data-window="settings"] {
+            background: rgba(78,205,196,0.15);
+            border-color: var(--pixel-accent);
+        }
+
+        .desktop-icon[data-window="settings"]:hover {
+            background: rgba(78,205,196,0.3);
+            box-shadow: 0 8px 25px rgba(78,205,196,0.6);
+        }
+
+        .desktop-icon img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            filter: drop-shadow(2px 2px 2px var(--retro-shadow));
+        }
+
+        .desktop-icon span {
+            font-size: 12px;
+            text-align: center;
+            color: var(--retro-highlight);
+            text-shadow: 1px 1px 1px var(--retro-shadow);
+            word-wrap: break-word;
+            max-width: 80px;
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--taskbar-background);
+            backdrop-filter: var(--panel-backdrop);
+            border-top: 2px solid var(--retro-highlight);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 1000;
+        }
+
+        .start-button {
+            background: var(--retro-taskbar);
+            border: 2px outset var(--retro-highlight);
+            padding: 5px 15px;
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all var(--transition-fast);
+        }
+
+        .start-button:hover {
+            border-style: inset;
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+        }
+
+        .taskbar-tabs {
+            display: flex;
+            flex: 1;
+            gap: 5px;
+        }
+
+        .taskbar-tab {
+            background: var(--retro-taskbar);
+            border: 2px outset var(--retro-highlight);
+            padding: 5px 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .taskbar-tab:hover {
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+        }
+
+        .system-tray {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .clock {
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--retro-text);
+            padding: 5px 10px;
+            border: 2px inset var(--retro-shadow);
+            background: var(--retro-highlight);
+        }
+
+        /* Window System */
+        .window {
+            position: absolute;
+            background: var(--window-background);
+            backdrop-filter: var(--window-backdrop);
+            border: 2px outset var(--retro-highlight);
+            border-radius: var(--radius-window);
+            min-width: 300px;
+            min-height: 200px;
+            z-index: 100;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .window-header {
+            background: var(--header-gradient);
+            color: var(--retro-highlight);
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            border-bottom: 2px outset var(--retro-highlight);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .window-control {
+            width: 16px;
+            height: 16px;
+            border: 1px outset var(--retro-highlight);
+            background: var(--retro-window);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .window-control:hover {
+            background: var(--retro-highlight);
+        }
+
+        .window-control.close:hover {
+            background: var(--retro-error);
+            color: var(--retro-highlight);
+        }
+
+        .window-content {
+            padding: 20px;
+            height: calc(100% - 40px);
+            overflow: auto;
+            background: var(--retro-window);
+            color: var(--retro-text);
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+        }
+
+        .window-content h1 {
+            color: var(--pixel-primary);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .window-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .window-content .btn {
+            display: inline-block;
+            background: var(--retro-taskbar);
+            border: 2px outset var(--retro-highlight);
+            border-radius: var(--radius-button);
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            color: var(--retro-text);
+        }
+
+        .window-content .btn:hover {
+            border-style: inset;
+            background: var(--retro-highlight);
+        }
+
+        .window-content .btn.primary {
+            background: var(--pixel-primary);
+            color: var(--retro-text);
+        }
+
+        /* Start Menu */
+        .start-menu {
+            position: fixed;
+            bottom: 40px;
+            left: 10px;
+            width: 280px;
+            background: var(--menu-background);
+            backdrop-filter: var(--panel-backdrop);
+            border: 3px outset var(--retro-highlight);
+            z-index: 2000;
+            display: none;
+            box-shadow: 6px 6px 15px rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            animation: startMenuSlide 0.3s ease-out;
+        }
+
+        @keyframes startMenuSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .start-menu.show {
+            display: block;
+        }
+
+        .start-menu-header {
+            background: linear-gradient(45deg, var(--retro-info), #0066cc);
+            color: var(--retro-highlight);
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 3px outset var(--retro-highlight);
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .start-menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border-bottom: 1px solid var(--retro-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .start-menu-item:hover {
+            background: linear-gradient(90deg, var(--retro-info), #0066cc);
+            color: var(--retro-highlight);
+            transform: translateX(5px);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .start-menu-item:active {
+            transform: translateX(3px) scale(0.98);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--retro-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: var(--retro-accent);
+        }
+
+        .loading-screen.hidden {
+            display: none !important;
+        }
+
+        .loading-logo {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px var(--retro-accent);
+            animation: pulse 2s infinite;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 20px;
+            border: 2px inset var(--retro-highlight);
+            background: var(--retro-window);
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: var(--retro-accent);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(0,255,0,0.5);
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: var(--retro-highlight);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 50px;
+            right: 20px;
+            background: var(--retro-window);
+            border: 2px outset var(--retro-highlight);
+            padding: 15px;
+            max-width: 300px;
+            z-index: 4000;
+            transform: translateX(400px);
+            transition: transform var(--transition-normal);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Fallback Content */
+        .fallback-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--retro-highlight);
+            z-index: 10000;
+            display: none;
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--retro-accent);
+        }
+
+        .fallback-content.show {
+            display: block;
+        }
+
+        .fallback-content h1 {
+            color: var(--retro-accent);
+            margin-bottom: 15px;
+            font-size: 2rem;
+        }
+
+        .fallback-content p {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .fallback-content button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: var(--retro-accent);
+            color: var(--retro-text);
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            transition: all var(--transition-normal);
+        }
+
+        .fallback-content button:hover {
+            background: var(--retro-highlight);
+            transform: scale(1.05);
+        }
+
+        /* Debug Panel */
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: var(--retro-accent);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            z-index: 5000;
+            max-width: 300px;
+        }
+
+        .debug-panel h4 {
+            color: var(--pixel-primary);
+            margin-bottom: 5px;
+        }
+
+        .debug-panel .status {
+            margin: 2px 0;
+        }
+
+        .debug-panel .status.ok {
+            color: var(--pixel-success);
+        }
+
+        .debug-panel .status.error {
+            color: var(--retro-error);
+        }
+
+        .debug-panel .status.warning {
+            color: var(--pixel-warning);
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            --retro-bg: #000000;
+            --retro-desktop: #000040;
+            --retro-taskbar: #808080;
+            --retro-window: #a0a0a0;
+            --retro-border: #606060;
+            --retro-text: #ffffff;
+            --retro-highlight: #000000;
+            --retro-shadow: #202020;
+        }
+
+        body.dark-theme .desktop {
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0,255,0,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,0,255,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%),
+                linear-gradient(45deg, #000040 0%, #000080 50%, #000040 100%);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .desktop-icon {
+                width: 60px;
+                height: 80px;
+            }
+            
+            .desktop-icon img {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .desktop-icon span {
+                font-size: 10px;
+            }
+            
+            .window {
+                min-width: 250px;
+                min-height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Debug Panel -->
+    <div class="debug-panel" id="debugPanel">
+        <h4>🔧 DEBUG PANEL</h4>
+        <div class="status" id="debugStatus">Initializing...</div>
+        <div class="status" id="debugProgress">Progress: 0%</div>
+        <div class="status" id="debugErrors">Errors: 0</div>
+    </div>
+
+    <!-- Fallback Content -->
+    <div class="fallback-content" id="fallbackContent">
+        <h1>🖥️ PIXEL PORTFOLIO</h1>
+        <p>JavaScript initialization failed or is taking too long.</p>
+        <p>This could be due to:</p>
+        <ul style="text-align: left; margin: 10px 0;">
+            <li>JavaScript is disabled in your browser</li>
+            <li>Network connection issues</li>
+            <li>Browser compatibility issues</li>
+        </ul>
+        <button onclick="location.reload()">🔄 RELOAD PAGE</button>
+        <button onclick="forceInit()">🚀 FORCE INIT</button>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">PIXEL.EXE</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loadingProgress"></div>
+        </div>
+        <div class="loading-text" id="loadingText">INITIALIZING SYSTEM...</div>
+        
+        <button onclick="skipLoading()" style="
+            margin-top: 20px; 
+            padding: 10px 20px; 
+            background: var(--retro-accent); 
+            color: var(--retro-text); 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+            SKIP LOADING
+        </button>
+    </div>
+
+    <!-- Desktop Background -->
+    <div class="desktop" id="desktop">
+        <!-- Animated Background Particles -->
+        <div class="particle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 60%; left: 80%; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 80%; left: 20%; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 30%; left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="top: 70%; left: 40%; animation-delay: 8s;"></div>
+        <div class="particle" style="top: 40%; left: 90%; animation-delay: 10s;"></div>
+    </div>
+
+    <!-- Desktop Icons -->
+    <div class="desktop-icon" style="top: 100px; left: 100px;" data-window="home">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjMDBGRjg4Ii8+CjxwYXRoIGQ9Ik0xMiAyNEwyNCAxMkwzNiAyNEgzMlYzNkgxNlYyNEgxMloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="Home">
+        <span>🏠 HOME</span>
+    </div>
+
+    <div class="desktop-icon" style="top: 100px; left: 260px;" data-window="about">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRkY2QjZCIi8+CjxjaXJjbGUgY3g9IjI0IiBjeT0iMTYiIHI9IjQiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAzNkgyNlYzMkgxMlYzNloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="Profile">
+        <span>👤 PROFILE</span>
+    </div>
+
+    <div class="desktop-icon" style="top: 100px; left: 420px;" data-window="projects">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjNEVDREM0Ii8+CjxwYXRoIGQ9Ik0xMiAxMkgzNlYzNkgxMlYxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAzNkgzNlY0OEgxMlYzNloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="Projects">
+        <span>🎮 PROJECTS</span>
+    </div>
+
+    <div class="desktop-icon" style="top: 100px; left: 580px;" data-window="contact">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRkZEN0QzIi8+CjxwYXRoIGQ9Ik0xMiAxMkgzNlYzNkgxMlYxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAzNkgzNlY0OEgxMlYzNloiIGZpbGw9IndoaXRlIi/+Cjwvc3ZnPgo=" alt="Contact">
+        <span>📧 CONTACT</span>
+    </div>
+
+    <!-- Second Row of Icons -->
+    <div class="desktop-icon" style="top: 280px; left: 100px;" data-window="games">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRkY2QjZCIi8+CjxwYXRoIGQ9Ik0xMiAyNEwyNCAxMkwzNiAyNEgzMlYzNkgxNlYyNEgxMloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="Games">
+        <span>🎯 GAMES</span>
+    </div>
+
+    <div class="desktop-icon" style="top: 280px; left: 260px;" data-window="settings">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjNEVDREM0Ii8+CjxwYXRoIGQ9Ik0xMiAxMkgzNlYzNkgxMlYxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAzNkgzNlY0OEgxMlYzNloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="Settings">
+        <span>⚙️ SETTINGS</span>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" id="startButton">START</button>
+        <div class="taskbar-tabs" id="taskbarTabs"></div>
+        <div class="system-tray">
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </div>
+
+    <!-- Start Menu -->
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">🚀 START MENU</div>
+        
+        <!-- Main Applications -->
+        <div class="start-menu-item" data-action="home">
+            <span style="font-size: 18px;">🏠</span>
+            <span>HOME DESKTOP</span>
+        </div>
+        <div class="start-menu-item" data-action="about">
+            <span style="font-size: 18px;">👤</span>
+            <span>PLAYER PROFILE</span>
+        </div>
+        <div class="start-menu-item" data-action="projects">
+            <span style="font-size: 18px;">🎮</span>
+            <span>QUEST LOG</span>
+        </div>
+        <div class="start-menu-item" data-action="contact">
+            <span style="font-size: 18px;">📧</span>
+            <span>NPC DIALOGUE</span>
+        </div>
+        
+        <!-- Separator -->
+        <div style="height: 2px; background: var(--retro-border); margin: 5px 0;"></div>
+        
+        <!-- System Tools -->
+        <div class="start-menu-item" data-action="games">
+            <span style="font-size: 18px;">🎯</span>
+            <span>MINI GAMES</span>
+        </div>
+        <div class="start-menu-item" data-action="settings">
+            <span style="font-size: 18px;">⚙️</span>
+            <span>SYSTEM SETTINGS</span>
+        </div>
+        <div class="start-menu-item" data-action="help">
+            <span style="font-size: 18px;">❓</span>
+            <span>HELP & TUTORIAL</span>
+        </div>
+        
+        <!-- Separator -->
+        <div style="height: 2px; background: var(--retro-border); margin: 5px 0;"></div>
+        
+        <!-- System Actions -->
+        <div class="start-menu-item" data-action="run">
+            <span style="font-size: 18px;">🏃</span>
+            <span>RUN...</span>
+        </div>
+        <div class="start-menu-item" data-action="control-panel">
+            <span style="font-size: 18px;">⚙️</span>
+            <span>CONTROL PANEL</span>
+        </div>
+        <div class="start-menu-item" data-action="restart">
+            <span style="font-size: 18px;">🔄</span>
+            <span>RESTART</span>
+        </div>
+        <div class="start-menu-item" data-action="shutdown">
+            <span style="font-size: 18px;">⏹️</span>
+            <span>SHUTDOWN</span>
+        </div>
+    </div>
+
+    <script>
+        // Global debug state
+        let debugState = {
+            progress: 0,
+            errors: 0,
+            initialized: false,
+            elements: {},
+            timeouts: []
+        };
+
+        // Simple API helper for persistence (Django JSON views)
+        const API = (() => {
+            const base = '';
+            function getCSRFToken() {
+                const name = 'csrftoken=';
+                const decodedCookie = decodeURIComponent(document.cookie || '');
+                const parts = decodedCookie.split(';');
+                for (let part of parts) {
+                    part = part.trim();
+                    if (part.indexOf(name) === 0) return part.substring(name.length, part.length);
+                }
+                return '';
+            }
+            async function json(path, method = 'GET', body = null) {
+                const opts = { method, headers: { 'Accept': 'application/json' } };
+                if (body !== null) {
+                    opts.headers['Content-Type'] = 'application/json';
+                    opts.headers['X-CSRFToken'] = getCSRFToken();
+                    opts.body = JSON.stringify(body);
+                }
+                const res = await fetch(base + path, opts);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            }
+            return {
+                getPreferences: () => json('/api/preferences/'),
+                savePreferences: (data) => json('/api/preferences/', 'POST', data),
+                getDesktopItems: () => json('/api/desktop-items/'),
+                createDesktopItem: (data) => json('/api/desktop-items/', 'POST', data),
+                updateDesktopItem: (data) => json('/api/desktop-items/', 'PATCH', data),
+                addRunHistory: (data) => json('/api/run-history/', 'POST', data),
+                getThemes: () => json('/api/themes/'),
+            };
+        })();
+
+        // Built-in theme presets (Retro to Modern) that can be switched from the UI
+        const THEMES = {
+            'retro-98': {
+                key: 'retro-98',
+                name: 'Retro 98',
+                category: 'Retro',
+                variables: {
+                    '--retro-bg': '#0a0a0a',
+                    '--retro-desktop': '#000080',
+                    '--retro-taskbar': '#c0c0c0',
+                    '--retro-window': '#c0c0c0',
+                    '--retro-border': '#808080',
+                    '--retro-text': '#000000',
+                    '--retro-highlight': '#ffffff',
+                    '--retro-shadow': '#404040',
+                    '--retro-info': '#0080ff'
+                }
+            },
+            'retro-olive': {
+                key: 'retro-olive',
+                name: 'Retro Olive',
+                category: 'Retro',
+                variables: {
+                    '--retro-bg': '#10120f',
+                    '--retro-desktop': '#3a3f2b',
+                    '--retro-taskbar': '#798252',
+                    '--retro-window': '#a7b074',
+                    '--retro-border': '#5f6644',
+                    '--retro-text': '#0b0b0b',
+                    '--retro-highlight': '#f8f8e7',
+                    '--retro-shadow': '#2f3323',
+                    '--retro-info': '#4e6b2e'
+                }
+            },
+            'retro-amber': {
+                key: 'retro-amber',
+                name: 'Retro Amber CRT',
+                category: 'Retro',
+                variables: {
+                    '--retro-bg': '#000000',
+                    '--retro-desktop': '#1a1200',
+                    '--retro-taskbar': '#4a3b00',
+                    '--retro-window': '#2a2100',
+                    '--retro-border': '#6b5200',
+                    '--retro-text': '#ffbf00',
+                    '--retro-highlight': '#ffc933',
+                    '--retro-shadow': '#332600',
+                    '--retro-info': '#ffbf00'
+                }
+            },
+            'modern-mint': {
+                key: 'modern-mint',
+                name: 'Modern Mint',
+                category: 'Modern',
+                variables: {
+                    '--retro-bg': '#0d1117',
+                    '--retro-desktop': '#0b3d3d',
+                    '--retro-taskbar': '#1f6f6f',
+                    '--retro-window': '#163a3a',
+                    '--retro-border': '#2aa198',
+                    '--retro-text': '#e6fffb',
+                    '--retro-highlight': '#c2fff6',
+                    '--retro-shadow': '#0a2a2a',
+                    '--retro-info': '#2ec4b6',
+                    '--window-background': 'rgba(22,58,58,0.55)',
+                    '--taskbar-background': 'rgba(31,111,111,0.55)',
+                    '--menu-background': 'rgba(22,58,58,0.55)',
+                    '--window-backdrop': 'blur(10px) saturate(120%)',
+                    '--panel-backdrop': 'blur(10px) saturate(120%)'
+                }
+            },
+            'modern-glass': {
+                key: 'modern-glass',
+                name: 'Modern Glass',
+                category: 'Modern',
+                variables: {
+                    '--retro-bg': '#0f141a',
+                    '--retro-desktop': '#0b1222',
+                    '--retro-taskbar': 'rgba(17,24,39,0.5)',
+                    '--retro-window': 'rgba(17,24,39,0.5)',
+                    '--retro-border': '#475569',
+                    '--retro-text': '#e2e8f0',
+                    '--retro-highlight': '#ffffff',
+                    '--retro-shadow': '#0a0f16',
+                    '--retro-info': '#60a5fa',
+                    '--window-background': 'rgba(17,24,39,0.55)',
+                    '--taskbar-background': 'rgba(17,24,39,0.55)',
+                    '--menu-background': 'rgba(17,24,39,0.55)',
+                    '--window-backdrop': 'blur(14px) saturate(140%)',
+                    '--panel-backdrop': 'blur(14px) saturate(140%)',
+                    '--radius-window': '10px',
+                    '--radius-button': '8px',
+                    '--header-gradient': 'linear-gradient(90deg,#60a5fa,#34d399)',
+                    '--glow-color': 'rgba(96,165,250,0.6)'
+                }
+            },
+            'modern-neon': {
+                key: 'modern-neon',
+                name: 'Modern Neon',
+                category: 'Modern',
+                variables: {
+                    '--retro-bg': '#0b0f1a',
+                    '--retro-desktop': '#0f172a',
+                    '--retro-taskbar': '#111827',
+                    '--retro-window': '#111827',
+                    '--retro-border': '#374151',
+                    '--retro-text': '#e5e7eb',
+                    '--retro-highlight': '#93c5fd',
+                    '--retro-shadow': '#0b1020',
+                    '--retro-info': '#60a5fa',
+                    '--window-background': 'rgba(17,24,39,0.55)',
+                    '--taskbar-background': 'rgba(17,24,39,0.55)',
+                    '--menu-background': 'rgba(17,24,39,0.55)',
+                    '--window-backdrop': 'blur(12px) saturate(120%)',
+                    '--panel-backdrop': 'blur(12px) saturate(120%)',
+                    '--radius-window': '12px',
+                    '--radius-button': '10px',
+                    '--header-gradient': 'linear-gradient(90deg,#60a5fa,#a78bfa)',
+                    '--glow-color': 'rgba(167,139,250,0.6)'
+                }
+            },
+            'nostalgia-memes': {
+                key: 'nostalgia-memes',
+                name: 'Nostalgia Memes',
+                category: 'Nostalgia',
+                variables: {
+                    '--retro-bg': '#0a0a0a',
+                    '--retro-desktop': '#003366',
+                    '--retro-taskbar': '#c0d0ff',
+                    '--retro-window': '#dfe8ff',
+                    '--retro-border': '#5577aa',
+                    '--retro-text': '#000000',
+                    '--retro-highlight': '#ffffff',
+                    '--retro-shadow': '#202a40',
+                    '--retro-info': '#3066be'
+                },
+                icons: ['😂','😹','🐸','😎','🔥','💾','📼','📟']
+            },
+            'art-absurd': {
+                key: 'art-absurd',
+                name: 'Art – Absurd',
+                category: 'Art',
+                variables: {
+                    '--retro-bg': '#0b0b0b',
+                    '--retro-desktop': 'linear-gradient(135deg,#1b1b2f,#162447,#1f4068)',
+                    '--retro-taskbar': 'rgba(31,64,104,0.6)',
+                    '--retro-window': 'rgba(27,27,47,0.6)',
+                    '--retro-border': '#e43f5a',
+                    '--retro-text': '#f3f3f3',
+                    '--retro-highlight': '#ffffff',
+                    '--retro-shadow': '#0a0a1a',
+                    '--retro-info': '#e43f5a',
+                    '--window-background': 'rgba(27,27,47,0.6)',
+                    '--taskbar-background': 'rgba(31,64,104,0.6)',
+                    '--menu-background': 'rgba(27,27,47,0.6)',
+                    '--window-backdrop': 'blur(16px) contrast(110%)',
+                    '--panel-backdrop': 'blur(16px) contrast(110%)',
+                    '--radius-window': '16px',
+                    '--radius-button': '12px',
+                    '--header-gradient': 'linear-gradient(90deg,#e43f5a,#ffd166)',
+                    '--glow-color': 'rgba(228,63,90,0.6)'
+                }
+            }
+        };
+
+        function updateDebug(status, progress = null, isError = false) {
+            console.log(`[DEBUG] ${status}`, progress ? `(${progress}%)` : '');
+            
+            const debugStatus = document.getElementById('debugStatus');
+            const debugProgress = document.getElementById('debugProgress');
+            const debugErrors = document.getElementById('debugErrors');
+            
+            if (debugStatus) {
+                debugStatus.textContent = status;
+                debugStatus.className = isError ? 'status error' : 'status ok';
+            }
+            
+            if (progress !== null) {
+                debugState.progress = progress;
+                if (debugProgress) debugProgress.textContent = `Progress: ${progress}%`;
+            }
+            
+            if (isError) {
+                debugState.errors++;
+                if (debugErrors) debugErrors.textContent = `Errors: ${debugState.errors}`;
+            }
+        }
+
+        // Safe element checker
+        function checkElement(id, required = true) {
+            const element = document.getElementById(id);
+            debugState.elements[id] = !!element;
+            
+            if (!element && required) {
+                updateDebug(`Missing element: ${id}`, null, true);
+                return null;
+            }
+            
+            updateDebug(`Found element: ${id}`);
+            return element;
+        }
+
+        // Force hide loading screen
+        function hideLoadingScreen() {
+            const loadingScreen = checkElement('loadingScreen', false);
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+                updateDebug('Loading screen hidden');
+            }
+        }
+
+        // Show fallback content
+        function showFallback() {
+            const fallback = checkElement('fallbackContent', false);
+            if (fallback) {
+                fallback.classList.add('show');
+                updateDebug('Fallback content shown');
+            }
+            hideLoadingScreen();
+        }
+
+        // Skip loading function
+        function skipLoading() {
+            updateDebug('Loading skipped by user');
+            clearAllTimeouts();
+            hideLoadingScreen();
+            
+            if (debugState.initialized) {
+                updateDebug('Desktop already initialized');
+                return;
+            }
+            
+            try {
+                initDesktop();
+            } catch (error) {
+                updateDebug(`Skip loading failed: ${error.message}`, null, true);
+                showFallback();
+            }
+        }
+
+        // Force initialization
+        function forceInit() {
+            updateDebug('Force initialization triggered');
+            clearAllTimeouts();
+            hideLoadingScreen();
+            
+            try {
+                initDesktop();
+            } catch (error) {
+                updateDebug(`Force init failed: ${error.message}`, null, true);
+                console.error('Force init error:', error);
+            }
+        }
+
+        // Clear all timeouts
+        function clearAllTimeouts() {
+            debugState.timeouts.forEach(id => clearTimeout(id));
+            debugState.timeouts = [];
+            updateDebug('All timeouts cleared');
+        }
+
+        // Safe timeout wrapper
+        function safeTimeout(fn, delay, description) {
+            const id = setTimeout(() => {
+                try {
+                    fn();
+                } catch (error) {
+                    updateDebug(`Timeout error (${description}): ${error.message}`, null, true);
+                }
+            }, delay);
+            
+            debugState.timeouts.push(id);
+            return id;
+        }
+
+        // Loading progress simulation
+        function simulateLoading() {
+            const progressBar = checkElement('loadingProgress');
+            const loadingText = checkElement('loadingText');
+            
+            if (!progressBar) {
+                updateDebug('Progress bar not found, skipping to desktop', null, true);
+                initDesktop();
+                return;
+            }
+            
+            let progress = 0;
+            const steps = [
+                { progress: 20, text: 'Loading system files...' },
+                { progress: 40, text: 'Initializing graphics...' },
+                { progress: 60, text: 'Setting up desktop...' },
+                { progress: 80, text: 'Loading applications...' },
+                { progress: 100, text: 'System ready!' }
+            ];
+            
+            let stepIndex = 0;
+            
+            const updateProgress = () => {
+                if (stepIndex >= steps.length) {
+                    safeTimeout(() => {
+                        hideLoadingScreen();
+                        initDesktop();
+                    }, 500, 'Final loading step');
+                    return;
+                }
+                
+                const step = steps[stepIndex];
+                progress = step.progress;
+                
+                progressBar.style.width = progress + '%';
+                if (loadingText) loadingText.textContent = step.text;
+                
+                updateDebug(step.text, progress);
+                stepIndex++;
+                
+                safeTimeout(updateProgress, 400 + Math.random() * 200, `Loading step ${stepIndex}`);
+            };
+            
+            updateProgress();
+        }
+
+        // Desktop initialization
+        function initDesktop() {
+            if (debugState.initialized) {
+                updateDebug('Desktop already initialized');
+                return;
+            }
+            
+            updateDebug('Starting desktop initialization...');
+            
+            try {
+                // Initialize clock
+                initClock();
+                
+                // Initialize taskbar
+                initTaskbar();
+                
+                // Initialize start menu
+                initStartMenu();
+                
+                // Initialize desktop icons and load persisted items/preferences
+                initDesktopIcons();
+                loadPreferencesAndItems();
+                
+                debugState.initialized = true;
+                updateDebug('Desktop initialization complete!');
+                showNotification('🎉 Welcome to Pixel Portfolio!', 'success');
+                
+            } catch (error) {
+                updateDebug(`Desktop init failed: ${error.message}`, null, true);
+                console.error('Desktop initialization error:', error);
+                showFallback();
+            }
+        }
+
+        // Clock initialization
+        function initClock() {
+            const clockElement = checkElement('clock');
+            if (!clockElement) return;
+            
+            const updateClock = () => {
+                try {
+                    const now = new Date();
+                    const time = now.toLocaleTimeString('en-US', {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    clockElement.textContent = time;
+                } catch (error) {
+                    updateDebug(`Clock update error: ${error.message}`, null, true);
+                }
+            };
+
+            updateClock();
+            setInterval(updateClock, 1000);
+            updateDebug('Clock initialized');
+        }
+
+        // Taskbar initialization
+        function initTaskbar() {
+            const startButton = checkElement('startButton');
+            if (!startButton) return;
+            
+            startButton.addEventListener('click', () => {
+                try {
+                    toggleStartMenu();
+                } catch (error) {
+                    updateDebug(`Start button error: ${error.message}`, null, true);
+                }
+            });
+            
+            updateDebug('Taskbar initialized');
+        }
+
+        // Start menu initialization
+        function initStartMenu() {
+            const startMenu = checkElement('startMenu');
+            const startButton = checkElement('startButton');
+            
+            if (!startMenu || !startButton) return;
+
+            // Toggle start menu
+            startButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startMenu.classList.toggle('show');
+            });
+
+            // Close start menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!startMenu.contains(e.target) && !startButton.contains(e.target)) {
+                    startMenu.classList.remove('show');
+                }
+            });
+
+            // Handle start menu items
+            startMenu.addEventListener('click', (e) => {
+                const action = e.target.dataset.action;
+                if (action) {
+                    try {
+                        handleStartMenuAction(action);
+                        startMenu.classList.remove('show');
+                    } catch (error) {
+                        updateDebug(`Start menu action error: ${error.message}`, null, true);
+                    }
+                }
+            });
+            
+            updateDebug('Start menu initialized');
+        }
+
+        // Desktop icons initialization
+        function initDesktopIcons() {
+            const icons = document.querySelectorAll('.desktop-icon');
+            
+            icons.forEach((icon, index) => {
+                // Double click to open
+                icon.addEventListener('dblclick', () => {
+                    try {
+                        const windowType = icon.dataset.window;
+                        if (windowType) {
+                            openWindow(windowType);
+                        }
+                    } catch (error) {
+                        updateDebug(`Icon open error: ${error.message}`, null, true);
+                    }
+                });
+
+                // Single click to select
+                icon.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    try {
+                        selectIcon(icon);
+                    } catch (error) {
+                        updateDebug(`Icon select error: ${error.message}`, null, true);
+                    }
+                });
+
+                // Right click for context menu
+                icon.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    try {
+                        showContextMenu(e, icon);
+                    } catch (error) {
+                        updateDebug(`Context menu error: ${error.message}`, null, true);
+                    }
+                });
+
+                // Make icon draggable
+                makeIconDraggable(icon);
+            });
+            
+            updateDebug(`Desktop icons initialized (${icons.length} icons)`);
+        }
+
+        // Icon selection
+        function selectIcon(icon) {
+            document.querySelectorAll('.desktop-icon').forEach(i => {
+                i.style.background = 'rgba(0,0,0,0.1)';
+            });
+            icon.style.background = 'rgba(0,255,0,0.3)';
+        }
+
+        // Window system
+        let windowCounter = 0;
+        let windows = new Map();
+        let activeWindow = null;
+
+        function openWindow(type) {
+            try {
+                const windowId = `window_${++windowCounter}`;
+                const window = createWindow(type, windowId);
+                
+                windows.set(windowId, window);
+                activeWindow = windowId;
+                
+                loadWindowContent(window, type);
+                updateTaskbar();
+                
+                updateDebug(`Window opened: ${type}`);
+            } catch (error) {
+                updateDebug(`Window open error: ${error.message}`, null, true);
+                showNotification(`Failed to open ${type} window`, 'error');
+            }
+        }
+
+        function createWindow(type, id) {
+            const window = document.createElement('div');
+            window.className = 'window';
+            window.id = id;
+            window.style.cssText = `
+                top: ${Math.random() * 100 + 50}px;
+                left: ${Math.random() * 100 + 50}px;
+                width: 600px;
+                height: 400px;
+            `;
+
+            const header = document.createElement('div');
+            header.className = 'window-header';
+            header.innerHTML = `
+                <span>${type.toUpperCase()}</span>
+                <div class="window-controls">
+                    <div class="window-control minimize">_</div>
+                    <div class="window-control maximize">□</div>
+                    <div class="window-control close">×</div>
+                </div>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'window-content';
+
+            window.appendChild(header);
+            window.appendChild(content);
+            document.body.appendChild(window);
+
+            // Make window draggable
+            makeWindowDraggable(window, header);
+
+            // Add window controls
+            addWindowControls(window);
+
+            return window;
+        }
+
+        function makeWindowDraggable(window, header) {
+            let isDragging = false;
+            let currentX, currentY, initialX, initialY;
+
+            header.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                initialX = e.clientX - window.offsetLeft;
+                initialY = e.clientY - window.offsetTop;
+                window.style.zIndex = 1000;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    
+                    // Keep window within bounds
+                    const maxX = window.innerWidth - window.offsetWidth;
+                    const maxY = window.innerHeight - window.offsetHeight - 40; // Account for taskbar
+                    
+                    currentX = Math.max(0, Math.min(currentX, maxX));
+                    currentY = Math.max(0, Math.min(currentY, maxY));
+                    
+                    window.style.left = currentX + 'px';
+                    window.style.top = currentY + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        }
+
+        function addWindowControls(window) {
+            const controls = window.querySelectorAll('.window-control');
+            
+            controls.forEach(control => {
+                control.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const action = control.textContent;
+                    handleWindowControl(window, action);
+                });
+            });
+        }
+
+        function handleWindowControl(window, action) {
+            try {
+                switch(action) {
+                    case '_': // Minimize
+                        window.style.display = 'none';
+                        break;
+                    case '□': // Maximize
+                        if (window.style.width === '100vw') {
+                            window.style.cssText = window.dataset.originalStyle || '';
+                        } else {
+                            window.dataset.originalStyle = window.style.cssText;
+                            window.style.cssText = `
+                                top: 0 !important;
+                                left: 0 !important;
+                                width: 100vw !important;
+                                height: calc(100vh - 40px) !important;
+                                z-index: 1000 !important;
+                            `;
+                        }
+                        break;
+                    case '×': // Close
+                        window.remove();
+                        windows.delete(window.id);
+                        updateTaskbar();
+                        break;
+                }
+            } catch (error) {
+                updateDebug(`Window control error: ${error.message}`, null, true);
+            }
+        }
+
+        function loadWindowContent(window, type) {
+            const content = window.querySelector('.window-content');
+            
+            const contentMap = {
+                home: `
+                    <h1>🏠 WELCOME TO PIXEL PORTFOLIO</h1>
+                    <p>Your retro PC desktop experience is ready! This is an interactive desktop environment with working windows, icons, and applications.</p>
+                    
+                    <h2>🎯 Quick Actions</h2>
+                    <button class="btn primary" onclick="openWindow('about')">Open Profile</button>
+                    <button class="btn primary" onclick="openWindow('projects')">View Projects</button>
+                    <button class="btn primary" onclick="openWindow('contact')">Contact Me</button>
+                    
+                    <h2>🖥️ Desktop Features</h2>
+                    <p>• Double-click desktop icons to open applications</p>
+                    <p>• Use the START menu for navigation</p>
+                    <p>• Drag windows around to organize your workspace</p>
+                    <p>• Click window controls to minimize, maximize, or close</p>
+                `,
+                about: `
+                    <h1>👤 DEVELOPER PROFILE</h1>
+                    <p>Full-stack developer specializing in interactive web applications and retro-inspired interfaces.</p>
+                    
+                    <h2>🛠️ Technical Skills</h2>
+                    <p><strong>Frontend:</strong> HTML5, CSS3, JavaScript ES6+, React, Vue.js</p>
+                    <p><strong>Backend:</strong> Python, Django, Node.js, Express, PostgreSQL</p>
+                    <p><strong>Tools:</strong> Git, Docker, AWS, CI/CD pipelines</p>
+                    
+                    <h2>🎯 Specializations</h2>
+                    <p>• Interactive UI/UX design with modern functionality</p>
+                    <p>• Performance optimization and best practices</p>
+                    <p>• Cross-browser compatibility and responsive design</p>
+                    <p>• API development and database management</p>
+                `,
+                projects: `
+                    <h1>🎮 FEATURED PROJECTS</h1>
+                    <p>A collection of innovative projects showcasing various technologies and creative approaches.</p>
+                    
+                    <h2>🖥️ Pixel Portfolio Desktop</h2>
+                    <p>This retro PC desktop interface you're currently using!</p>
+                    <p><strong>Tech Stack:</strong> HTML5, CSS3, Vanilla JavaScript</p>
+                    <p><strong>Features:</strong> Window management, drag & drop, interactive desktop</p>
+                    
+                    <h2>🌐 Web Applications</h2>
+                    <p>Various full-stack web applications built with modern frameworks and best practices.</p>
+                    
+                    <h2>🎯 Interactive Demos</h2>
+                    <p>Creative coding experiments and interactive demonstrations.</p>
+                `,
+                contact: `
+                    <h1>📧 GET IN TOUCH</h1>
+                    <p>Ready to collaborate on your next project? Let's build something amazing together!</p>
+                    
+                    <h2>📬 Contact Information</h2>
+                    <p><strong>Email:</strong> developer@pixelportfolio.com</p>
+                    <p><strong>GitHub:</strong> github.com/pixelportfolio</p>
+                    <p><strong>LinkedIn:</strong> linkedin.com/in/pixelportfolio</p>
+                    
+                    <h2>💬 Project Inquiries</h2>
+                    <p>I'm always interested in hearing about new projects, collaboration opportunities, or discussing innovative web technologies.</p>
+                    
+                    <button class="btn primary" onclick="copyToClipboard('developer@pixelportfolio.com')">📋 Copy Email</button>
+                `,
+                games: `
+                    <h1>🎯 MINI GAMES</h1>
+                    <p>Take a break and enjoy some retro-style mini games!</p>
+                    
+                    <h2>🎮 Available Games</h2>
+                    <button class="btn primary" onclick="startGame('snake')">🐍 Snake Classic</button>
+                    <button class="btn primary" onclick="startGame('tetris')">🧩 Tetris</button>
+                    <button class="btn primary" onclick="startGame('pong')">🏓 Pong</button>
+                    <button class="btn primary" onclick="startGame('breakout')">💥 Breakout</button>
+                    
+                    <h2>🏆 High Scores</h2>
+                    <p>Challenge yourself and beat your best scores!</p>
+                `,
+                settings: `
+                    <h1>⚙️ SYSTEM SETTINGS</h1>
+                    <p>Customize your retro PC experience!</p>
+                    
+                    <h2>🎨 Visual Settings</h2>
+                    <button class="btn primary" onclick="toggleTheme()">🌙 Toggle Theme</button>
+                    <button class="btn primary" onclick="toggleParticles()">✨ Toggle Particles</button>
+                    <button class="btn primary" onclick="toggleScanlines()">📺 Toggle Scanlines</button>
+                    
+                    <h2>🔊 Audio Settings</h2>
+                    <button class="btn primary" onclick="toggleSound()">🔊 Toggle Sound</button>
+                    <button class="btn primary" onclick="adjustVolume()">🎚️ Adjust Volume</button>
+                `,
+                help: `
+                    <h1>❓ HELP & TUTORIAL</h1>
+                    <p>Welcome to your retro PC desktop! Here's how to get started:</p>
+                    
+                    <h2>🖱️ Basic Navigation</h2>
+                    <p>• <strong>Click START</strong> to open the main menu</p>
+                    <p>• <strong>Double-click icons</strong> to open applications</p>
+                    <p>• <strong>Drag windows</strong> by their title bars</p>
+                    <p>• <strong>Use window controls</strong> to minimize, maximize, or close</p>
+                    <p>• <strong>Right-click icons</strong> for context menu options</p>
+                    <p>• <strong>Drag icons</strong> to move them around the desktop</p>
+                    
+                    <h2>🎮 Features</h2>
+                    <p>• <strong>Retro PC aesthetic</strong> with authentic Windows 98 feel</p>
+                    <p>• <strong>Animated background</strong> with floating particles</p>
+                    <p>• <strong>Responsive design</strong> that works on all devices</p>
+                    <p>• <strong>Interactive elements</strong> with hover effects and animations</p>
+                    <p>• <strong>Context menus</strong> with desktop actions</p>
+                    <p>• <strong>Run dialog</strong> for quick program access</p>
+                    <p>• <strong>Control Panel</strong> for system settings</p>
+                `,
+                notepad: `
+                    <h1>📝 NOTEPAD</h1>
+                    <p>A simple text editor for creating and editing text files.</p>
+                    
+                    <div style="margin: 20px 0;">
+                        <textarea id="notepadText" style="
+                            width: 100%;
+                            height: 300px;
+                            padding: 10px;
+                            border: 2px inset var(--retro-highlight);
+                            background: var(--retro-highlight);
+                            font-family: 'VT323', monospace;
+                            font-size: 14px;
+                            resize: none;
+                        " placeholder="Start typing here..."></textarea>
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <button class="btn primary" onclick="saveNotepadText()">💾 Save</button>
+                        <button class="btn" onclick="clearNotepadText()">🗑️ Clear</button>
+                    </div>
+                `,
+                calculator: `
+                    <h1>🧮 CALCULATOR</h1>
+                    <p>A simple calculator for basic arithmetic operations.</p>
+                    
+                    <div style="margin: 20px 0;">
+                        <input type="text" id="calcDisplay" style="
+                            width: 100%;
+                            padding: 10px;
+                            border: 2px inset var(--retro-highlight);
+                            background: var(--retro-highlight);
+                            font-family: 'VT323', monospace;
+                            font-size: 18px;
+                            text-align: right;
+                            margin-bottom: 10px;
+                        " readonly value="0">
+                        
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+                            <button class="btn" onclick="calcInput('7')">7</button>
+                            <button class="btn" onclick="calcInput('8')">8</button>
+                            <button class="btn" onclick="calcInput('9')">9</button>
+                            <button class="btn" onclick="calcInput('/')">/</button>
+                            <button class="btn" onclick="calcInput('4')">4</button>
+                            <button class="btn" onclick="calcInput('5')">5</button>
+                            <button class="btn" onclick="calcInput('6')">6</button>
+                            <button class="btn" onclick="calcInput('*')">*</button>
+                            <button class="btn" onclick="calcInput('1')">1</button>
+                            <button class="btn" onclick="calcInput('2')">2</button>
+                            <button class="btn" onclick="calcInput('3')">3</button>
+                            <button class="btn" onclick="calcInput('-')">-</button>
+                            <button class="btn" onclick="calcInput('0')">0</button>
+                            <button class="btn" onclick="calcInput('.')">.</button>
+                            <button class="btn primary" onclick="calcCalculate()">=</button>
+                            <button class="btn" onclick="calcInput('+')">+</button>
+                        </div>
+                        
+                        <div style="margin-top: 10px;">
+                            <button class="btn" onclick="calcClear()">C</button>
+                            <button class="btn" onclick="calcBackspace()">⌫</button>
+                        </div>
+                    </div>
+                `,
+                paint: `
+                    <h1>🎨 PAINT</h1>
+                    <p>A simple drawing application. Click and drag to draw!</p>
+                    
+                    <div style="margin: 20px 0;">
+                        <canvas id="paintCanvas" style="
+                            border: 2px inset var(--retro-highlight);
+                            background: white;
+                            cursor: crosshair;
+                        " width="400" height="300"></canvas>
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <button class="btn" onclick="paintClear()">🗑️ Clear</button>
+                        <button class="btn" onclick="paintSave()">💾 Save</button>
+                        <input type="color" id="paintColor" value="#000000" onchange="paintChangeColor(this.value)">
+                        <label for="paintColor">Color</label>
+                    </div>
+                `,
+                command: `
+                    <h1>💻 COMMAND PROMPT</h1>
+                    <p>Type commands to interact with the system.</p>
+                    
+                    <div style="margin: 20px 0;">
+                        <div id="cmdOutput" style="
+                            width: 100%;
+                            height: 300px;
+                            padding: 10px;
+                            border: 2px inset var(--retro-highlight);
+                            background: var(--retro-bg);
+                            color: var(--retro-accent);
+                            font-family: 'VT323', monospace;
+                            font-size: 14px;
+                            overflow-y: auto;
+                            margin-bottom: 10px;
+                        ">Pixel Portfolio Command Prompt v1.0<br>Type 'help' for available commands.<br><br></div>
+                        
+                        <div style="display: flex;">
+                            <span style="color: var(--retro-accent); margin-right: 5px;">C:\\></span>
+                            <input type="text" id="cmdInput" style="
+                                flex: 1;
+                                padding: 5px;
+                                border: none;
+                                background: transparent;
+                                color: var(--retro-accent);
+                                font-family: 'VT323', monospace;
+                                font-size: 14px;
+                                outline: none;
+                            " placeholder="Type command here...">
+                        </div>
+                    </div>
+                `
+            };
+            
+            content.innerHTML = contentMap[type] || `<h1>Coming Soon</h1><p>This application is under development.</p>`;
+            
+            // Initialize specific applications
+            safeTimeout(() => {
+                switch(type) {
+                    case 'paint':
+                        initPaint();
+                        break;
+                    case 'command':
+                        initCommandPrompt();
+                        break;
+                }
+            }, 100, `Initialize ${type} application`);
+        }
+
+        function updateTaskbar() {
+            const taskbarTabs = checkElement('taskbarTabs');
+            if (!taskbarTabs) return;
+            
+            taskbarTabs.innerHTML = '';
+
+            windows.forEach((window, id) => {
+                const tab = document.createElement('div');
+                tab.className = 'taskbar-tab';
+                tab.textContent = window.querySelector('.window-header span').textContent;
+                
+                if (id === activeWindow) {
+                    tab.classList.add('active');
+                }
+                
+                tab.addEventListener('click', () => {
+                    focusWindow(id);
+                });
+                
+                taskbarTabs.appendChild(tab);
+            });
+        }
+
+        function focusWindow(id) {
+            const window = document.getElementById(id);
+            if (window) {
+                window.style.display = 'block';
+                window.style.zIndex = 1000;
+                activeWindow = id;
+                updateTaskbar();
+            }
+        }
+
+        function toggleStartMenu() {
+            const startMenu = checkElement('startMenu');
+            if (startMenu) {
+                startMenu.classList.toggle('show');
+            }
+        }
+
+        function handleStartMenuAction(action) {
+            switch(action) {
+                case 'home':
+                    showNotification('Already on home desktop!', 'info');
+                    break;
+                case 'about':
+                case 'projects':
+                case 'contact':
+                    openWindow(action);
+                    break;
+                case 'games':
+                    openWindow('games');
+                    break;
+                case 'settings':
+                    openWindow('settings');
+                    break;
+                case 'help':
+                    openWindow('help');
+                    break;
+                case 'run':
+                    showRunDialog();
+                    break;
+                case 'control-panel':
+                    openControlPanel();
+                    break;
+                case 'restart':
+                    if (confirm('Are you sure you want to restart the system?')) {
+                        showNotification('Restarting system...', 'info');
+                        safeTimeout(() => {
+                            location.reload();
+                        }, 2000, 'Restart animation');
+                    }
+                    break;
+                case 'shutdown':
+                    if (confirm('Are you sure you want to shutdown?')) {
+                        showNotification('Shutting down...', 'info');
+                        safeTimeout(() => {
+                            document.body.innerHTML = '<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#00ff00;font-size:2rem;font-family:monospace;">SYSTEM SHUTDOWN</div>';
+                        }, 2000, 'Shutdown animation');
+                    }
+                    break;
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            safeTimeout(() => notification.classList.add('show'), 100, 'Show notification');
+            safeTimeout(() => {
+                notification.classList.remove('show');
+                safeTimeout(() => notification.remove(), 300, 'Remove notification');
+            }, 3000, 'Hide notification');
+        }
+
+        // Utility functions
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Email copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('Failed to copy email', 'error');
+            });
+        }
+
+        // Game functions
+        function startGame(gameType) {
+            showNotification(`Starting ${gameType}...`, 'info');
+            // Placeholder for game implementation
+            setTimeout(() => {
+                showNotification(`${gameType} game loaded!`, 'success');
+            }, 1000);
+        }
+
+        // Settings functions
+        function toggleTheme() {
+            const isDark = !document.body.classList.contains('dark-theme');
+            document.body.classList.toggle('dark-theme');
+            showNotification('Theme toggled!', 'info');
+            API.savePreferences({ theme: isDark ? 'dark' : 'light' }).catch(() => {});
+        }
+
+        function toggleParticles() {
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(p => p.style.display = p.style.display === 'none' ? 'block' : 'none');
+            showNotification('Particles toggled!', 'info');
+        }
+
+        function toggleScanlines() {
+            const scanlines = document.querySelector('body::before');
+            if (scanlines) {
+                scanlines.style.animationPlayState = 
+                    scanlines.style.animationPlayState === 'paused' ? 'running' : 'paused';
+            }
+            showNotification('Scanlines toggled!', 'info');
+        }
+
+        function toggleSound() {
+            showNotification('Sound toggled!', 'info');
+        }
+
+        function adjustVolume() {
+            const volume = prompt('Enter volume (0-100):', '50');
+            if (volume !== null) {
+                showNotification(`Volume set to ${volume}%`, 'info');
+            }
+        }
+
+        // Context menu system
+        function showContextMenu(e, target) {
+            // Remove existing context menu
+            const existingMenu = document.querySelector('.context-menu');
+            if (existingMenu) {
+                existingMenu.remove();
+            }
+
+            const menu = document.createElement('div');
+            menu.className = 'context-menu';
+            menu.style.cssText = `
+                position: fixed;
+                top: ${e.clientY}px;
+                left: ${e.clientX}px;
+                background: var(--retro-window);
+                border: 2px outset var(--retro-highlight);
+                padding: 5px 0;
+                z-index: 3000;
+                min-width: 150px;
+                box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            `;
+
+            const menuItems = [
+                { text: 'Open', action: () => openWindow(target.dataset.window) },
+                { text: 'Refresh', action: () => refreshDesktop() },
+                { text: 'Change Wallpaper', action: () => changeWallpaper() },
+                { text: 'Properties', action: () => showProperties(target) },
+                { text: 'New Folder', action: () => createNewFolder() },
+                { text: 'Arrange Icons', action: () => arrangeIcons() }
+            ];
+
+            menuItems.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.style.cssText = `
+                    padding: 8px 15px;
+                    cursor: pointer;
+                    font-family: 'VT323', monospace;
+                    font-size: 14px;
+                    transition: all var(--transition-fast);
+                `;
+                menuItem.textContent = item.text;
+                
+                menuItem.addEventListener('mouseenter', () => {
+                    menuItem.style.background = 'var(--retro-info)';
+                    menuItem.style.color = 'var(--retro-highlight)';
+                });
+                
+                menuItem.addEventListener('mouseleave', () => {
+                    menuItem.style.background = 'transparent';
+                    menuItem.style.color = 'var(--retro-text)';
+                });
+                
+                menuItem.addEventListener('click', () => {
+                    try {
+                        item.action();
+                        menu.remove();
+                    } catch (error) {
+                        updateDebug(`Context menu action error: ${error.message}`, null, true);
+                    }
+                });
+                
+                menu.appendChild(menuItem);
+            });
+
+            document.body.appendChild(menu);
+
+            // Close menu when clicking outside
+            const closeMenu = (e) => {
+                if (!menu.contains(e.target)) {
+                    menu.remove();
+                    document.removeEventListener('click', closeMenu);
+                }
+            };
+            
+            safeTimeout(() => {
+                document.addEventListener('click', closeMenu);
+            }, 100, 'Context menu close handler');
+        }
+
+        // Context menu actions
+        function refreshDesktop() {
+            showNotification('Refreshing desktop...', 'info');
+            safeTimeout(() => {
+                // Simulate refresh by reinitializing desktop icons
+                initDesktopIcons();
+                showNotification('Desktop refreshed!', 'success');
+            }, 500, 'Desktop refresh');
+        }
+
+        function changeWallpaper() {
+            const wallpapers = [
+                'linear-gradient(45deg, var(--retro-desktop) 0%, #0000a0 50%, var(--retro-desktop) 100%)',
+                'linear-gradient(45deg, #800080 0%, #400040 50%, #800080 100%)',
+                'linear-gradient(45deg, #008000 0%, #004000 50%, #008000 100%)',
+                'linear-gradient(45deg, #800000 0%, #400000 50%, #800000 100%)',
+                'linear-gradient(45deg, #000000 0%, #404040 50%, #000000 100%)'
+            ];
+            
+            const currentBg = document.querySelector('.desktop').style.background;
+            let currentIndex = wallpapers.findIndex(wp => wp === currentBg);
+            currentIndex = (currentIndex + 1) % wallpapers.length;
+            
+            document.querySelector('.desktop').style.background = wallpapers[currentIndex];
+            showNotification('Wallpaper changed!', 'success');
+
+            // Persist wallpaper name (simple index for demo)
+            API.savePreferences({ wallpaper: `preset-${currentIndex}` }).catch(() => {});
+        }
+
+        function showProperties(target) {
+            const window = createWindow('properties', `properties_${Date.now()}`);
+            const content = window.querySelector('.window-content');
+            
+            content.innerHTML = `
+                <h1>📋 PROPERTIES</h1>
+                <h2>${target.querySelector('span').textContent}</h2>
+                
+                <div style="margin: 20px 0;">
+                    <p><strong>Type:</strong> Desktop Icon</p>
+                    <p><strong>Location:</strong> Desktop</p>
+                    <p><strong>Size:</strong> 120x140 pixels</p>
+                    <p><strong>Created:</strong> ${new Date().toLocaleDateString()}</p>
+                    <p><strong>Modified:</strong> ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <button class="btn primary" onclick="this.parentElement.parentElement.parentElement.parentElement.remove()">OK</button>
+                    <button class="btn" onclick="this.parentElement.parentElement.parentElement.parentElement.remove()">Cancel</button>
+                </div>
+            `;
+            
+            windows.set(window.id, window);
+            updateTaskbar();
+        }
+
+        function createNewFolder() {
+            const folderIcon = document.createElement('div');
+            folderIcon.className = 'desktop-icon';
+            folderIcon.style.cssText = `
+                position: absolute;
+                top: ${Math.random() * 300 + 100}px;
+                left: ${Math.random() * 300 + 100}px;
+                width: 120px;
+                height: 140px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                cursor: pointer;
+                transition: all var(--transition-normal);
+                z-index: 10;
+                padding: 15px;
+                border-radius: 12px;
+                background: rgba(255,215,61,0.15);
+                border: 3px solid var(--pixel-warning);
+                backdrop-filter: blur(5px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            `;
+            
+            folderIcon.innerHTML = `
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRkZEN0QzIi8+CjxwYXRoIGQ9Ik0xMiAxMkgzNlYzNkgxMlYxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAzNkgzNlY0OEgxMlYzNloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="Folder">
+                <span>📁 NEW FOLDER</span>
+            `;
+            
+            // Add event listeners
+            folderIcon.addEventListener('dblclick', () => {
+                showNotification('Folder opened!', 'info');
+            });
+            
+            folderIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                selectIcon(folderIcon);
+            });
+            
+            folderIcon.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                showContextMenu(e, folderIcon);
+            });
+            
+            // Make draggable
+            makeIconDraggable(folderIcon);
+            
+            document.body.appendChild(folderIcon);
+            showNotification('New folder created!', 'success');
+
+            // Persist the new folder
+            const top = parseInt(folderIcon.style.top, 10) || 100;
+            const left = parseInt(folderIcon.style.left, 10) || 100;
+            API.createDesktopItem({ label: 'New Folder', item_type: 'folder', pos_x: left, pos_y: top })
+                .then((resp) => {
+                    folderIcon.dataset.itemId = resp.id;
+                })
+                .catch(() => {});
+        }
+
+        function arrangeIcons() {
+            const icons = document.querySelectorAll('.desktop-icon');
+            const iconSize = 140;
+            const spacing = 20;
+            const startX = 100;
+            const startY = 100;
+            const iconsPerRow = Math.floor((window.innerWidth - startX * 2) / (120 + spacing));
+            
+            icons.forEach((icon, index) => {
+                const row = Math.floor(index / iconsPerRow);
+                const col = index % iconsPerRow;
+                const x = startX + col * (120 + spacing);
+                const y = startY + row * (iconSize + spacing);
+                
+                icon.style.top = y + 'px';
+                icon.style.left = x + 'px';
+            });
+            
+            showNotification('Icons arranged!', 'success');
+        }
+
+        function makeIconDraggable(icon) {
+            let isDragging = false;
+            let currentX, currentY, initialX, initialY;
+
+            icon.addEventListener('mousedown', (e) => {
+                if (e.button === 0) { // Left click only
+                    isDragging = true;
+                    initialX = e.clientX - icon.offsetLeft;
+                    initialY = e.clientY - icon.offsetTop;
+                    icon.style.zIndex = 1000;
+                }
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    
+                    // Keep icon within bounds
+                    const maxX = window.innerWidth - icon.offsetWidth;
+                    const maxY = window.innerHeight - icon.offsetHeight - 40; // Account for taskbar
+                    
+                    currentX = Math.max(0, Math.min(currentX, maxX));
+                    currentY = Math.max(0, Math.min(currentY, maxY));
+                    
+                    icon.style.left = currentX + 'px';
+                    icon.style.top = currentY + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                icon.style.zIndex = 10;
+
+                // Save new position if this is a persisted item
+                const id = icon.dataset.itemId;
+                if (id) {
+                    const top = parseInt(icon.style.top, 10) || 0;
+                    const left = parseInt(icon.style.left, 10) || 0;
+                    API.updateDesktopItem({ id: Number(id), pos_x: left, pos_y: top }).catch(() => {});
+                }
+            });
+        }
+
+        // Run dialog
+        function showRunDialog() {
+            const runWindow = createWindow('run', `run_${Date.now()}`);
+            const content = runWindow.querySelector('.window-content');
+            
+            content.innerHTML = `
+                <h1>🏃 RUN</h1>
+                <p>Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.</p>
+                
+                <div style="margin: 20px 0;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Open:</label>
+                    <input type="text" id="runInput" style="
+                        width: 100%;
+                        padding: 8px;
+                        border: 2px inset var(--retro-highlight);
+                        background: var(--retro-highlight);
+                        font-family: 'VT323', monospace;
+                        font-size: 14px;
+                        margin-bottom: 20px;
+                    " placeholder="Type program name here...">
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <button class="btn primary" onclick="executeRunCommand()">OK</button>
+                    <button class="btn" onclick="this.parentElement.parentElement.parentElement.parentElement.remove()">Cancel</button>
+                    <button class="btn" onclick="browseForFile()">Browse...</button>
+                </div>
+            `;
+            
+            windows.set(runWindow.id, runWindow);
+            updateTaskbar();
+            
+            // Focus on input
+            safeTimeout(() => {
+                const input = document.getElementById('runInput');
+                if (input) input.focus();
+            }, 100, 'Run dialog focus');
+        }
+
+        function executeRunCommand() {
+            const input = document.getElementById('runInput');
+            if (!input) return;
+            
+            const command = input.value.trim().toLowerCase();
+            
+            const commands = {
+                'notepad': () => openWindow('notepad'),
+                'calc': () => openWindow('calculator'),
+                'paint': () => openWindow('paint'),
+                'explorer': () => showNotification('File Explorer opened!', 'info'),
+                'cmd': () => openWindow('command'),
+                'control': () => openControlPanel(),
+                'help': () => openWindow('help'),
+                'about': () => openWindow('about'),
+                'projects': () => openWindow('projects'),
+                'contact': () => openWindow('contact'),
+                'games': () => openWindow('games'),
+                'settings': () => openWindow('settings')
+            };
+            
+            if (commands[command]) {
+                commands[command]();
+                showNotification(`Executing: ${command}`, 'success');
+                API.addRunHistory({ command, result: 'ok' }).catch(() => {});
+            } else {
+                showNotification(`Unknown command: ${command}`, 'error');
+                API.addRunHistory({ command, result: 'unknown' }).catch(() => {});
+            }
+            
+            // Close run window
+            const runWindow = document.querySelector('[id^="run_"]');
+            if (runWindow) runWindow.remove();
+        }
+
+        function browseForFile() {
+            showNotification('Browse functionality would open file dialog', 'info');
+        }
+
+        // Control Panel
+        function openControlPanel() {
+            const controlWindow = createWindow('control-panel', `control_${Date.now()}`);
+            const content = controlWindow.querySelector('.window-content');
+            
+            content.innerHTML = `
+                <h1>⚙️ CONTROL PANEL</h1>
+                <p>Configure system settings and preferences.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">
+                    <button class="btn primary" onclick="openWindow('display')">🖥️ Display</button>
+                    <button class="btn primary" onclick="openWindow('sound')">🔊 Sound</button>
+                    <button class="btn primary" onclick="openWindow('keyboard')">⌨️ Keyboard</button>
+                    <button class="btn primary" onclick="openWindow('mouse')">🖱️ Mouse</button>
+                    <button class="btn primary" onclick="openWindow('network')">🌐 Network</button>
+                    <button class="btn primary" onclick="openWindow('system')">💻 System</button>
+                    <button class="btn primary" onclick="openWindow('users')">👥 Users</button>
+                    <button class="btn primary" onclick="openWindow('security')">🔒 Security</button>
+                    <button class="btn" onclick="openWallpapers()">🖼️ Wallpapers</button>
+                    <button class="btn" onclick="openThemeManager()">🎨 Themes</button>
+                    <button class="btn" onclick="viewRunHistory()">📜 Run history</button>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <button class="btn" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
+                </div>
+            `;
+            
+            windows.set(controlWindow.id, controlWindow);
+            updateTaskbar();
+        }
+        
+        function applyThemeVariables(vars) {
+            const root = document.documentElement;
+            Object.entries(vars || {}).forEach(([k, v]) => root.style.setProperty(k, v));
+        }
+
+        async function openThemeManager() {
+            const win = createWindow('themes', `themes_${Date.now()}`);
+            const content = win.querySelector('.window-content');
+            content.innerHTML = `<h1>🎨 THEMES</h1><p>Pick a theme. It will be saved and applied instantly.</p>
+                <div style="margin:10px 0;">
+                  <button class="btn" onclick="filterThemes('All')">All</button>
+                  <button class="btn" onclick="filterThemes('Retro')">Retro</button>
+                  <button class="btn" onclick="filterThemes('Modern')">Modern</button>
+                  <button class="btn" onclick="filterThemes('Nostalgia')">Nostalgia</button>
+                  <button class="btn" onclick="filterThemes('Art')">Art</button>
+                </div>
+                <div id="themeList">Loading themes...</div>`;
+            windows.set(win.id, win);
+            updateTaskbar();
+
+            try {
+                const prefs = await API.getPreferences();
+                renderThemeList(content.querySelector('#themeList'), prefs.theme);
+            } catch (e) {
+                content.querySelector('#themeList').innerHTML = 'Failed to load themes';
+            }
+        }
+
+        function renderThemeList(container, activeKey, filter = 'All') {
+            const entries = Object.values(THEMES).filter(t => filter === 'All' || t.category === filter);
+            container.innerHTML = entries.map(t => {
+                const active = t.key === activeKey ? ' (Active)' : '';
+                const iconRow = t.icons ? `<div style="margin-top:6px; font-size:18px;">${t.icons.join(' ')}</div>` : '';
+                return `<div style="margin:8px 0;padding:8px;border:2px inset var(--retro-highlight);background:var(--retro-window)">
+                    <strong>${t.name}</strong> <small>(${t.category})</small>${active}<br>
+                    <button class="btn" onclick="selectTheme('${t.key}')">Apply</button>
+                    ${iconRow}
+                </div>`;
+            }).join('') || 'No themes found.';
+        }
+
+        function filterThemes(category) {
+            const container = document.querySelector('#themeList');
+            const activeKey = window.currentThemeKey || 'retro-98';
+            renderThemeList(container, activeKey, category);
+        }
+
+        async function selectTheme(key) {
+            try {
+                const theme = THEMES[key];
+                if (!theme) { showNotification('Theme not found', 'error'); return; }
+                applyThemeVariables(theme.variables);
+                await API.savePreferences({ theme: key });
+                window.currentThemeKey = key;
+                if (key.startsWith('modern-')) {
+                    document.body.classList.add('dark-theme');
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+                showNotification(`Theme applied: ${theme.name}`, 'success');
+                const container = document.querySelector('#themeList');
+                if (container) renderThemeList(container, key);
+            } catch (_) {}
+        }
+
+        function openWallpapers() {
+            const win = createWindow('wallpapers', `wall_${Date.now()}`);
+            const content = win.querySelector('.window-content');
+            content.innerHTML = `
+                <h1>🖼️ WALLPAPERS</h1>
+                <p>Select a wallpaper preset and it will be saved.</p>
+                <div style="margin:10px 0;">
+                    <button class="btn" onclick="applyWallpaper(0)">Preset 1</button>
+                    <button class="btn" onclick="applyWallpaper(1)">Preset 2</button>
+                    <button class="btn" onclick="applyWallpaper(2)">Preset 3</button>
+                    <button class="btn" onclick="applyWallpaper(3)">Preset 4</button>
+                    <button class="btn" onclick="applyWallpaper(4)">Preset 5</button>
+                </div>
+            `;
+            windows.set(win.id, win);
+            updateTaskbar();
+        }
+
+        function applyWallpaper(index) {
+            const wallpapers = [
+                'linear-gradient(45deg, var(--retro-desktop) 0%, #0000a0 50%, var(--retro-desktop) 100%)',
+                'linear-gradient(45deg, #800080 0%, #400040 50%, #800080 100%)',
+                'linear-gradient(45deg, #008000 0%, #004000 50%, #008000 100%)',
+                'linear-gradient(45deg, #800000 0%, #400000 50%, #800000 100%)',
+                'linear-gradient(45deg, #000000 0%, #404040 50%, #000000 100%)'
+            ];
+            document.querySelector('.desktop').style.background = wallpapers[index];
+            API.savePreferences({ wallpaper: `preset-${index}` }).catch(()=>{});
+            showNotification('Wallpaper applied and saved!', 'success');
+        }
+
+        async function loadPreferencesAndItems() {
+            try {
+                // Preferences
+                const prefs = await API.getPreferences();
+                const key = prefs.theme || 'retro-98';
+                const theme = THEMES[key] || THEMES['retro-98'];
+                if (theme) applyThemeVariables(theme.variables);
+                if (key.includes('modern')) {
+                    document.body.classList.add('dark-theme');
+                }
+                window.currentThemeKey = key;
+                if (prefs.wallpaper && prefs.wallpaper.startsWith('preset-')) {
+                    const idx = parseInt(prefs.wallpaper.split('-')[1] || '0', 10) || 0;
+                    applyWallpaper(idx);
+                }
+
+                // Desktop items
+                const items = await API.getDesktopItems();
+                (items.results || []).forEach((it) => {
+                    if (it.item_type === 'folder') {
+                        const el = document.createElement('div');
+                        el.className = 'desktop-icon';
+                        el.dataset.itemId = it.id;
+                        el.style.cssText = `position:absolute; top:${it.pos_y}px; left:${it.pos_x}px; width:120px; height:140px; display:flex; flex-direction:column; align-items:center; cursor:pointer; transition:all var(--transition-normal); z-index:10; padding:15px; border-radius:12px; background: rgba(255,215,61,0.15); border: 3px solid var(--pixel-warning); backdrop-filter: blur(5px); box-shadow: 0 4px 15px rgba(0,0,0,0.3);`;
+                        el.innerHTML = `
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRkZEN0QzIi8+CjxwYXRoIGQ9Ik0xMiAxMkgzNlYzNkgxMlYxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAzNkgzNlY0OEgxMlYzNloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="Folder">
+                            <span>📁 ${it.label}</span>`;
+                        // events
+                        el.addEventListener('dblclick', () => showNotification('Folder opened!', 'info'));
+                        el.addEventListener('click', (e) => { e.preventDefault(); selectIcon(el); });
+                        el.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, el); });
+                        makeIconDraggable(el);
+                        document.body.appendChild(el);
+                    }
+                });
+            } catch (e) {
+                updateDebug(`Load prefs/items failed: ${e.message}`, null, true);
+            }
+        }
+
+        // Notepad functions
+        function saveNotepadText() {
+            const textarea = document.getElementById('notepadText');
+            if (textarea) {
+                const text = textarea.value;
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'document.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+                showNotification('Document saved!', 'success');
+            }
+        }
+
+        function clearNotepadText() {
+            const textarea = document.getElementById('notepadText');
+            if (textarea) {
+                textarea.value = '';
+                showNotification('Document cleared!', 'info');
+            }
+        }
+
+        // Calculator functions
+        let calcExpression = '0';
+        let calcResult = 0;
+
+        function calcInput(value) {
+            const display = document.getElementById('calcDisplay');
+            if (!display) return;
+            
+            if (calcExpression === '0' && value !== '.') {
+                calcExpression = value;
+            } else {
+                calcExpression += value;
+            }
+            display.value = calcExpression;
+        }
+
+        function calcCalculate() {
+            const display = document.getElementById('calcDisplay');
+            if (!display) return;
+            
+            try {
+                calcResult = eval(calcExpression);
+                display.value = calcResult;
+                calcExpression = calcResult.toString();
+            } catch (error) {
+                display.value = 'Error';
+                calcExpression = '0';
+            }
+        }
+
+        function calcClear() {
+            const display = document.getElementById('calcDisplay');
+            if (!display) return;
+            
+            calcExpression = '0';
+            display.value = calcExpression;
+        }
+
+        function calcBackspace() {
+            const display = document.getElementById('calcDisplay');
+            if (!display) return;
+            
+            if (calcExpression.length > 1) {
+                calcExpression = calcExpression.slice(0, -1);
+            } else {
+                calcExpression = '0';
+            }
+            display.value = calcExpression;
+        }
+
+        // Paint functions
+        let paintContext = null;
+        let paintDrawing = false;
+
+        function initPaint() {
+            const canvas = document.getElementById('paintCanvas');
+            if (!canvas) return;
+            
+            paintContext = canvas.getContext('2d');
+            paintContext.strokeStyle = '#000000';
+            paintContext.lineWidth = 2;
+            paintContext.lineCap = 'round';
+            
+            canvas.addEventListener('mousedown', startPaint);
+            canvas.addEventListener('mousemove', drawPaint);
+            canvas.addEventListener('mouseup', stopPaint);
+            canvas.addEventListener('mouseout', stopPaint);
+        }
+
+        function startPaint(e) {
+            paintDrawing = true;
+            const rect = e.target.getBoundingClientRect();
+            paintContext.beginPath();
+            paintContext.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function drawPaint(e) {
+            if (!paintDrawing) return;
+            const rect = e.target.getBoundingClientRect();
+            paintContext.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            paintContext.stroke();
+        }
+
+        function stopPaint() {
+            paintDrawing = false;
+        }
+
+        function paintClear() {
+            const canvas = document.getElementById('paintCanvas');
+            if (!canvas || !paintContext) return;
+            
+            paintContext.clearRect(0, 0, canvas.width, canvas.height);
+            showNotification('Canvas cleared!', 'info');
+        }
+
+        function paintSave() {
+            const canvas = document.getElementById('paintCanvas');
+            if (!canvas) return;
+            
+            const link = document.createElement('a');
+            link.download = 'drawing.png';
+            link.href = canvas.toDataURL();
+            link.click();
+            showNotification('Drawing saved!', 'success');
+        }
+
+        function paintChangeColor(color) {
+            if (paintContext) {
+                paintContext.strokeStyle = color;
+            }
+        }
+
+        // Command prompt functions
+        function initCommandPrompt() {
+            const input = document.getElementById('cmdInput');
+            if (!input) return;
+            
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    executeCommand(input.value);
+                    input.value = '';
+                }
+            });
+        }
+
+        function executeCommand(command) {
+            const output = document.getElementById('cmdOutput');
+            if (!output) return;
+            
+            const cmd = command.trim().toLowerCase();
+            let response = '';
+            
+            switch(cmd) {
+                case 'help':
+                    response = 'Available commands:<br>help - Show this help<br>clear - Clear screen<br>date - Show current date<br>time - Show current time<br>version - Show system version<br>dir - List files<br>echo [text] - Display text';
+                    break;
+                case 'clear':
+                    output.innerHTML = 'Pixel Portfolio Command Prompt v1.0<br>Type \'help\' for available commands.<br><br>';
+                    return;
+                case 'date':
+                    response = new Date().toLocaleDateString();
+                    break;
+                case 'time':
+                    response = new Date().toLocaleTimeString();
+                    break;
+                case 'version':
+                    response = 'Pixel Portfolio Desktop v1.0<br>Retro PC Interface';
+                    break;
+                case 'dir':
+                    response = 'Directory of C:\\<br><br>HOME.EXE<br>ABOUT.EXE<br>PROJECTS.EXE<br>CONTACT.EXE<br>GAMES.EXE<br>SETTINGS.EXE<br>1 file(s)';
+                    break;
+                case '':
+                    return;
+                default:
+                    if (cmd.startsWith('echo ')) {
+                        response = cmd.substring(5);
+                    } else {
+                        response = `'${command}' is not recognized as an internal or external command, operable program or batch file.`;
+                    }
+            }
+            
+            output.innerHTML += `C:\\>${command}<br>${response}<br><br>`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Main initialization
+        function main() {
+            updateDebug('Starting main initialization...');
+            
+            try {
+                // Check critical elements
+                const criticalElements = ['loadingScreen', 'desktop', 'startButton', 'clock'];
+                let missingElements = 0;
+                
+                criticalElements.forEach(id => {
+                    if (!checkElement(id, false)) {
+                        missingElements++;
+                    }
+                });
+                
+                if (missingElements > 2) {
+                    updateDebug(`Too many missing elements (${missingElements}), showing fallback`, null, true);
+                    showFallback();
+                    return;
+                }
+                
+                // Start loading simulation
+                simulateLoading();
+                
+                // Set up emergency timeout
+                safeTimeout(() => {
+                    if (!debugState.initialized) {
+                        updateDebug('Emergency timeout triggered', null, true);
+                        showFallback();
+                    }
+                }, 8000, 'Emergency timeout');
+                
+                updateDebug('Main initialization complete');
+                
+            } catch (error) {
+                updateDebug(`Main initialization failed: ${error.message}`, null, true);
+                showFallback();
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', main);
+        } else {
+            main();
+        }
+
+        // Global error handlers
+        window.addEventListener('error', (e) => {
+            updateDebug(`Global error: ${e.message}`, null, true);
+            console.error('Global error:', e.error);
+            
+            if (!debugState.initialized) {
+                showFallback();
+            }
+        });
+
+        window.addEventListener('unhandledrejection', (e) => {
+            updateDebug(`Unhandled promise: ${e.reason}`, null, true);
+            console.error('Unhandled promise rejection:', e.reason);
+        });
+
+        // Export functions for debugging
+        window.debugFunctions = {
+            skipLoading,
+            forceInit,
+            showFallback,
+            hideLoadingScreen,
+            initDesktop,
+            openWindow,
+            debugState
+        };
+
+        console.log('🎯 Pixel Portfolio Desktop loaded!');
+        console.log('🔧 Debug functions available in window.debugFunctions');
+    </script>
+    
+    <!-- Mobile Optimization JavaScript -->
+    <script src="{% static 'js/mobile.js' %}"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        // Register service worker for mobile optimization
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('{% static "sw.js" %}')
+                    .then((registration) => {
+                        console.log('📱 Service Worker registered successfully:', registration.scope);
+                        
+                        // Handle service worker updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New service worker available
+                                    if (confirm('A new version is available. Reload to update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('📱 Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

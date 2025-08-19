@@ -1,0 +1,3834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Portfolio - Advanced Retro PC</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Retro PC Color Palette */
+            --retro-bg: #0a0a0a;
+            --retro-desktop: #000080;
+            --retro-taskbar: #c0c0c0;
+            --retro-window: #c0c0c0;
+            --retro-border: #808080;
+            --retro-text: #000000;
+            --retro-highlight: #ffffff;
+            --retro-shadow: #404040;
+            --retro-accent: #00ff00;
+            --retro-error: #ff0000;
+            --retro-warning: #ffff00;
+            --retro-info: #0080ff;
+            
+            /* Pixel Portfolio Colors */
+            --pixel-primary: #00ff88;
+            --pixel-secondary: #ff6b6b;
+            --pixel-accent: #4ecdc4;
+            --pixel-warning: #ffd73d;
+            --pixel-success: #51cf66;
+            --pixel-info: #339af0;
+            
+            /* Animation Variables */
+            --transition-fast: 0.1s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.4s ease;
+        }
+
+        /* Enhanced Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+            background: var(--retro-bg);
+            color: var(--retro-text);
+            line-height: 1.4;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            cursor: default;
+        }
+
+        /* CRT Monitor Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+                linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 2px 2px, 2px 2px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlines 0.1s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+
+        /* Desktop Background */
+        .desktop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0,255,0,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,0,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%),
+                var(--retro-desktop);
+            background-size: 100% 100%;
+            z-index: 1;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* Live Wallpaper Options */
+        .desktop.wallpaper-matrix {
+            background: 
+                linear-gradient(0deg, transparent 50%, rgba(0,255,0,0.1) 50%),
+                linear-gradient(90deg, transparent 50%, rgba(0,255,0,0.05) 50%),
+                radial-gradient(circle at 50% 50%, rgba(0,255,0,0.2) 0%, transparent 70%),
+                #000000;
+            background-size: 4px 4px, 4px 4px, 100% 100%;
+            animation: matrixFlow 20s linear infinite;
+        }
+
+        .desktop.wallpaper-cyberpunk {
+            background: 
+                linear-gradient(45deg, #ff0080 0%, transparent 50%, #00ffff 100%),
+                radial-gradient(circle at 20% 80%, rgba(255,0,128,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,255,255,0.3) 0%, transparent 50%),
+                #0a0a0a;
+            background-size: 200% 200%, 100% 100%, 100% 100%;
+            animation: cyberpunkPulse 8s ease-in-out infinite;
+        }
+
+        .desktop.wallpaper-retro-wave {
+            background: 
+                linear-gradient(0deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%),
+                linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%),
+                #1a1a2e;
+            background-size: 100% 100%, 200% 100%;
+            animation: retroWave 12s linear infinite;
+        }
+
+        .desktop.wallpaper-pixel-art {
+            background: 
+                radial-gradient(circle at 25% 25%, #ff6b6b 0%, transparent 25%),
+                radial-gradient(circle at 75% 75%, #4ecdc4 0%, transparent 25%),
+                radial-gradient(circle at 50% 50%, #45b7d1 0%, transparent 30%),
+                #2d2d2d;
+            background-size: 100px 100px, 100px 100px, 150px 150px;
+            animation: pixelFloat 15s ease-in-out infinite;
+        }
+
+        .desktop.wallpaper-8bit {
+            background: 
+                linear-gradient(90deg, #ff0000 0%, #ff8000 16.66%, #ffff00 33.33%, #00ff00 50%, #0080ff 66.66%, #8000ff 83.33%, #ff0080 100%),
+                #000000;
+            background-size: 200% 100%, 100% 100%;
+            animation: rainbowFlow 10s linear infinite;
+        }
+
+        .desktop.wallpaper-crt {
+            background: 
+                linear-gradient(0deg, transparent 50%, rgba(0,255,0,0.1) 50%),
+                radial-gradient(circle at 50% 50%, rgba(0,255,0,0.2) 0%, transparent 70%),
+                #000080;
+            background-size: 2px 2px, 100% 100%;
+            animation: crtScan 0.1s linear infinite;
+        }
+
+        /* Wallpaper Animations */
+        @keyframes matrixFlow {
+            0% { background-position: 0 0, 0 0, 0 0; }
+            100% { background-position: 0 100px, 100px 0, 0 0; }
+        }
+
+        @keyframes cyberpunkPulse {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        @keyframes retroWave {
+            0% { background-position: 0% 0%, 0% 0%; }
+            100% { background-position: 0% 0%, 200% 0%; }
+        }
+
+        @keyframes pixelFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes rainbowFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        @keyframes crtScan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+
+        /* Wallpaper Customization Panel */
+        .wallpaper-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--retro-window);
+            border: 3px outset var(--retro-highlight);
+            padding: 20px;
+            z-index: 5000;
+            display: none;
+            box-shadow: 6px 6px 15px rgba(0,0,0,0.7);
+            min-width: 400px;
+        }
+
+        .wallpaper-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .wallpaper-header {
+            background: var(--retro-info);
+            color: var(--retro-highlight);
+            padding: 10px 15px;
+            margin: -20px -20px 20px -20px;
+            font-weight: bold;
+            font-size: 16px;
+            border-bottom: 2px outset var(--retro-highlight);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wallpaper-close {
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 5px;
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+            border: 2px outset var(--retro-highlight);
+            border-radius: 2px;
+            min-width: 20px;
+            text-align: center;
+            line-height: 1.2;
+            user-select: none;
+        }
+
+        .wallpaper-close:hover {
+            background: var(--retro-border);
+            border-color: var(--retro-border);
+            color: var(--retro-highlight);
+        }
+
+        .wallpaper-close:active {
+            border-style: inset;
+        }
+
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .wallpaper-option {
+            background: var(--retro-highlight);
+            border: 2px outset var(--retro-highlight);
+            padding: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallpaper-option:hover {
+            border-color: var(--pixel-primary);
+            transform: scale(1.05);
+        }
+
+        .wallpaper-option.active {
+            border-color: var(--pixel-primary);
+            background: rgba(0,255,136,0.1);
+        }
+
+        .wallpaper-preview {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 10px;
+            border: 1px solid var(--retro-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallpaper-preview.matrix {
+            background: linear-gradient(0deg, transparent 50%, rgba(0,255,0,0.3) 50%), #000000;
+            background-size: 4px 4px;
+        }
+
+        .wallpaper-preview.cyberpunk {
+            background: linear-gradient(45deg, #ff0080 0%, #00ffff 100%), #0a0a0a;
+        }
+
+        .wallpaper-preview.retro-wave {
+            background: linear-gradient(0deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+        }
+
+        .wallpaper-preview.pixel-art {
+            background: radial-gradient(circle at 25% 25%, #ff6b6b 0%, transparent 25%), #2d2d2d;
+            background-size: 20px 20px;
+        }
+
+        .wallpaper-preview.8bit {
+            background: linear-gradient(90deg, #ff0000 0%, #00ff00 50%, #0080ff 100%);
+        }
+
+        .wallpaper-preview.crt {
+            background: linear-gradient(0deg, transparent 50%, rgba(0,255,0,0.3) 50%), #000080;
+            background-size: 2px 2px;
+        }
+
+        .wallpaper-name {
+            font-weight: bold;
+            color: var(--retro-text);
+            font-size: 14px;
+        }
+
+        .wallpaper-description {
+            font-size: 12px;
+            color: var(--retro-text);
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        /* Additional Customization Options */
+        .customization-options {
+            background: var(--retro-highlight);
+            border: 2px inset var(--retro-highlight);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .customization-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .customization-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .customization-label {
+            font-weight: bold;
+            color: var(--retro-text);
+        }
+
+        .customization-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .customization-slider {
+            width: 100px;
+            height: 20px;
+            background: var(--retro-border);
+            border: 2px inset var(--retro-highlight);
+            outline: none;
+        }
+
+        .customization-toggle {
+            width: 40px;
+            height: 20px;
+            background: var(--retro-border);
+            border: 2px inset var(--retro-highlight);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .customization-toggle.active {
+            background: var(--pixel-primary);
+        }
+
+        .customization-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: var(--retro-highlight);
+            transition: left 0.2s ease;
+        }
+
+        .customization-toggle.active::after {
+            left: 22px;
+        }
+
+        /* Desktop Icons */
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: all var(--transition-fast);
+            z-index: 10;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            transform: scale(1.05);
+        }
+
+        .desktop-icon .icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .desktop-icon .icon-label {
+            font-size: 10px;
+            text-align: center;
+            color: var(--retro-highlight);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            line-height: 1.2;
+            max-width: 70px;
+            word-wrap: break-word;
+        }
+
+        .desktop-icon img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+        }
+
+        .desktop-icon span {
+            font-size: 10px;
+            text-align: center;
+            color: var(--retro-highlight);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            line-height: 1.2;
+            max-width: 70px;
+            word-wrap: break-word;
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--retro-taskbar);
+            border-top: 2px outset var(--retro-highlight);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.3);
+        }
+
+        .start-button {
+            background: var(--retro-taskbar);
+            border: 2px outset var(--retro-highlight);
+            padding: 6px 12px;
+            margin: 4px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all var(--transition-fast);
+        }
+
+        .start-button:hover {
+            border-style: inset;
+        }
+
+        .start-button.active {
+            border-style: inset;
+            background: var(--retro-shadow);
+        }
+
+        .taskbar-tabs {
+            flex: 1;
+            display: flex;
+            gap: 2px;
+            padding: 0 10px;
+            overflow-x: auto;
+        }
+
+        .taskbar-tab {
+            background: var(--retro-taskbar);
+            border: 2px outset var(--retro-highlight);
+            padding: 6px 12px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 12px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: all var(--transition-fast);
+        }
+
+        .taskbar-tab:hover {
+            background: var(--retro-highlight);
+        }
+
+        .taskbar-tab.active {
+            border-style: inset;
+            background: var(--retro-shadow);
+            color: var(--retro-highlight);
+        }
+        #taskbar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 4px 8px;
+            background: #222;
+            border-top: 2px solid #444;
+        }
+        
+        .taskbar-window {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #333;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #fff;
+        }
+        
+        .taskbar-window:hover {
+            background: #555;
+        }
+        
+        .system-tray {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
+            border-left: 2px inset var(--retro-highlight);
+            height: 100%;
+        }
+
+        .clock {
+            font-family: 'VT323', monospace;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--retro-text);
+            background: var(--retro-taskbar);
+            padding: 4px 8px;
+            border: 1px inset var(--retro-highlight);
+        }
+
+        /* Enhanced Window System with Resizing */
+        .window {
+            position: absolute;
+            background: var(--retro-window);
+            border: 2px outset var(--retro-highlight);
+            min-width: 300px;
+            min-height: 200px;
+            z-index: 100;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            resize: both;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .window.active {
+            z-index: 1000;
+            border-color: var(--retro-info);
+            box-shadow: 4px 4px 12px rgba(0,0,0,0.7);
+        }
+
+        .window.maximized {
+            resize: none !important;
+        }
+
+        .window:hover {
+            box-shadow: 6px 6px 16px rgba(0,0,0,0.6);
+        }
+
+        /* Window Resize Handles */
+        .window-resize-handle {
+            position: absolute;
+            background: transparent;
+        }
+
+        .window-resize-handle.n {
+            top: -3px;
+            left: 3px;
+            right: 3px;
+            height: 6px;
+            cursor: n-resize;
+        }
+
+        .window-resize-handle.s {
+            bottom: -3px;
+            left: 3px;
+            right: 3px;
+            height: 6px;
+            cursor: s-resize;
+        }
+
+        .window-resize-handle.e {
+            top: 3px;
+            right: -3px;
+            bottom: 3px;
+            width: 6px;
+            cursor: e-resize;
+        }
+
+        .window-resize-handle.w {
+            top: 3px;
+            left: -3px;
+            bottom: 3px;
+            width: 6px;
+            cursor: w-resize;
+        }
+
+        .window-resize-handle.ne {
+            top: -3px;
+            right: -3px;
+            width: 6px;
+            height: 6px;
+            cursor: ne-resize;
+        }
+
+        .window-resize-handle.nw {
+            top: -3px;
+            left: -3px;
+            width: 6px;
+            height: 6px;
+            cursor: nw-resize;
+        }
+
+        .window-resize-handle.se {
+            bottom: -3px;
+            right: -3px;
+            width: 6px;
+            height: 6px;
+            cursor: se-resize;
+        }
+
+        .window-resize-handle.sw {
+            bottom: -3px;
+            left: -3px;
+            width: 6px;
+            height: 6px;
+            cursor: sw-resize;
+        }
+
+        .window-header {
+            background: var(--retro-info);
+            color: var(--retro-highlight);
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            border-bottom: 2px outset var(--retro-highlight);
+        }
+
+        .window-header.inactive {
+            background: var(--retro-border);
+            color: var(--retro-text);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .window-control {
+            width: 16px;
+            height: 16px;
+            border: 1px outset var(--retro-highlight);
+            background: var(--retro-window);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .window-control:hover {
+            background: var(--retro-highlight);
+        }
+
+        .window-control.close:hover {
+            background: var(--retro-error);
+            color: var(--retro-highlight);
+        }
+
+        .window-content {
+            padding: 20px;
+            height: calc(100% - 40px);
+            overflow: auto;
+            background: var(--retro-window);
+            color: var(--retro-text);
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+        }
+
+        .window-content h1 {
+            color: var(--pixel-primary);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .window-content h2 {
+            color: var(--pixel-secondary);
+            margin: 20px 0 10px 0;
+            font-size: 1.4rem;
+        }
+
+        .window-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .window-content .btn {
+            display: inline-block;
+            background: var(--retro-taskbar);
+            border: 2px outset var(--retro-highlight);
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            color: var(--retro-text);
+        }
+
+        .window-content .btn:hover {
+            border-style: inset;
+            background: var(--retro-highlight);
+        }
+
+        .window-content .btn.primary {
+            background: var(--pixel-primary);
+            color: var(--retro-text);
+        }
+
+        /* Enhanced Start Menu with More Options */
+        .start-menu {
+            position: fixed;
+            bottom: 40px;
+            left: 10px;
+            width: 280px;
+            background: var(--retro-window);
+            border: 2px outset var(--retro-highlight);
+            z-index: 2000;
+            display: none;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .start-menu.show {
+            display: block;
+            animation: slideUp 0.2s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .start-menu-header {
+            background: var(--retro-info);
+            color: var(--retro-highlight);
+            padding: 8px 15px;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px outset var(--retro-highlight);
+        }
+
+        .start-menu-section {
+            border-bottom: 1px solid var(--retro-border);
+            padding: 5px 0;
+        }
+
+        .start-menu-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all var(--transition-fast);
+        }
+
+        .start-menu-item:hover {
+            background: var(--retro-info);
+            color: var(--retro-highlight);
+        }
+
+        .start-menu-item.separator {
+            height: 1px;
+            background: var(--retro-border);
+            margin: 5px 0;
+            padding: 0;
+            cursor: default;
+        }
+
+        .start-menu-item.separator:hover {
+            background: var(--retro-border);
+        }
+
+        /* System Dialog Styles */
+        .system-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--retro-window);
+            border: 3px outset var(--retro-highlight);
+            z-index: 5000;
+            min-width: 400px;
+            box-shadow: 6px 6px 15px rgba(0,0,0,0.7);
+        }
+
+        .run-dialog {
+            min-width: 450px;
+        }
+
+        .dialog-header {
+            background: var(--retro-info);
+            color: var(--retro-highlight);
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+            border-bottom: 2px outset var(--retro-highlight);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dialog-close {
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 5px;
+        }
+
+        .dialog-close:hover {
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+        }
+
+        .dialog-content {
+            padding: 20px;
+        }
+
+        .dialog-content p {
+            margin-bottom: 15px;
+            color: var(--retro-text);
+        }
+
+        .dialog-content input {
+            width: 100%;
+            padding: 8px;
+            border: 2px inset var(--retro-highlight);
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+
+        .dialog-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .dialog-buttons button {
+            padding: 8px 16px;
+            border: 2px outset var(--retro-highlight);
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .dialog-buttons button:hover {
+            background: var(--retro-border);
+            border-color: var(--retro-border);
+        }
+
+        /* Shutdown Screen */
+        .shutdown-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--retro-bg);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: var(--retro-accent);
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        .shutdown-text {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Context Menu */
+        .context-menu {
+            position: fixed;
+            background: var(--retro-window);
+            border: 2px outset var(--retro-highlight);
+            z-index: 2500;
+            display: none;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            min-width: 150px;
+        }
+
+        .context-menu-item {
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid var(--retro-border);
+        }
+
+        .context-menu-item:hover {
+            background: var(--retro-info);
+            color: var(--retro-highlight);
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Sound Effects Indicator */
+        .sound-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: var(--retro-accent);
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            z-index: 5000;
+            display: none;
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--retro-window);
+            border: 2px outset var(--retro-highlight);
+            padding: 15px 20px;
+            z-index: 4000;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            animation: slideInRight 0.3s ease-out;
+            max-width: 300px;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .notification.error {
+            border-color: var(--retro-error);
+            background: #ffeeee;
+        }
+
+        .notification.success {
+            border-color: var(--pixel-success);
+            background: #eeffee;
+        }
+
+        .notification.info {
+            border-color: var(--retro-info);
+            background: #eeeeff;
+        }
+
+        /* Debug Panel */
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.9);
+            color: var(--retro-accent);
+            padding: 10px;
+            border: 1px solid var(--retro-accent);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            z-index: 5000;
+            max-width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .debug-panel.show {
+            display: block;
+        }
+
+        .debug-entry {
+            margin-bottom: 2px;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(0,255,0,0.2);
+        }
+
+        .debug-entry.error {
+            color: var(--retro-error);
+        }
+
+        .debug-entry.warning {
+            color: var(--retro-warning);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .desktop-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .desktop-icon img {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .desktop-icon span {
+                font-size: 9px;
+            }
+            
+            .start-menu {
+                width: 240px;
+            }
+            
+            .window {
+                min-width: 250px;
+                min-height: 180px;
+            }
+        }
+
+        .taskbar-item:hover {
+            background: var(--retro-highlight);
+            color: var(--retro-text);
+        }
+
+        .taskbar-window {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--retro-highlight);
+            border: 2px outset var(--retro-highlight);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            min-width: 120px;
+        }
+
+        .taskbar-window:hover {
+            background: var(--retro-border);
+            border-color: var(--retro-border);
+        }
+
+        .taskbar-icon {
+            font-size: 16px;
+        }
+
+        .taskbar-title {
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head> 
+<body>
+
+
+    <!-- Taskbar -->
+
+    <div id="shutdownScreen" class="shutdown-screen">
+        <div class="shutdown-text">⚠️ Shutting down...</div>
+        <p>Click the button below to restart the system.</p>
+        <button id="restartButton" style="
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'Press Start 2P', monospace;
+            color: var(--retro-accent);
+            background: var(--retro-bg-darker);
+            border: 2px solid var(--retro-accent);
+        ">Restart</button>
+    </div>
+    
+
+    <div id="taskbar"></div>
+
+    <div class="desktop" id="desktop"></div>
+
+    <!-- Enhanced Desktop Icons with Proper Grid Layout -->
+    <div class="desktop-icon" data-action="home" onclick="openWindow('home', 'home')" style="top: 80px; left: 80px;">
+        <div class="icon">🏠</div>
+        <div class="icon-label">Home</div>
+    </div>
+    
+    <div class="desktop-icon" data-action="wallpaper-test" onclick="toggleWallpaper()" style="top: 80px; left: 220px;">
+        <div class="icon">🎨</div>
+        <div class="icon-label">Wallpapers</div>
+    </div>
+    
+    <div class="desktop-icon" data-action="about" onclick="openWindow('about', 'about')" style="top: 80px; left: 360px;">
+        <div class="icon">ℹ️</div>
+        <div class="icon-label">About</div>
+    </div>
+
+    <div class="desktop-icon" data-action="projects" onclick="openWindow('projects', 'projects')" style="top: 80px; left: 500px;">
+        <div class="icon">🎮</div>
+        <div class="icon-label">Projects</div>
+    </div>
+
+    <div class="desktop-icon" data-action="contact" onclick="openWindow('contact', 'contact')" style="top: 80px; left: 640px;">
+        <div class="icon">📧</div>
+        <div class="icon-label">Contact</div>
+    </div>
+
+    <!-- System Icons - Second Row -->
+    <div class="desktop-icon" data-action="mycomputer" onclick="openWindow('mycomputer', 'mycomputer')" style="top: 200px; left: 80px;">
+        <div class="icon">💻</div>
+        <div class="icon-label">My Computer</div>
+    </div>
+
+    <div class="desktop-icon" data-action="notepad" onclick="openWindow('notepad', 'notepad')" style="top: 200px; left: 220px;">
+        <div class="icon">📝</div>
+        <div class="icon-label">Notepad</div>
+    </div>
+
+    <div class="desktop-icon" data-action="calculator" onclick="openWindow('calculator', 'calculator')" style="top: 200px; left: 360px;">
+        <div class="icon">🧮</div>
+        <div class="icon-label">Calculator</div>
+    </div>
+
+    <div class="desktop-icon" data-action="recycle" onclick="openWindow('recycle', 'recycle')" style="top: 200px; left: 500px;">
+        <div class="icon">🗑️</div>
+        <div class="icon-label">Recycle Bin</div>
+    </div>
+
+    <div class="desktop-icon" data-action="control" onclick="openControlPanel()" style="top: 200px; left: 640px;">
+        <div class="icon">⚙️</div>
+        <div class="icon-label">Control Panel</div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" id="startButton">START</button>
+        <div class="taskbar-tabs" id="taskbarTabs"></div>
+        <div class="system-tray">
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+        <div class="taskbar-item" onclick="toggleWallpaper()">
+            🎨
+        </div>
+        
+        <div class="taskbar-item" onclick="toggleDebugPanel()">
+            🐛
+        </div>
+    </div>
+
+    <!-- Enhanced Start Menu with More Options -->
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">🖥️ PIXEL PORTFOLIO</div>
+        
+        <div class="start-menu-section">
+            <div class="start-menu-item" data-action="home">🏠 Home</div>
+            <div class="start-menu-item" data-action="about">👤 Profile</div>
+            <div class="start-menu-item" data-action="projects">🎮 Projects</div>
+            <div class="start-menu-item" data-action="contact">📧 Contact</div>
+        </div>
+        
+        <div class="start-menu-section">
+            <div class="start-menu-item" data-action="mycomputer">💻 My Computer</div>
+            <div class="start-menu-item" data-action="notepad">📝 Notepad</div>
+            <div class="start-menu-item" data-action="calculator">🔢 Calculator</div>
+            <div class="start-menu-item" data-action="recycle">🗑️ Recycle Bin</div>
+        </div>
+        
+        <div class="start-menu-section">
+            <div class="start-menu-item" data-action="run">🏃 Run...</div>
+            <div class="start-menu-item" data-action="control">⚙️ Control Panel</div>
+            <div class="start-menu-item" data-action="wallpaper">🎨 Wallpapers</div>
+            <div class="start-menu-item" data-action="help">❓ Help</div>
+        </div>
+        
+        <div class="start-menu-section">
+            <div class="start-menu-item" data-action="restart">🔄 Restart</div>
+            <div class="start-menu-item" data-action="shutdown">⏹️ Shut Down</div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" data-action="refresh">🔄 Refresh</div>
+        <div class="context-menu-item" data-action="wallpaper">🎨 Change Wallpaper</div>
+        <div class="context-menu-item" data-action="properties">📋 Properties</div>
+        <div class="context-menu-item" data-action="new-folder">📁 New Folder</div>
+        <div class="context-menu-item" data-action="arrange">📐 Arrange Icons</div>
+    </div>
+
+    <!-- System Dialogs -->
+    <div class="shutdown-screen" id="shutdownScreen">
+        <div class="shutdown-text">SYSTEM SHUTDOWN</div>
+        <div style="font-size: 1rem;">Please wait...</div>
+    </div>
+
+    <!-- Wallpaper Customization Panel -->
+    <div class="wallpaper-panel" id="wallpaperPanel">
+        <div class="wallpaper-header">
+            🎨 WALLPAPER CUSTOMIZATION
+            <span class="wallpaper-close" onclick="closeWallpaperPanel()">×</span>
+        </div>
+        
+        <div class="wallpaper-grid">
+            <div class="wallpaper-option" data-wallpaper="default" onclick="setWallpaper('default')">
+                <div class="wallpaper-preview" style="background: var(--retro-desktop);"></div>
+                <div class="wallpaper-name">Classic Blue</div>
+                <div class="wallpaper-description">Original Windows 95 style</div>
+            </div>
+            
+            <div class="wallpaper-option" data-wallpaper="matrix" onclick="setWallpaper('matrix')">
+                <div class="wallpaper-preview matrix"></div>
+                <div class="wallpaper-name">Matrix Rain</div>
+                <div class="wallpaper-description">Green digital rain effect</div>
+            </div>
+            
+            <div class="wallpaper-option" data-wallpaper="cyberpunk" onclick="setWallpaper('cyberpunk')">
+                <div class="wallpaper-preview cyberpunk"></div>
+                <div class="wallpaper-name">Cyberpunk</div>
+                <div class="wallpaper-description">Neon pink and cyan</div>
+            </div>
+            
+            <div class="wallpaper-option" data-wallpaper="retro-wave" onclick="setWallpaper('retro-wave')">
+                <div class="wallpaper-preview retro-wave"></div>
+                <div class="wallpaper-name">Retro Wave</div>
+                <div class="wallpaper-description">80s synthwave colors</div>
+            </div>
+            
+            <div class="wallpaper-option" data-wallpaper="pixel-art" onclick="setWallpaper('pixel-art')">
+                <div class="wallpaper-preview pixel-art"></div>
+                <div class="wallpaper-name">Pixel Art</div>
+                <div class="wallpaper-description">Geometric pixel patterns</div>
+            </div>
+            
+            <div class="wallpaper-option" data-wallpaper="8bit" onclick="setWallpaper('8bit')">
+                <div class="wallpaper-preview 8bit"></div>
+                <div class="wallpaper-name">8-Bit Rainbow</div>
+                <div class="wallpaper-description">Classic gaming colors</div>
+            </div>
+            
+            <div class="wallpaper-option" data-wallpaper="crt" onclick="setWallpaper('crt')">
+                <div class="wallpaper-preview crt"></div>
+                <div class="wallpaper-name">CRT Monitor</div>
+                <div class="wallpaper-description">Authentic scanlines</div>
+            </div>
+            
+            <div class="wallpaper-option" data-wallpaper="custom" onclick="setWallpaper('custom')">
+                <div class="wallpaper-preview" style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);"></div>
+                <div class="wallpaper-name">Custom</div>
+                <div class="wallpaper-description">Create your own</div>
+            </div>
+        </div>
+        
+        <div class="customization-options">
+            <h3 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 14px;">⚙️ ADVANCED OPTIONS</h3>
+            
+            <div class="customization-option">
+                <span class="customization-label">Animation Speed:</span>
+                <div class="customization-control">
+                    <input type="range" class="customization-slider" id="animationSpeed" min="0.5" max="3" step="0.1" value="1" onchange="setAnimationSpeed(this.value)">
+                    <span id="speedValue">1x</span>
+                </div>
+            </div>
+            
+            <div class="customization-option">
+                <span class="customization-label">Scanlines Effect:</span>
+                <div class="customization-control">
+                    <div class="customization-toggle" id="scanlinesToggle" onclick="toggleScanlines()"></div>
+                    <span id="scanlinesStatus">OFF</span>
+                </div>
+            </div>
+            
+            <div class="customization-option">
+                <span class="customization-label">Particle Density:</span>
+                <div class="customization-control">
+                    <input type="range" class="customization-slider" id="particleDensity" min="0" max="100" step="10" value="50" onchange="setParticleDensity(this.value)">
+                    <span id="densityValue">50%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <button class="btn primary" onclick="saveWallpaperSettings()">💾 Save Settings</button>
+            <button class="btn" onclick="resetWallpaperSettings()">🔄 Reset to Default</button>
+        </div>
+    </div>
+
+    <!-- Sound Indicator -->
+    <div class="sound-indicator" id="soundIndicator">🔊 BEEP</div>
+
+    <!-- Debug Panel -->
+    <div class="debug-panel" id="debugPanel">
+        <div style="color: #00ff00; font-weight: bold; margin-bottom: 5px;">DEBUG CONSOLE</div>
+        <div id="debugContent"></div>
+    </div>
+
+    <script>
+
+        
+        
+        let debugState = {
+            progress: 0,
+            errors: 0,
+            initialized: false,
+            elements: {},
+            timeouts: [],
+            sounds: true,
+            windowZIndex: 100
+        };
+
+        function playSound(type = 'click') {
+            if (!debugState.sounds) return;
+            
+            const soundIndicator = document.getElementById('soundIndicator');
+            if (soundIndicator) {
+                soundIndicator.style.display = 'block';
+                setTimeout(() => {
+                    soundIndicator.style.display = 'none';
+                }, 200);
+            }
+            
+            // Create audio context for retro beeps
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                const frequencies = {
+                    click: 800,
+                    open: 1000,
+                    close: 600,
+                    error: 400,
+                    startup: 1200
+                };
+                
+                oscillator.frequency.setValueAtTime(frequencies[type] || 800, audioContext.currentTime);
+                oscillator.type = 'square';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (error) {
+                console.log('Audio not supported');
+            }
+        }
+
+        // Enhanced utility functions
+        function safeTimeout(callback, delay, description = 'Anonymous timeout') {
+            try {
+                const timeoutId = setTimeout(() => {
+                    try {
+                        callback();
+                        debugState.timeouts = debugState.timeouts.filter(id => id !== timeoutId);
+                    } catch (error) {
+                        updateDebug(`Timeout callback error (${description}): ${error.message}`, null, true);
+                    }
+                }, delay);
+                
+                debugState.timeouts.push(timeoutId);
+                return timeoutId;
+            } catch (error) {
+                updateDebug(`Timeout creation error: ${error.message}`, null, true);
+                return null;
+            }
+        }
+
+        function checkElement(id, required = true) {
+            try {
+                const element = document.getElementById(id);
+                if (!element && required) {
+                    updateDebug(`Required element missing: ${id}`, null, true);
+                    debugState.errors++;
+                }
+                return element;
+            } catch (error) {
+                updateDebug(`Element check error for ${id}: ${error.message}`, null, true);
+                return null;
+            }
+        }
+
+        function updateDebug(message, progress = null, isError = false) {
+            try {
+                if (progress !== null) {
+                    debugState.progress = Math.max(0, Math.min(100, progress));
+                }
+                
+                if (isError) {
+                    debugState.errors++;
+                }
+                
+                const debugContent = document.getElementById('debugContent');
+                if (debugContent) {
+                    const entry = document.createElement('div');
+                    entry.className = `debug-entry ${isError ? 'error' : ''}`;
+                    entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                    debugContent.appendChild(entry);
+                    debugContent.scrollTop = debugContent.scrollHeight;
+                    
+                    // Keep only last 50 entries
+                    while (debugContent.children.length > 50) {
+                        debugContent.removeChild(debugContent.firstChild);
+                    }
+                }
+                
+                console.log(`[v0] ${message}`);
+            } catch (error) {
+                console.error('[v0] Debug update failed:', error);
+            }
+        }
+
+        let windowCounter = 0;
+        let windows = new Map();
+        let activeWindow = null;
+        let isResizing = true;
+        let resizeData = {};
+
+        // Helper function to check if a position overlaps with existing windows
+        function isPositionOverlapping(x, y, width, height) {
+            for (const [id, windowData] of windows) {
+                const element = windowData.element;
+                const rect = element.getBoundingClientRect();
+                
+                // Check if rectangles overlap
+                if (x < rect.right && x + width > rect.left && 
+                    y < rect.bottom && y + height > rect.top) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function openWindow(type) {
+            try {
+                playSound('open');
+                const windowId = `window_${++windowCounter}`;
+                const window = createWindow(type, windowId);
+        
+                windows.set(windowId, {
+                    element: window,
+                    type: type,
+                    minimized: false,
+                    maximized: false
+                });
+        
+                setActiveWindow(windowId);
+                updateTaskbar();
+        
+                // Opening animation
+                window.style.opacity = '0';
+                window.style.transform = 'scale(0.8) translateY(20px)';
+                setTimeout(() => {
+                    window.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                    window.style.opacity = '1';
+                    window.style.transform = 'none';
+                }, 10);
+        
+                // Window content
+                const content = window.querySelector('.window-content');
+                if (!content) return;
+        
+                // Try dynamic fetch from Django
+                content.innerHTML = "<p>Loading...</p>";
+                fetch(`/${type}/`)
+                    .then(res => {
+                        if (!res.ok) throw new Error("No Django route");
+                        return res.text();
+                    })
+                    .then(html => {
+                        content.innerHTML = html;
+                    })
+                    .catch(err => {
+                        console.warn(`Falling back to static for ${type}:`, err.message);
+                        // Use your old preload function as fallback
+                        loadWindowContent(window, type);
+                    });
+        
+                updateDebug(`Window opened: ${type}`);
+            } catch (error) {
+                updateDebug(`Window open error: ${error.message}`, null, true);
+                showNotification(`Failed to open ${type} window`, 'error');
+            }
+        }
+        
+        function createWindow(type, id) {
+            const window = document.createElement('div');
+            window.className = 'window';
+            window.id = id;
+            
+            // Smart positioning - avoid overlapping with existing windows
+            let x, y;
+            const windowWidth = 600;
+            const windowHeight = 400;
+            
+            // Try to find a good position that doesn't overlap
+            let attempts = 0;
+            do {
+                x = 50 + (attempts * 30) % (window.innerWidth - windowWidth - 100);
+                y = 50 + (attempts * 20) % (window.innerHeight - windowHeight - 100);
+                attempts++;
+            } while (isPositionOverlapping(x, y, windowWidth, windowHeight) && attempts < 20);
+            
+            // Ensure window stays within bounds
+            x = Math.max(20, Math.min(x, window.innerWidth - windowWidth - 20));
+            y = Math.max(20, Math.min(y, window.innerHeight - windowHeight - 60));
+            
+            window.style.cssText = `
+                top: ${y}px;
+                left: ${x}px;
+                width: ${windowWidth}px;
+                height: ${windowHeight}px;
+                z-index: ${++debugState.windowZIndex};
+                position: absolute;
+            `;
+
+            const header = document.createElement('div');
+            header.className = 'window-header';
+            header.innerHTML = `
+                <span>${type.toUpperCase()}</span>
+                <div class="window-controls">
+                    <div class="window-control minimize">_</div>
+                    <div class="window-control maximize">□</div>
+                    <div class="window-control close">×</div>
+                </div>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'window-content';
+
+            window.appendChild(header);
+            window.appendChild(content);
+            
+            // Add resize handles
+            addResizeHandles(window);
+            
+            document.body.appendChild(window);
+
+            // Make window draggable and add controls
+            console.log('=== CREATING WINDOW ===');
+            console.log('Window element:', window);
+            console.log('Window style before makeWindowDraggable:', window.style.cssText);
+            
+            makeWindowDraggable(window, header);
+            addWindowControls(window);
+            
+            console.log('Window style after makeWindowDraggable:', window.style.cssText);
+            console.log('=== WINDOW CREATED ===');
+
+            // Click to focus
+            window.addEventListener('mousedown', () => {
+                setActiveWindow(id);
+            });
+
+            return window;
+        }
+
+        function addResizeHandles(windowElement) {
+            const handles = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
+            
+            handles.forEach(direction => {
+                const handle = document.createElement('div');
+                handle.className = `window-resize-handle ${direction}`;
+                handle.addEventListener('mousedown', (e) => startResize(e, windowElement, direction));
+                windowElement.appendChild(handle);
+            });
+        }
+
+        function startResize(e, windowElement, direction) {
+            if (windows.get(windowElement.id)?.maximized) return;
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
+            isResizing = true;
+            resizeData = {
+                windowElement: windowElement,
+                direction: direction,
+                startX: e.clientX,
+                startY: e.clientY,
+                startWidth: parseInt(windowElement.style.width),
+                startHeight: parseInt(windowElement.style.height),
+                startLeft: parseInt(windowElement.style.left),
+                startTop: parseInt(windowElement.style.top)
+            };
+            
+            document.addEventListener('mousemove', handleResize);
+            document.addEventListener('mouseup', stopResize);
+        }
+
+        function handleResize(e) {
+            if (!isResizing) return;
+            
+            const { windowElement, direction, startX, startY, startWidth, startHeight, startLeft, startTop } = resizeData;
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            
+            let newWidth = startWidth;
+            let newHeight = startHeight;
+            let newLeft = startLeft;
+            let newTop = startTop;
+            
+            // Handle different resize directions
+            if (direction.includes('e')) {
+                newWidth = Math.max(300, startWidth + deltaX);
+            }
+            if (direction.includes('w')) {
+                newWidth = Math.max(300, startWidth - deltaX);
+                newLeft = startLeft + (startWidth - newWidth);
+            }
+            if (direction.includes('s')) {
+                newHeight = Math.max(200, startHeight + deltaY);
+            }
+            if (direction.includes('n')) {
+                newHeight = Math.max(200, startHeight - deltaY);
+                newTop = startTop + (startHeight - newHeight);
+            }
+            
+            // Apply constraints
+            const maxX = window.innerWidth - newWidth;
+            const maxY = window.innerHeight - newHeight - 40;
+            
+            newLeft = Math.max(0, Math.min(newLeft, maxX));
+            newTop = Math.max(0, Math.min(newTop, maxY));
+            
+            windowElement.style.width = newWidth + 'px';
+            windowElement.style.height = newHeight + 'px';
+            windowElement.style.left = newLeft + 'px';
+            windowElement.style.top = newTop + 'px';
+        }
+
+        function stopResize() {
+            isResizing = false;
+            resizeData = {};
+            document.removeEventListener('mousemove', handleResize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+
+        function setActiveWindow(windowId) {
+            // Remove active class from all windows
+            document.querySelectorAll('.window').forEach(window => {
+                window.classList.remove('active');
+            });
+            
+            // Add active class to current window
+            const currentWindow = document.getElementById(windowId);
+            if (currentWindow) {
+                currentWindow.classList.add('active');
+                currentWindow.style.zIndex = getHighestZIndex() + 1;
+            }
+            
+            // Update taskbar
+            updateTaskbar();
+        }
+
+        function updateTaskbar() {
+            const taskbar = document.getElementById('taskbar');
+            if (!taskbar) {
+                updateDebug('updateTaskbar: taskbar element not found', null, true);
+                return;
+            }
+        
+            updateDebug('updateTaskbar called. Current windows: ' + JSON.stringify(windows));
+        
+            taskbar.innerHTML = "";
+        
+            // Assuming windows is an object
+            Object.entries(windows).forEach(([windowId, windowData]) => {
+                updateDebug(`Adding taskbar item for: ${windowId}, type: ${windowData.type}, title: ${windowData.title || 'N/A'}`);
+        
+                const taskbarItem = document.createElement("div");
+                taskbarItem.className = "taskbar-window";
+                taskbarItem.innerHTML = `
+                    <span class="taskbar-icon">🪟</span>
+                    <span class="taskbar-title">${windowData.title || windowData.type.toUpperCase()}</span>
+                `;
+                taskbarItem.onclick = () => setActiveWindow(windowId);
+                taskbar.appendChild(taskbarItem);
+            });
+        }
+        
+        
+        function makeWindowDraggable(windowElement, header) {
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            // Mouse down event
+            header.addEventListener('mousedown', function(e) {
+                // Don't drag if clicking on window controls
+                if (e.target.classList.contains('window-control')) {
+                    return;
+                }
+                
+                // Don't drag if window is maximized
+                if (windows.get(windowElement.id)?.maximized) {
+                    return;
+                }
+                
+                console.log('=== DRAG START ===');
+                console.log('Window element:', windowElement);
+                console.log('Window style:', windowElement.style.cssText);
+                
+                isDragging = true;
+                
+                // Calculate offset from mouse to window top-left corner
+                const rect = windowElement.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                console.log('Mouse position:', e.clientX, e.clientY);
+                console.log('Window rect:', rect);
+                console.log('Offset calculated:', offsetX, offsetY);
+                
+                // Set active window
+                setActiveWindow(windowElement.id);
+                
+                // Visual feedback
+                windowElement.style.cursor = 'move';
+                windowElement.style.opacity = '0.8';
+                
+                // Prevent default behavior
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('Drag started successfully');
+            });
+
+            // Mouse move event
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                console.log('=== DRAG MOVE ===');
+                console.log('Mouse position:', e.clientX, e.clientY);
+                
+                // Calculate new position
+                let newLeft = e.clientX - offsetX;
+                let newTop = e.clientY - offsetY;
+                
+                // Keep window within bounds
+                const maxLeft = window.innerWidth - windowElement.offsetWidth;
+                const maxTop = window.innerHeight - windowElement.offsetHeight;
+                
+                newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+                newTop = Math.max(0, Math.min(newTop, maxTop));
+                
+                console.log('New position calculated:', newLeft, newTop);
+                
+                // Apply new position
+                windowElement.style.left = newLeft + 'px';
+                windowElement.style.top = newTop + 'px';
+                
+                console.log('Position applied. New style:', windowElement.style.cssText);
+            });
+
+            // Mouse up event
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    console.log('=== DRAG END ===');
+                    
+                    isDragging = false;
+                    
+                    // Reset visual feedback
+                    windowElement.style.cursor = 'default';
+                    windowElement.style.opacity = '1';
+                    
+                    console.log('Drag ended successfully');
+                }
+            });
+
+            // Mouse leave event (safety)
+            document.addEventListener('mouseleave', function() {
+                if (isDragging) {
+                    console.log('=== MOUSE LEAVE - STOPPING DRAG ===');
+                    isDragging = false;
+                    windowElement.style.cursor = 'default';
+                    windowElement.style.opacity = '1';
+                }
+            });
+        }
+        
+        function addWindowControls(windowElement) {
+            const controls = windowElement.querySelectorAll('.window-control');
+            
+            controls.forEach(control => {
+                control.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    playSound('click');
+                    const action = control.textContent;
+                    handleWindowControl(windowElement, action);
+                });
+            });
+        }
+
+        function handleWindowControl(windowElement, action) {
+            try {
+                const windowData = windows.get(windowElement.id);
+                if (!windowData) return;
+                
+                switch(action) {
+                    case '_': // Minimize
+                        windowData.minimized = true;
+                        windowElement.style.display = 'none';
+                        playSound('close');
+                        break;
+                        
+                    case '□': // Maximize/Restore
+                        if (windowData.maximized) {
+                            // Restore
+                            windowElement.style.cssText = windowData.originalStyle || '';
+                            windowElement.classList.remove('maximized');
+                            windowData.maximized = false;
+                        } else {
+                            // Maximize
+                            windowData.originalStyle = windowElement.style.cssText;
+                            windowElement.style.cssText = `
+                                top: 0 !important;
+                                left: 0 !important;
+                                width: 100vw !important;
+                                height: calc(100vh - 40px) !important;
+                                z-index: ${++debugState.windowZIndex} !important;
+                            `;
+                            windowElement.classList.add('maximized');
+                            windowData.maximized = true;
+                        }
+                        break;
+                        
+                    case '×': // Close
+                        playSound('close');
+                        windowElement.remove();
+                        windows.delete(windowElement.id);
+                        if (activeWindow === windowElement.id) {
+                            activeWindow = null;
+                        }
+                        updateTaskbar();
+                        break;
+                }
+            } catch (error) {
+                updateDebug(`Window control error: ${error.message}`, null, true);
+            }
+        }
+
+        function loadWindowContent(window, type) {
+            const content = window.querySelector('.window-content');
+            
+            const contentMap = {
+                home: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 64px; height: 64px; background: var(--pixel-primary); border: 2px outset var(--retro-highlight); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;">🏠</div>
+                        <div>
+                            <h1 style="margin: 0; color: var(--pixel-primary); font-family: 'Press Start 2P', monospace; font-size: 18px;">WELCOME TO PIXEL PORTFOLIO</h1>
+                            <p style="margin: 5px 0; color: var(--retro-text); font-size: 14px;">Your advanced retro PC desktop experience is ready!</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🧪 DEBUG TEST</h2>
+                        <button class="btn" onclick="testDragging()" style="background: red; color: white;">TEST DRAGGING</button>
+                        <button class="btn" onclick="console.log('Window elements:', document.querySelectorAll('.window'))">LOG WINDOWS</button>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🎯 QUICK ACTIONS</h2>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn primary" onclick="openWindow('about')">👤 Open Profile</button>
+                            <button class="btn primary" onclick="openWindow('projects')">🎮 View Projects</button>
+                            <button class="btn primary" onclick="openWindow('contact')">📧 Contact Me</button>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🖥️ DESKTOP FEATURES</h2>
+                        <div style="font-size: 13px;">
+                            <p style="margin: 5px 0;">• <strong>Resizable Windows:</strong> Drag window edges to resize</p>
+                            <p style="margin: 5px 0;">• <strong>Window Management:</strong> Minimize, maximize, and close windows</p>
+                            <p style="margin: 5px 0;">• <strong>Sound Effects:</strong> Authentic retro PC sounds</p>
+                            <p style="margin: 5px 0;">• <strong>Right-click Context Menu:</strong> Desktop interaction</p>
+                            <p style="margin: 5px 0;">• <strong>Enhanced Start Menu:</strong> More applications and options</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🎮 SYSTEM APPLICATIONS</h2>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn" onclick="openWindow('calculator')">🔢 Calculator</button>
+                            <button class="btn" onclick="openWindow('notepad')">📝 Notepad</button>
+                            <button class="btn" onclick="openWindow('mycomputer')">💻 My Computer</button>
+                        </div>
+                    </div>
+                `,
+                about: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 64px; height: 64px; background: var(--pixel-primary); border: 2px outset var(--retro-highlight); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;">👤</div>
+                        <div>
+                            <h1 style="margin: 0; color: var(--pixel-primary); font-family: 'Press Start 2P', monospace; font-size: 18px;">PLAYER PROFILE</h1>
+                            <p style="margin: 5px 0; color: var(--retro-text); font-size: 14px;">BCA Graduate | Aspiring Full-Stack Developer</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🧑‍💻 PLAYER BIO</h2>
+                        <p style="margin: 0; font-size: 13px; line-height: 1.6;">
+                            Greetings, fellow adventurer! I'm a passionate BCA graduate with a quest for creating innovative web solutions. 
+                            My journey through the digital realm has equipped me with diverse technical skills and an insatiable curiosity 
+                            for emerging technologies. From crafting tourism websites to exploring full-stack development, 
+                            I'm always ready for the next coding challenge!
+                        </p>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🛠️ TECHNICAL EXPERTISE</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 5px; border: 1px solid var(--retro-accent);">
+                                <strong>Frontend:</strong> HTML5, CSS3, JavaScript ES6+
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 5px; border: 1px solid var(--retro-accent);">
+                                <strong>Frameworks:</strong> React, Vue.js, TypeScript
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 5px; border: 1px solid var(--retro-accent);">
+                                <strong>Backend:</strong> Python, Django, Node.js
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 5px; border: 1px solid var(--retro-accent);">
+                                <strong>Databases:</strong> PostgreSQL, MongoDB, SQLite
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 5px; border: 1px solid var(--retro-accent);">
+                                <strong>Tools:</strong> Git, Docker, AWS, CI/CD
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 5px; border: 1px solid var(--retro-accent);">
+                                <strong>Design:</strong> Figma, Adobe Creative Suite
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🏆 EXPERIENCE HIGHLIGHTS</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+                            <div><strong>Years:</strong> 5+ in web development</div>
+                            <div><strong>Projects:</strong> 50+ successful deliveries</div>
+                            <div><strong>Technologies:</strong> Legacy & modern</div>
+                            <div><strong>Focus:</strong> Creative solutions</div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn primary" onclick="openWindow('projects')">🎮 View Projects</button>
+                        <button class="btn" onclick="openWindow('contact')">📧 Contact Me</button>
+                    </div>
+                `,
+                projects: `
+                    <section class="quest-section">
+                        <div class="container">
+                            <!-- Stats -->
+                            <div class="quest-stats">
+                                <div class="stat-box">
+                                    <span class="stat-number">{{ projects.count }}</span>
+                                    <span>TOTAL QUESTS</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-number">{{ projects|length }}</span>
+                                    <span>COMPLETED</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-number">∞</span>
+                                    <span>XP GAINED</span>
+                                </div>
+                            </div>
+
+                            <!-- Projects -->
+                            <div class="quest-grid">
+                                {% for project in projects %}
+                                <div class="quest-card">
+                                    <h3>{{ project.title }}</h3>
+                                    <p>{{ project.objective }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+
+                `,
+                contact: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 64px; height: 64px; background: var(--pixel-warning); border: 2px outset var(--retro-highlight); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;">📧</div>
+                        <div>
+                            <h1 style="margin: 0; color: var(--pixel-warning); font-family: 'Press Start 2P', monospace; font-size: 18px;">NPC DIALOGUE</h1>
+                            <p style="margin: 5px 0; color: var(--retro-text); font-size: 14px;">Connect with the developer NPC</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <div style="background: var(--retro-info); color: var(--retro-highlight); padding: 10px; margin-bottom: 15px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: 'VT323', monospace;">
+                            <span>👨‍💻</span>
+                            <span>NPC_DEVELOPER</span>
+                        </div>
+                        <p style="margin: 0; font-size: 13px; line-height: 1.6;">
+                            Hello, adventurer! Welcome to my digital realm. I'm always excited to connect with fellow explorers of the coding universe. 
+                            What brings you here today?
+                        </p>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">💬 DIALOGUE OPTIONS</h2>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <button class="btn" onclick="showContactForm()" style="text-align: left; justify-content: flex-start;">
+                                📝 I want to send you a message
+                            </button>
+                            <button class="btn" onclick="showContactInfo()" style="text-align: left; justify-content: flex-start;">
+                                📋 Show me your contact information
+                            </button>
+                            <button class="btn" onclick="showSocialLinks()" style="text-align: left; justify-content: flex-start;">
+                                🔗 Let's connect on social media
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="contact-form" style="display: none; background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">📝 MESSAGE SCROLL</h2>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; font-family: 'Press Start 2P', monospace; font-size: 10px;">YOUR_NAME:</label>
+                            <input type="text" id="contact-name" style="width: 100%; padding: 8px; border: 2px inset var(--retro-highlight); background: white; font-family: inherit;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; font-family: 'Press Start 2P', monospace; font-size: 10px;">EMAIL_ADDRESS:</label>
+                            <input type="email" id="contact-email" style="width: 100%; padding: 8px; border: 2px inset var(--retro-highlight); background: white; font-family: inherit;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; font-family: 'Press Start 2P', monospace; font-size: 10px;">MESSAGE:</label>
+                            <textarea id="contact-message" rows="4" style="width: 100%; padding: 8px; border: 2px inset var(--retro-highlight); background: white; font-family: inherit; resize: vertical;"></textarea>
+                        </div>
+                        <button class="btn primary" onclick="sendMessage()">📤 SEND MESSAGE</button>
+                        <button class="btn" onclick="hideContactForm()">↩️ GO BACK</button>
+                    </div>
+                    
+                    <div id="contact-info" style="display: none; background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">📋 CONTACT INFORMATION</h2>
+                        <div style="font-size: 13px;">
+                            <p><strong>📧 Email:</strong> developer@pixelportfolio.com</p>
+                            <p><strong>📱 Phone:</strong> +91 12345 67890</p>
+                            <p><strong>📍 Location:</strong> Mumbai, Maharashtra</p>
+                            <p><strong>💼 LinkedIn:</strong> linkedin.com/in/pixelportfolio</p>
+                            <p><strong🐙 GitHub:</strong> github.com/pixelportfolio</p>
+                        </div>
+                        <button class="btn" onclick="hideContactInfo()" style="margin-top: 10px;">↩️ GO BACK</button>
+                    </div>
+                    
+                    <div id="social-links" style="display: none; background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🔗 SOCIAL CONNECTIONS</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 8px; border: 1px solid var(--retro-accent); text-align: center;">
+                                <div style="font-size: 16px; margin-bottom: 5px;">💼</div>
+                                <div>LINKEDIN</div>
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 8px; border: 1px solid var(--retro-accent); text-align: center;">
+                                <div style="font-size: 16px; margin-bottom: 5px;">🐙</div>
+                                <div>GITHUB</div>
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 8px; border: 1px solid var(--retro-accent); text-align: center;">
+                                <div style="font-size: 16px; margin-bottom: 5px;">🐦</div>
+                                <div>TWITTER</div>
+                            </div>
+                            <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 8px; border: 1px solid var(--retro-accent); text-align: center;">
+                                <div style="font-size: 16px; margin-bottom: 5px;">📷</div>
+                                <div>INSTAGRAM</div>
+                            </div>
+                        </div>
+                        <button class="btn" onclick="hideSocialLinks()" style="margin-top: 10px;">↩️ GO BACK</button>
+                    </div>
+                `,
+                mycomputer: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 64px; height: 64px; background: var(--retro-border); border: 2px outset var(--retro-highlight); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;">💻</div>
+                        <div>
+                            <h1 style="margin: 0; color: var(--retro-border); font-family: 'Press Start 2P', monospace; font-size: 18px;">MY COMPUTER</h1>
+                            <p style="margin: 5px 0; color: var(--retro-text); font-size: 14px;">System information and file management interface</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">💾 SYSTEM DRIVES</h2>
+                        <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 10px; font-family: 'Share Tech Mono', monospace; font-size: 12px; border: 2px inset var(--retro-accent); margin: 10px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>🖥️ Local Disk (C:)</span>
+                                <span>System Drive</span>
+                            </div>
+                            <div style="background: var(--retro-accent); height: 8px; margin: 5px 0; position: relative;">
+                                <div style="background: var(--retro-error); height: 100%; width: 15.2%;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                                <span>Used: 15.2 GB</span>
+                                <span>Free: 84.8 GB</span>
+                                <span>Total: 100 GB</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">📁 QUICK ACCESS</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <button class="btn" onclick="openWindow('notepad')" style="text-align: left; padding: 10px;">
+                                <div style="font-size: 20px; margin-bottom: 5px;">📝</div>
+                                <div style="font-size: 12px;"><strong>Documents</strong><br>Personal files & notes</div>
+                            </button>
+                            <button class="btn" onclick="openWindow('projects')" style="text-align: left; padding: 10px;">
+                                <div style="font-size: 20px; margin-bottom: 5px;">🎮</div>
+                                <div style="font-size: 12px;"><strong>Projects</strong><br>Development work</div>
+                            </button>
+                            <button class="btn" onclick="showNotification('Downloads folder opened!', 'info')" style="text-align: left; padding: 10px;">
+                                <div style="font-size: 20px; margin-bottom: 5px;">📥</div>
+                                <div style="font-size: 12px;"><strong>Downloads</strong><br>Downloaded files</div>
+                            </button>
+                            <button class="btn" onclick="showNotification('Pictures folder opened!', 'info')" style="text-align: left; padding: 10px;">
+                                <div style="font-size: 20px; margin-bottom: 5px;">🖼️</div>
+                                <div style="font-size: 12px;"><strong>Pictures</strong><br>Image files</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">⚙️ SYSTEM INFORMATION</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+                            <div><strong>OS:</strong> Pixel Portfolio OS v2.0</div>
+                            <div><strong>Processor:</strong> Retro CPU 486DX</div>
+                            <div><strong>Memory:</strong> 16 MB RAM</div>
+                            <div><strong>Graphics:</strong> VGA Compatible</div>
+                            <div><strong>Sound:</strong> Sound Blaster 16</div>
+                            <div><strong>Network:</strong> 56k Modem</div>
+                        </div>
+                    </div>
+                `,
+                notepad: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 64px; height: 64px; background: var(--retro-highlight); border: 2px outset var(--retro-highlight); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;">📝</div>
+                        <div>
+                            <h1 style="margin: 0; color: var(--retro-text); font-family: 'Press Start 2P', monospace; font-size: 18px;">NOTEPAD</h1>
+                            <p style="margin: 5px 0; color: var(--retro-text); font-size: 14px;">Simple text editor for quick notes and code snippets</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <textarea id="notepadText" style="width: 100%; height: 200px; background: white; border: 2px inset var(--retro-highlight); padding: 10px; font-family: 'Courier New', monospace; font-size: 12px; resize: vertical;" placeholder="Type your notes here...">Welcome to Pixel Portfolio Notepad!
+
+This is a simple text editor where you can:
+• Write notes and reminders
+• Draft code snippets
+• Plan your projects
+• Jot down ideas
+
+Features:
+- Retro styling
+- Monospace font
+- Authentic feel
+- Auto-save functionality
+
+Start typing to replace this text...</textarea>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">📁 FILE OPERATIONS</h2>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn" onclick="notepadSave()">💾 Save</button>
+                            <button class="btn" onclick="notepadOpen()">📂 Open</button>
+                            <button class="btn" onclick="notepadNew()">🆕 New</button>
+                            <button class="btn" onclick="notepadClear()">🗑️ Clear</button>
+                            <button class="btn" onclick="notepadPrint()">🖨️ Print</button>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 8px; font-family: 'Share Tech Mono', monospace; font-size: 11px; border: 1px solid var(--retro-accent); margin-top: 15px;">
+                        <div><strong>Status:</strong> Ready</div>
+                        <div><strong>Characters:</strong> <span id="charCount">0</span></div>
+                        <div><strong>Lines:</strong> <span id="lineCount">0</span></div>
+                    </div>
+                `,
+                calculator: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 64px; height: 64px; background: var(--retro-border); border: 2px outset var(--retro-highlight); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;">🔢</div>
+                        <div>
+                            <h1 style="margin: 0; color: var(--retro-border); font-family: 'Press Start 2P', monospace; font-size: 18px;">CALCULATOR</h1>
+                            <p style="margin: 5px 0; color: var(--retro-text); font-size: 14px;">Basic calculator for mathematical operations</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 15px; margin: 10px 0; font-family: 'Share Tech Mono', monospace; font-size: 18px; text-align: right; border: 2px inset var(--retro-accent); min-height: 30px; display: flex; align-items: center; justify-content: flex-end;">
+                            <div id="calcDisplay">0</div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 0 auto;">
+                            <button class="btn" onclick="calcClear()" style="background: var(--retro-error); color: var(--retro-highlight);">C</button>
+                            <button class="btn" onclick="calcInput('/')" style="background: var(--pixel-warning);">/</button>
+                            <button class="btn" onclick="calcInput('*')" style="background: var(--pixel-warning);">×</button>
+                            <button class="btn" onclick="calcBackspace()" style="background: var(--retro-info); color: var(--retro-highlight);">←</button>
+                            
+                            <button class="btn" onclick="calcInput('7')">7</button>
+                            <button class="btn" onclick="calcInput('8')">8</button>
+                            <button class="btn" onclick="calcInput('9')">9</button>
+                            <button class="btn" onclick="calcEquals()" style="grid-row: span 2; background: var(--pixel-success); color: var(--retro-highlight);">=</button>
+                            
+                            <button class="btn" onclick="calcInput('4')">4</button>
+                            <button class="btn" onclick="calcInput('5')">5</button>
+                            <button class="btn" onclick="calcInput('6')">6</button>
+                            <button class="btn" onclick="calcInput('-')" style="background: var(--pixel-warning);">−</button>
+                            
+                            <button class="btn" onclick="calcInput('1')">1</button>
+                            <button class="btn" onclick="calcInput('2')">2</button>
+                            <button class="btn" onclick="calcInput('3')">3</button>
+                            <button class="btn" onclick="calcInput('+')" style="background: var(--pixel-warning);">+</button>
+                            
+                            <button class="btn" onclick="calcInput('0')" style="grid-column: span 2;">0</button>
+                            <button class="btn" onclick="calcInput('.')">.</button>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 8px; font-family: 'Share Tech Mono', monospace; font-size: 11px; border: 1px solid var(--retro-accent); margin-top: 15px;">
+                        <div><strong>Mode:</strong> Standard</div>
+                        <div><strong>Memory:</strong> <span id="calcMemory">0</span></div>
+                        <div><strong>History:</strong> <span id="calcHistory">0</span> operations</div>
+                    </div>
+                `,
+                recycle: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 64px; height: 64px; background: var(--retro-error); border: 2px outset var(--retro-highlight); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;">🗑️</div>
+                        <div>
+                            <h1 style="margin: 0; color: var(--retro-error); font-family: 'Press Start 2P', monospace; font-size: 18px;">RECYCLE BIN</h1>
+                            <p style="margin: 5px 0; color: var(--retro-text); font-size: 14px;">Deleted files and folders are stored here temporarily</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 20px; margin: 10px 0; min-height: 150px; border: 2px inset var(--retro-accent); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <div style="font-size: 48px; margin-bottom: 10px;">🗑️</div>
+                            <p style="text-align: center; color: var(--retro-accent); font-style: italic; margin: 0;">Recycle Bin is empty</p>
+                            <p style="text-align: center; color: var(--retro-accent); font-size: 12px; margin: 5px 0 0 0;">No deleted items to display</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-highlight); border: 2px inset var(--retro-highlight); padding: 15px; margin: 15px 0;">
+                        <h2 style="color: var(--pixel-secondary); margin: 0 0 10px 0; font-size: 16px; font-family: 'Press Start 2P', monospace;">🗑️ BIN OPERATIONS</h2>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn" onclick="recycleEmpty()">🗑️ Empty Recycle Bin</button>
+                            <button class="btn" onclick="recycleRestore()">↩️ Restore All</button>
+                            <button class="btn" onclick="recycleProperties()">📋 Properties</button>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--retro-bg); color: var(--retro-accent); padding: 8px; font-family: 'Share Tech Mono', monospace; font-size: 11px; border: 1px solid var(--retro-accent); margin-top: 15px;">
+                        <div><strong>Items:</strong> 0</div>
+                        <div><strong>Size:</strong> 0 bytes</div>
+                        <div><strong>Location:</strong> C:\\Recycled</div>
+                        <div><strong>Last Modified:</strong> Never</div>
+                    </div>
+                `
+            };
+            
+            content.innerHTML = contentMap[type] || `<h1>🚧 Coming Soon</h1><p>This application is under development.</p>`;
+            
+            // Initialize specific functionality for certain windows
+            if (type === 'notepad') {
+                initializeNotepad();
+            } else if (type === 'calculator') {
+                initializeCalculator();
+            }
+        }
+
+        let calcCurrentInput = '0';
+        let calcOperator = null;
+        let calcPreviousInput = null;
+        let calcWaitingForOperand = false;
+
+        function calcInput(value) {
+            playSound('click');
+            const display = document.getElementById('calcDisplay');
+            
+            if (calcWaitingForOperand) {
+                calcCurrentInput = value;
+                calcWaitingForOperand = false;
+            } else {
+                calcCurrentInput = calcCurrentInput === '0' ? value : calcCurrentInput + value;
+            }
+            
+            display.textContent = calcCurrentInput;
+        }
+
+        function calcClear() {
+            playSound('click');
+            calcCurrentInput = '0';
+            calcOperator = null;
+            calcPreviousInput = null;
+            calcWaitingForOperand = false;
+            document.getElementById('calcDisplay').textContent = calcCurrentInput;
+        }
+
+        function calcBackspace() {
+            playSound('click');
+            calcCurrentInput = calcCurrentInput.slice(0, -1) || '0';
+            document.getElementById('calcDisplay').textContent = calcCurrentInput;
+        }
+
+        function calcEquals() {
+            playSound('click');
+            if (calcOperator && calcPreviousInput !== null && !calcWaitingForOperand) {
+                const prev = parseFloat(calcPreviousInput);
+                const current = parseFloat(calcCurrentInput);
+                let result;
+                
+                switch (calcOperator) {
+                    case '+': result = prev + current; break;
+                    case '-': result = prev - current; break;
+                    case '*': result = prev * current; break;
+                    case '/': result = current !== 0 ? prev / current : 'Error'; break;
+                    default: return;
+                }
+                
+                calcCurrentInput = result.toString();
+                document.getElementById('calcDisplay').textContent = calcCurrentInput;
+                calcOperator = null;
+                calcPreviousInput = null;
+                calcWaitingForOperand = true;
+            }
+        }
+
+        // Enhanced Notepad Functions
+        function initializeNotepad() {
+            const textarea = document.getElementById('notepadText');
+            if (textarea) {
+                textarea.addEventListener('input', updateNotepadStats);
+                updateNotepadStats();
+            }
+        }
+
+        function updateNotepadStats() {
+            const textarea = document.getElementById('notepadText');
+            const charCount = document.getElementById('charCount');
+            const lineCount = document.getElementById('lineCount');
+            
+            if (textarea && charCount && lineCount) {
+                const text = textarea.value;
+                const chars = text.length;
+                const lines = text.split('\n').length;
+                
+                charCount.textContent = chars;
+                lineCount.textContent = lines;
+            }
+        }
+
+        function notepadSave() {
+            playSound('click');
+            showNotification('File saved successfully!', 'success');
+            updateDebug('Notepad file saved');
+        }
+
+        function notepadOpen() {
+            playSound('click');
+            showNotification('File opened successfully!', 'info');
+            updateDebug('Notepad file opened');
+        }
+
+        function notepadNew() {
+            playSound('click');
+            const textarea = document.getElementById('notepadText');
+            if (textarea) {
+                textarea.value = '';
+                updateNotepadStats();
+            }
+            showNotification('New document created!', 'success');
+        }
+
+        function notepadClear() {
+            playSound('click');
+            const textarea = document.getElementById('notepadText');
+            if (textarea) {
+                textarea.value = '';
+                updateNotepadStats();
+            }
+            showNotification('Document cleared!', 'success');
+        }
+
+        function notepadPrint() {
+            playSound('click');
+            showNotification('Print dialog opened!', 'info');
+            updateDebug('Notepad print requested');
+        }
+
+        // Enhanced Calculator Functions
+        function initializeCalculator() {
+            updateCalculatorDisplay();
+        }
+
+        function updateCalculatorDisplay() {
+            const memory = document.getElementById('calcMemory');
+            const history = document.getElementById('calcHistory');
+            
+            if (memory) memory.textContent = '0';
+            if (history) history.textContent = '0';
+        }
+
+        // Enhanced Recycle Bin Functions
+        function recycleEmpty() {
+            playSound('click');
+            showNotification('Recycle Bin emptied successfully!', 'success');
+            updateDebug('Recycle Bin emptied');
+        }
+
+        function recycleRestore() {
+            playSound('click');
+            showNotification('No items to restore!', 'info');
+            updateDebug('Recycle Bin restore attempted');
+        }
+
+        function recycleProperties() {
+            playSound('click');
+            showNotification('Recycle Bin properties opened!', 'info');
+            updateDebug('Recycle Bin properties viewed');
+        }
+
+        // Test function for debugging dragging
+        function testDragging() {
+            console.log('=== TESTING DRAGGING ===');
+            const windows = document.querySelectorAll('.window');
+            console.log('Found windows:', windows.length);
+            
+            windows.forEach((win, index) => {
+                console.log(`Window ${index}:`, win);
+                console.log(`Window ${index} style:`, win.style.cssText);
+                console.log(`Window ${index} position:`, win.style.left, win.style.top);
+                console.log(`Window ${index} offset:`, win.offsetLeft, win.offsetTop);
+            });
+            
+            // Try to manually move a window
+            if (windows.length > 0) {
+                const testWindow = windows[0];
+                console.log('Testing manual movement of:', testWindow);
+                testWindow.style.left = '100px';
+                testWindow.style.top = '100px';
+                console.log('Manual movement applied. New style:', testWindow.style.cssText);
+            }
+        }
+
+        // Contact Form Functions
+        function showContactForm() {
+            playSound('click');
+            document.getElementById('contact-form').style.display = 'block';
+            document.getElementById('contact-info').style.display = 'none';
+            document.getElementById('social-links').style.display = 'none';
+            updateDebug('Contact form displayed');
+        }
+
+        function hideContactForm() {
+            playSound('click');
+            document.getElementById('contact-form').style.display = 'none';
+            updateDebug('Contact form hidden');
+        }
+
+        function showContactInfo() {
+            playSound('click');
+            document.getElementById('contact-info').style.display = 'block';
+            document.getElementById('contact-form').style.display = 'none';
+            document.getElementById('social-links').style.display = 'none';
+            updateDebug('Contact info displayed');
+        }
+
+        function hideContactInfo() {
+            playSound('click');
+            document.getElementById('contact-info').style.display = 'none';
+            updateDebug('Contact info hidden');
+        }
+
+        function showSocialLinks() {
+            playSound('click');
+            document.getElementById('social-links').style.display = 'block';
+            document.getElementById('contact-form').style.display = 'none';
+            document.getElementById('contact-info').style.display = 'none';
+            updateDebug('Social links displayed');
+        }
+
+        function hideSocialLinks() {
+            playSound('click');
+            document.getElementById('social-links').style.display = 'none';
+            updateDebug('Social links hidden');
+        }
+
+        function sendMessage() {
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            
+            if (!name || !email || !message) {
+                showNotification('Please fill in all fields!', 'error');
+                return;
+            }
+            
+            playSound('click');
+            showNotification('Message sent successfully! Thank you!', 'success');
+            
+            // Clear form
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-message').value = '';
+            
+            // Hide form
+            hideContactForm();
+            
+            updateDebug('Contact message sent');
+        }
+
+        // Wallpaper Customization Functions
+        let currentWallpaper = 'default';
+        let wallpaperSettings = {
+            animationSpeed: 1,
+            scanlines: false,
+            particleDensity: 50
+        };
+
+        function openWallpaperPanel() {
+            const panel = document.getElementById('wallpaperPanel');
+            if (panel) {
+                panel.classList.add('show');
+                playSound('open');
+                updateDebug('Wallpaper panel opened');
+            }
+        }
+
+        // Theme presets for this template
+        const CP_THEMES = {
+            // Retro
+            'retro-98': { 
+                name: 'Retro 98', 
+                vars: { 
+                    '--retro-bg':'#0a0a0a',
+                    '--retro-desktop':'#000080',
+                    '--retro-taskbar':'#c0c0c0',
+                    '--retro-window':'#c0c0c0',
+                    '--retro-border':'#808080',
+                    '--retro-text':'#000000',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#404040',
+                    '--retro-info':'#0080ff' 
+                }, 
+                cat:'Retro' 
+            },
+            'retro-olive': { 
+                name: 'Retro Olive', 
+                vars: { 
+                    '--retro-bg':'#10120f',
+                    '--retro-desktop':'#3a3f2b',
+                    '--retro-taskbar':'#798252',
+                    '--retro-window':'#a7b074',
+                    '--retro-border':'#5f6644',
+                    '--retro-text':'#0b0b0b',
+                    '--retro-highlight':'#f8f8e7',
+                    '--retro-shadow':'#2f3323',
+                    '--retro-info':'#4e6b2e' 
+                }, 
+                cat:'Retro' 
+            },
+            'retro-amber': { 
+                name: 'Retro Amber CRT', 
+                vars: { 
+                    '--retro-bg':'#000000',
+                    '--retro-desktop':'#1a1200',
+                    '--retro-taskbar':'#4a3b00',
+                    '--retro-window':'#2a2100',
+                    '--retro-border':'#6b5200',
+                    '--retro-text':'#ffbf00',
+                    '--retro-highlight':'#ffc933',
+                    '--retro-shadow':'#332600',
+                    '--retro-info':'#ffbf00' 
+                }, 
+                cat:'Retro' 
+            },
+        
+            // Modern
+            'modern-mint': { 
+                name: 'Modern Mint', 
+                vars: { 
+                    '--retro-bg':'#0d1117',
+                    '--retro-desktop':'#0b3d3d',
+                    '--retro-taskbar':'#1f6f6f',
+                    '--retro-window':'#163a3a',
+                    '--retro-border':'#2aa198',
+                    '--retro-text':'#e6fffb',
+                    '--retro-highlight':'#c2fff6',
+                    '--retro-shadow':'#0a2a2a',
+                    '--retro-info':'#2ec4b6',
+                    '--window-background':'rgba(22,58,58,0.55)',
+                    '--taskbar-background':'rgba(31,111,111,0.55)',
+                    '--menu-background':'rgba(22,58,58,0.55)',
+                    '--window-backdrop':'blur(10px) saturate(120%)',
+                    '--panel-backdrop':'blur(10px) saturate(120%)'
+                }, 
+                cat:'Modern' 
+            },
+            'modern-glass': { 
+                name: 'Modern Glass', 
+                vars: { 
+                    '--retro-bg':'#0f141a',
+                    '--retro-desktop':'#0b1222',
+                    '--retro-taskbar':'rgba(17,24,39,0.5)',
+                    '--retro-window':'rgba(17,24,39,0.5)',
+                    '--retro-border':'#475569',
+                    '--retro-text':'#e2e8f0',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#0a0f16',
+                    '--retro-info':'#60a5fa',
+                    '--window-background':'rgba(17,24,39,0.55)',
+                    '--taskbar-background':'rgba(17,24,39,0.55)',
+                    '--menu-background':'rgba(17,24,39,0.55)',
+                    '--window-backdrop':'blur(14px) saturate(140%)',
+                    '--panel-backdrop':'blur(14px) saturate(140%)'
+                }, 
+                cat:'Modern' 
+            },
+            'modern-neon': { 
+                name: 'Modern Neon', 
+                vars: { 
+                    '--retro-bg':'#0b0f1a',
+                    '--retro-desktop':'#0f172a',
+                    '--retro-taskbar':'#111827',
+                    '--retro-window':'#111827',
+                    '--retro-border':'#374151',
+                    '--retro-text':'#e5e7eb',
+                    '--retro-highlight':'#93c5fd',
+                    '--retro-shadow':'#0b1020',
+                    '--retro-info':'#60a5fa',
+                    '--window-background':'rgba(17,24,39,0.55)',
+                    '--taskbar-background':'rgba(17,24,39,0.55)',
+                    '--menu-background':'rgba(17,24,39,0.55)',
+                    '--window-backdrop':'blur(12px) saturate(120%)',
+                    '--panel-backdrop':'blur(12px) saturate(120%)'
+                }, 
+                cat:'Modern' 
+            },
+        
+            // Nostalgia
+            'nostalgia-memes': { 
+                name: 'Nostalgia Memes', 
+                vars: { 
+                    '--retro-bg':'#0a0a0a',
+                    '--retro-desktop':'#003366',
+                    '--retro-taskbar':'#c0d0ff',
+                    '--retro-window':'#dfe8ff',
+                    '--retro-border':'#5577aa',
+                    '--retro-text':'#000000',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#202a40',
+                    '--retro-info':'#3066be' 
+                }, 
+                cat:'Nostalgia',
+                icons:['😂','😹','🐸','😎','🔥','💾','📼','📟']
+            },
+        
+            // Art
+            'art-absurd': { 
+                name: 'Art – Absurd', 
+                vars: { 
+                    '--retro-bg':'#0b0b0b',
+                    '--retro-desktop':'linear-gradient(135deg,#1b1b2f,#162447,#1f4068)',
+                    '--retro-taskbar':'rgba(31,64,104,0.6)',
+                    '--retro-window':'rgba(27,27,47,0.6)',
+                    '--retro-border':'#e43f5a',
+                    '--retro-text':'#f3f3f3',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#0a0a1a',
+                    '--retro-info':'#e43f5a',
+                    '--window-background':'rgba(27,27,47,0.6)',
+                    '--taskbar-background':'rgba(31,64,104,0.6)',
+                    '--menu-background':'rgba(27,27,47,0.6)',
+                    '--window-backdrop':'blur(16px) contrast(110%)',
+                    '--panel-backdrop':'blur(16px) contrast(110%)'
+                }, 
+                cat:'Art' 
+            },
+        
+            // Horror
+            'horror-night': { 
+                name: 'Horror Night', 
+                vars: { 
+                    '--retro-bg':'#1a0a0a',
+                    '--retro-desktop':'#330000',
+                    '--retro-taskbar':'#660000',
+                    '--retro-window':'#990000',
+                    '--retro-border':'#ff0000',
+                    '--retro-text':'#ffffff',
+                    '--retro-highlight':'#ff3333',
+                    '--retro-shadow':'#330000',
+                    '--retro-info':'#990099'
+                }, 
+                cat:'Horror' 
+            },
+        
+            // Happy
+            'happy-sunshine': { 
+                name: 'Happy Sunshine', 
+                vars: { 
+                    '--retro-bg':'#fffbe6',
+                    '--retro-desktop':'#ffeb3b',
+                    '--retro-taskbar':'#ffd700',
+                    '--retro-window':'#ffecb3',
+                    '--retro-border':'#ff9800',
+                    '--retro-text':'#333333',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#cccccc',
+                    '--retro-info':'#ff5722'
+                }, 
+                cat:'Happy' 
+            },
+        
+            // Nature
+            'forest-mist': { 
+                name: 'Forest Mist', 
+                vars: { 
+                    '--retro-bg':'#0b3d0b',
+                    '--retro-desktop':'#1b6b1b',
+                    '--retro-taskbar':'#2e8b57',
+                    '--retro-window':'#3cb371',
+                    '--retro-border':'#006400',
+                    '--retro-text':'#e0f2f1',
+                    '--retro-highlight':'#a8e6cf',
+                    '--retro-shadow':'#014421',
+                    '--retro-info':'#76c7c0'
+                }, 
+                cat:'Nature' 
+            },
+            'ocean-breeze': { 
+                name: 'Ocean Breeze', 
+                vars: { 
+                    '--retro-bg':'#002b3a',
+                    '--retro-desktop':'#005f73',
+                    '--retro-taskbar':'#0a9396',
+                    '--retro-window':'#94d2bd',
+                    '--retro-border':'#001219',
+                    '--retro-text':'#e0f7fa',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#003845',
+                    '--retro-info':'#ee9b00'
+                }, 
+                cat:'Nature' 
+            },
+        
+            // Cyberpunk
+            'cyberpunk-glow': { 
+                name: 'Cyberpunk Glow', 
+                vars: { 
+                    '--retro-bg':'#0d001f',
+                    '--retro-desktop':'#1a00ff',
+                    '--retro-taskbar':'#ff00ff',
+                    '--retro-window':'#3300ff',
+                    '--retro-border':'#00ffff',
+                    '--retro-text':'#f0f0f0',
+                    '--retro-highlight':'#ff66ff',
+                    '--retro-shadow':'#110033',
+                    '--retro-info':'#00ffcc'
+                }, 
+                cat:'Cyberpunk' 
+            },
+        
+            // Sunset
+            'sunset-bliss': { 
+                name: 'Sunset Bliss', 
+                vars: { 
+                    '--retro-bg':'#ff4500',
+                    '--retro-desktop':'#ff6347',
+                    '--retro-taskbar':'#ffa07a',
+                    '--retro-window':'#ff7f50',
+                    '--retro-border':'#ff1493',
+                    '--retro-text':'#ffffff',
+                    '--retro-highlight':'#fffacd',
+                    '--retro-shadow':'#8b0000',
+                    '--retro-info':'#ffdead'
+                }, 
+                cat:'Sunset' 
+            },
+        
+            // Fun
+            'candy-pop': { 
+                name: 'Candy Pop', 
+                vars: { 
+                    '--retro-bg':'#ffe6f0',
+                    '--retro-desktop':'#ff99cc',
+                    '--retro-taskbar':'#ff66b2',
+                    '--retro-window':'#ffb3d9',
+                    '--retro-border':'#ff3399',
+                    '--retro-text':'#330033',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#cc6699',
+                    '--retro-info':'#ff66ff'
+                }, 
+                cat:'Fun', 
+                icons:['🍭','🍬','🍒','🍉','🦄','✨'] 
+            },
+
+            'forest-mist': { 
+                name: 'Forest Mist', 
+                vars: { 
+                    '--retro-bg':'#0b3d0b',        // deep forest
+                    '--retro-desktop':'#1b6b1b',   // mossy green
+                    '--retro-taskbar':'#2e8b57',   // pine
+                    '--retro-window':'#3cb371',    // fresh leaves
+                    '--retro-border':'#006400',    // dark foliage
+                    '--retro-text':'#e0f2f1',      // soft text
+                    '--retro-highlight':'#a8e6cf', // light mist
+                    '--retro-shadow':'#014421',    // deep shadows
+                    '--retro-info':'#76c7c0'       // water/river accents
+                }, 
+                cat:'Nature' 
+            },
+            'ocean-breeze': { 
+                name: 'Ocean Breeze', 
+                vars: { 
+                    '--retro-bg':'#002b3a',        // deep sea
+                    '--retro-desktop':'#005f73',   // waves
+                    '--retro-taskbar':'#0a9396',   // surf
+                    '--retro-window':'#94d2bd',    // foam
+                    '--retro-border':'#001219',    // night ocean
+                    '--retro-text':'#e0f7fa',      // light reflections
+                    '--retro-highlight':'#ffffff', // sun on water
+                    '--retro-shadow':'#003845',    // depth
+                    '--retro-info':'#ee9b00'       // sunset glint
+                }, 
+                cat:'Nature' 
+            },
+        
+            // Cozy & Happy
+            'sunny-morning': {
+                name: 'Sunny Morning',
+                vars: {
+                    '--retro-bg':'#fff9e6',        // soft sunlight
+                    '--retro-desktop':'#fff2b2',   // morning glow
+                    '--retro-taskbar':'#ffd966',   // warmth
+                    '--retro-window':'#fff0a3',    // gentle light
+                    '--retro-border':'#ffcc33',    // accent
+                    '--retro-text':'#333333',      // easy on eyes
+                    '--retro-highlight':'#ffffff', // light reflections
+                    '--retro-shadow':'#e6c266',    // subtle shadows
+                    '--retro-info':'#ff9900'       // cheerful accent
+                },
+                cat:'Happy'
+            },
+        
+            // Dark & Mysterious
+            'horror-night': { 
+                name: 'Horror Night', 
+                vars: { 
+                    '--retro-bg':'#1a0a0a',        // night sky
+                    '--retro-desktop':'#330000',   // deep shadows
+                    '--retro-taskbar':'#660000',   // blood tint
+                    '--retro-window':'#990000',    // danger red
+                    '--retro-border':'#ff0000',    // alert
+                    '--retro-text':'#ffffff',      // ghostly contrast
+                    '--retro-highlight':'#ff3333', // danger highlights
+                    '--retro-shadow':'#330000',    // depth
+                    '--retro-info':'#990099'       // eerie accent
+                }, 
+                cat:'Horror' 
+            },
+        
+            // Futuristic & Cyberpunk
+            'cyberpunk-glow': { 
+                name: 'Cyberpunk Glow', 
+                vars: { 
+                    '--retro-bg':'#0d001f',        // neon night
+                    '--retro-desktop':'#1a00ff',   // neon lights
+                    '--retro-taskbar':'#ff00ff',   // neon accent
+                    '--retro-window':'#3300ff',    // glowing UI
+                    '--retro-border':'#00ffff',    // cyber accents
+                    '--retro-text':'#f0f0f0',      // readable neon
+                    '--retro-highlight':'#ff66ff', // neon glow
+                    '--retro-shadow':'#110033',    // dark depth
+                    '--retro-info':'#00ffcc'       // electric details
+                }, 
+                cat:'Cyberpunk' 
+            },
+        
+            // Playful & Fun
+            'candy-pop': { 
+                name: 'Candy Pop', 
+                vars: { 
+                    '--retro-bg':'#ffe6f0',        // candy pink
+                    '--retro-desktop':'#ff99cc',   // sweet
+                    '--retro-taskbar':'#ff66b2',   // bubblegum
+                    '--retro-window':'#ffb3d9',    // frosting
+                    '--retro-border':'#ff3399',    // accent candy
+                    '--retro-text':'#330033',      // chocolate dark
+                    '--retro-highlight':'#ffffff', // sugar sparkle
+                    '--retro-shadow':'#cc6699',    // soft shadows
+                    '--retro-info':'#ff66ff'       // lollipop pop
+                }, 
+                cat:'Fun', 
+                icons:['🍭','🍬','🍒','🍉','🦄','✨'] 
+            },
+        
+            // Artistic & Abstract
+            'art-absurd': { 
+                name: 'Art – Absurd', 
+                vars: { 
+                    '--retro-bg':'#0b0b0b',       
+                    '--retro-desktop':'linear-gradient(135deg,#1b1b2f,#162447,#1f4068)', 
+                    '--retro-taskbar':'rgba(31,64,104,0.6)',
+                    '--retro-window':'rgba(27,27,47,0.6)',
+                    '--retro-border':'#e43f5a',   
+                    '--retro-text':'#f3f3f3',
+                    '--retro-highlight':'#ffffff',
+                    '--retro-shadow':'#0a0a1a',
+                    '--retro-info':'#e43f5a',
+                    '--window-background':'rgba(27,27,47,0.6)',
+                    '--taskbar-background':'rgba(31,64,104,0.6)',
+                    '--menu-background':'rgba(27,27,47,0.6)',
+                    '--window-backdrop':'blur(16px) contrast(110%)',
+                    '--panel-backdrop':'blur(16px) contrast(110%)'
+                }, 
+                cat:'Art' 
+            }
+        };
+        
+
+        function applyThemeVars(vars){ Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v)); }
+
+        function openControlPanel(){
+            const win = createWindow('control', `control_${Date.now()}`);
+            const content = win.querySelector('.window-content');
+            content.innerHTML = `
+                <h1 style="margin:0;">⚙️ CONTROL PANEL</h1>
+                <h2>🎨 Themes</h2>
+                <div style="margin:10px 0;">
+                    <button class="btn" onclick="renderCpThemes('All')">All</button>
+                    <button class="btn" onclick="renderCpThemes('Retro')">Retro</button>
+                    <button class="btn" onclick="renderCpThemes('Modern')">Modern</button>
+                    <button class="btn" onclick="renderCpThemes('Nostalgia')">Nostalgia</button>
+                    <button class="btn" onclick="renderCpThemes('Art')">Art</button>
+                </div>
+                <div id="cpThemeList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;"></div>
+            `;
+            windows.set(win.id, { element: win, title: 'Control Panel', minimized:false, maximized:false });
+            updateTaskbar();
+            renderCpThemes('All');
+        }
+
+        function renderCpThemes(filter){
+            const list = document.getElementById('cpThemeList');
+            const active = localStorage.getItem('pp_theme_key') || 'retro-98';
+            const items = Object.entries(CP_THEMES).filter(([k,t])=> filter==='All' || t.cat===filter).map(([key,t])=>{
+                const isActive = key===active ? ' (Active)' : '';
+                const iconRow = t.icons ? `<div style="margin-top:6px; font-size:18px;">${t.icons.join(' ')}</div>` : '';
+                return `<div style="border:2px inset var(--retro-highlight);background:var(--retro-window);padding:10px;">
+                    <div style="font-weight:bold;">${t.name}${isActive}</div>
+                    <div style="margin:8px 0; font-size:12px;opacity:0.8;">${t.cat}</div>
+                    <button class="btn" onclick="selectCpTheme('${key}')">Apply</button>
+                    ${iconRow}
+                </div>`;
+            }).join('');
+            list.innerHTML = items || 'No themes';
+        }
+
+        function selectCpTheme(key){
+            const theme = CP_THEMES[key];
+            if(!theme) return;
+            applyThemeVars(theme.vars);
+            localStorage.setItem('pp_theme_key', key);
+            if(key.startsWith('modern')) document.body.classList.add('dark'); else document.body.classList.remove('dark');
+            showNotification(`Theme applied: ${theme.name}`, 'success');
+            renderCpThemes('All');
+        }
+
+        // Apply saved theme on startup
+        (function(){
+            const k = localStorage.getItem('pp_theme_key') || 'retro-98';
+            if(CP_THEMES[k]) applyThemeVars(CP_THEMES[k].vars);
+        })();
+
+        function closeWallpaperPanel() {
+            const panel = document.getElementById('wallpaperPanel');
+            if (panel) {
+                panel.classList.remove('show');
+                playSound('close');
+                updateDebug('Wallpaper panel closed');
+                showNotification('Wallpaper panel closed', 'info');
+            } else {
+                updateDebug('ERROR: Wallpaper panel not found', null, true);
+            }
+        }
+
+        function setWallpaper(type) {
+            const desktop = document.getElementById('desktop');
+            if (!desktop) return;
+            
+            // Remove all wallpaper classes
+            desktop.className = 'desktop';
+            
+            // Add new wallpaper class
+            if (type !== 'default') {
+                desktop.classList.add(`wallpaper-${type}`);
+            }
+            
+            // Update active state in panel if it exists
+            const wallpaperOptions = document.querySelectorAll('.wallpaper-option');
+            if (wallpaperOptions.length > 0) {
+                wallpaperOptions.forEach(option => {
+                    option.classList.remove('active');
+                });
+                const activeOption = document.querySelector(`[data-wallpaper="${type}"]`);
+                if (activeOption) {
+                    activeOption.classList.add('active');
+                }
+            }
+            
+            currentWallpaper = type;
+            playSound('click');
+            showNotification(`Wallpaper changed to ${type}!`, 'success');
+            updateDebug(`Wallpaper changed to: ${type}`);
+        }
+
+        function applyCustomWallpaper() {
+            const desktop = document.getElementById('desktop');
+            if (!desktop) return;
+            
+            // Create a custom gradient based on user preferences
+            const hue1 = Math.floor(Math.random() * 360);
+            const hue2 = (hue1 + 120) % 360;
+            const hue3 = (hue1 + 240) % 360;
+            
+            desktop.style.background = `
+                linear-gradient(45deg, 
+                    hsl(${hue1}, 70%, 60%) 0%, 
+                    hsl(${hue2}, 70%, 60%) 50%, 
+                    hsl(${hue3}, 70%, 60%) 100%),
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)
+            `;
+        }
+
+        function setAnimationSpeed(speed) {
+            wallpaperSettings.animationSpeed = parseFloat(speed);
+            document.getElementById('speedValue').textContent = speed + 'x';
+            
+            // Apply to current wallpaper
+            const desktop = document.getElementById('desktop');
+            if (desktop) {
+                desktop.style.animationDuration = `${20 / speed}s`;
+            }
+            
+            updateDebug(`Animation speed set to: ${speed}x`);
+        }
+
+        function toggleScanlines() {
+            const toggle = document.getElementById('scanlinesToggle');
+            const status = document.getElementById('scanlinesStatus');
+            
+            wallpaperSettings.scanlines = !wallpaperSettings.scanlines;
+            
+            if (wallpaperSettings.scanlines) {
+                toggle.classList.add('active');
+                status.textContent = 'ON';
+                addScanlinesEffect();
+            } else {
+                toggle.classList.remove('active');
+                status.textContent = 'OFF';
+                removeScanlinesEffect();
+            }
+            
+            playSound('click');
+            updateDebug(`Scanlines ${wallpaperSettings.scanlines ? 'enabled' : 'disabled'}`);
+        }
+
+        function addScanlinesEffect() {
+            let scanlines = document.getElementById('customScanlines');
+            if (!scanlines) {
+                scanlines = document.createElement('div');
+                scanlines.id = 'customScanlines';
+                scanlines.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+                    background-size: 2px 2px;
+                    pointer-events: none;
+                    z-index: 9998;
+                    animation: scanlines 0.1s linear infinite;
+                `;
+                document.body.appendChild(scanlines);
+            }
+        }
+
+        function removeScanlinesEffect() {
+            const scanlines = document.getElementById('customScanlines');
+            if (scanlines) {
+                scanlines.remove();
+            }
+        }
+
+        function setParticleDensity(density) {
+            wallpaperSettings.particleDensity = parseInt(density);
+            document.getElementById('densityValue').textContent = density + '%';
+            
+            // Apply particle effect based on density
+            applyParticleEffect(density);
+            
+            updateDebug(`Particle density set to: ${density}%`);
+        }
+
+        function applyParticleEffect(density) {
+            // Remove existing particles
+            const existingParticles = document.querySelectorAll('.particle');
+            existingParticles.forEach(particle => particle.remove());
+            
+            if (density === 0) return;
+            
+            const particleCount = Math.floor(density / 10) * 5; // 5 particles per 10% density
+            
+            for (let i = 0; i < particleCount; i++) {
+                createParticle();
+            }
+        }
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.cssText = `
+                position: fixed;
+                width: 2px;
+                height: 2px;
+                background: var(--pixel-primary);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9997;
+                animation: particleFloat 10s linear infinite;
+            `;
+            
+            // Random position and animation
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            const endX = Math.random() * window.innerWidth;
+            const endY = Math.random() * window.innerHeight;
+            
+            particle.style.left = startX + 'px';
+            particle.style.top = startY + 'px';
+            particle.style.animation = `particleFloat 10s linear infinite`;
+            
+            document.body.appendChild(particle);
+            
+            // Remove particle after animation
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            }, 10000);
+        }
+
+        function saveWallpaperSettings() {
+            const settings = {
+                wallpaper: currentWallpaper,
+                ...wallpaperSettings
+            };
+            
+            localStorage.setItem('pixelPortfolioWallpaper', JSON.stringify(settings));
+            showNotification('Wallpaper settings saved!', 'success');
+            updateDebug('Wallpaper settings saved to localStorage');
+        }
+
+        function resetWallpaperSettings() {
+            currentWallpaper = 'default';
+            wallpaperSettings = {
+                animationSpeed: 1,
+                scanlines: false,
+                particleDensity: 50
+            };
+            
+            // Reset UI
+            setWallpaper('default');
+            document.getElementById('animationSpeed').value = 1;
+            document.getElementById('speedValue').textContent = '1x';
+            document.getElementById('scanlinesToggle').classList.remove('active');
+            document.getElementById('scanlinesStatus').textContent = 'OFF';
+            document.getElementById('particleDensity').value = 50;
+            document.getElementById('densityValue').textContent = '50%';
+            
+            // Remove effects
+            removeScanlinesEffect();
+            applyParticleEffect(0);
+            
+            // Clear localStorage
+            localStorage.removeItem('pixelPortfolioWallpaper');
+            
+            showNotification('Settings reset to default!', 'success');
+            updateDebug('Wallpaper settings reset to default');
+        }
+
+        function loadWallpaperSettings() {
+            try {
+                const saved = localStorage.getItem('pixelPortfolioWallpaper');
+                if (saved) {
+                    const settings = JSON.parse(saved);
+                    currentWallpaper = settings.wallpaper || 'default';
+                    wallpaperSettings = {
+                        animationSpeed: settings.animationSpeed || 1,
+                        scanlines: settings.scanlines || false,
+                        particleDensity: settings.particleDensity || 50
+                    };
+                    
+                    // Apply saved settings only if DOM elements exist
+                    const desktop = document.getElementById('desktop');
+                    if (desktop) {
+                        setWallpaper(currentWallpaper);
+                    }
+                    
+                    // Only apply other settings if elements exist
+                    const speedElement = document.getElementById('animationSpeed');
+                    if (speedElement) {
+                        setAnimationSpeed(wallpaperSettings.animationSpeed);
+                    }
+                    
+                    if (wallpaperSettings.scanlines) {
+                        const scanlinesToggle = document.getElementById('scanlinesToggle');
+                        if (scanlinesToggle) {
+                            toggleScanlines();
+                        }
+                    }
+                    
+                    const densityElement = document.getElementById('particleDensity');
+                    if (densityElement) {
+                        setParticleDensity(wallpaperSettings.particleDensity);
+                    }
+                    
+                    updateDebug('Wallpaper settings loaded from localStorage');
+                }
+            } catch (error) {
+                updateDebug('Error loading wallpaper settings: ' + error.message);
+                // Don't let wallpaper errors break the system
+            }
+        }
+
+        function hideContextMenu() {
+            const contextMenu = document.getElementById('contextMenu');
+            if (contextMenu) {
+                contextMenu.style.display = 'none';
+            }
+        }
+
+        function showContextMenu(e) {
+            e.preventDefault();
+            const contextMenu = document.getElementById('contextMenu');
+            if (contextMenu) {
+                contextMenu.style.display = 'block';
+                contextMenu.style.left = e.clientX + 'px';
+                contextMenu.style.top = e.clientY + 'px';
+                playSound('click');
+            }
+        }
+
+        function handleContextMenuAction(action) {
+            hideContextMenu();
+            
+            switch(action) {
+                case 'refresh':
+                    showNotification('Desktop refreshed!', 'success');
+                    break;
+                case 'wallpaper':
+                    openWallpaperPanel();
+                    break;
+                case 'properties':
+                    showNotification('Desktop properties opened!', 'info');
+                    break;
+                case 'new-folder':
+                    showNotification('New folder created!', 'success');
+                    break;
+                case 'arrange':
+                    showNotification('Icons arranged!', 'success');
+                    break;
+            }
+        }
+
+        function toggleDebugPanel() {
+            const debugPanel = document.getElementById('debugPanel');
+            if (debugPanel) {
+                debugPanel.classList.toggle('show');
+                playSound('click');
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 5px;">${type.toUpperCase()}</div>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            playSound(type === 'error' ? 'error' : 'click');
+            
+            safeTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000, 'Notification cleanup');
+        }
+
+        // Utility functions
+        function copyToClipboard(text) {
+            try {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification(`Copied: ${text}`, 'success');
+                }).catch(() => {
+                    showNotification('Copy failed - clipboard not available', 'error');
+                });
+            } catch (error) {
+                showNotification('Copy failed - clipboard not available', 'error');
+            }
+        }
+
+        function updateClock() {
+            try {
+                const clock = checkElement('clock', false);
+                if (clock) {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('en-US', { 
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    clock.textContent = timeString;
+                }
+            } catch (error) {
+                updateDebug(`Clock update error: ${error.message}`, null, true);
+            }
+        }
+
+        function initializeSystem() {
+            try {
+                updateDebug('Initializing Pixel Portfolio Desktop...', 10);
+                
+                // Start button
+                const startButton = checkElement('startButton');
+                if (startButton) {
+                    startButton.addEventListener('click', toggleStartMenu);
+                }
+                
+                // Start menu items
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('start-menu-item')) {
+                        const action = e.target.dataset.action;
+                        if (action) {
+                            handleStartMenuAction(action);
+                        }
+                    }
+                });
+                
+                // Desktop icons - single click to open
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.desktop-icon')) {
+                        const icon = e.target.closest('.desktop-icon');
+                        const windowType = icon.dataset.window;
+                        if (windowType) {
+                            openWindow(windowType);
+                        }
+                    }
+                });
+                
+                // Desktop icons - double click also works
+                document.addEventListener('dblclick', (e) => {
+                    if (e.target.closest('.desktop-icon')) {
+                        const icon = e.target.closest('.desktop-icon');
+                        const windowType = icon.dataset.window;
+                        if (windowType) {
+                            openWindow(windowType);
+                        }
+                    }
+                });
+                
+                // Context menu
+                document.addEventListener('contextmenu', (e) => {
+                    if (e.target.id === 'desktop' || e.target.classList.contains('desktop')) {
+                        showContextMenu(e);
+                    }
+                });
+                
+                // Context menu actions
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('context-menu-item')) {
+                        const action = e.target.dataset.action;
+                        if (action) {
+                            handleContextMenuAction(action);
+                        }
+                    } else {
+                        hideContextMenu();
+                    }
+                });
+                
+                // Hide start menu when clicking elsewhere
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
+                        const startMenu = document.getElementById('startMenu');
+                        const startButton = document.getElementById('startButton');
+                        if (startMenu && startButton) {
+                            startMenu.classList.remove('show');
+                            startButton.classList.remove('active');
+                        }
+                    }
+                    
+                    // Close wallpaper panel when clicking outside
+                    if (!e.target.closest('.wallpaper-panel')) {
+                        const wallpaperPanel = document.getElementById('wallpaperPanel');
+                        if (wallpaperPanel && wallpaperPanel.classList.contains('show')) {
+                            closeWallpaperPanel();
+                        }
+                    }
+                });
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'r') {
+                        e.preventDefault();
+                        showRunDialog();
+                    }
+                    if (e.key === 'F1') {
+                        e.preventDefault();
+                        showNotification('Help system activated!', 'info');
+                    }
+                    if (e.key === 'F12') {
+                        e.preventDefault();
+                        toggleDebugPanel();
+                    }
+                    if (e.key === 'Escape') {
+                        hideContextMenu();
+                        const dialogs = document.querySelectorAll('.system-dialog');
+                        dialogs.forEach(dialog => dialog.remove());
+                        
+                        // Close wallpaper panel with Escape key
+                        const wallpaperPanel = document.getElementById('wallpaperPanel');
+                        if (wallpaperPanel && wallpaperPanel.classList.contains('show')) {
+                            closeWallpaperPanel();
+                        }
+                    }
+                });
+                
+                // Run dialog enter key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && e.target.id === 'runInput') {
+                        executeRunCommand();
+                    }
+                });
+                
+                // Clock update
+                updateClock();
+                setInterval(updateClock, 1000);
+                
+                // Startup sound and notification
+                playSound('startup');
+                showNotification('Pixel Portfolio Desktop loaded successfully!', 'success');
+                
+                // Check system status
+                setTimeout(() => {
+                    checkSystemStatus();
+                }, 500);
+                
+                // Test wallpaper system
+                testWallpaperSystem();
+                
+                // TEMPORARILY DISABLED: Load wallpaper settings after system is ready
+                // setTimeout(() => {
+                //     loadWallpaperSettings();
+                // }, 1000);
+                
+                debugState.initialized = true;
+                updateDebug('System initialization complete!', 100);
+                
+            } catch (error) {
+                updateDebug(`Initialization error: ${error.message}`, null, true);
+                showNotification('System initialization failed!', 'error');
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeSystem);
+        } else {
+            initializeSystem();
+        }
+
+        // Global error handler
+        window.addEventListener('error', (e) => {
+            updateDebug(`Global error: ${e.message}`, null, true);
+        });
+
+        // Prevent default drag behavior on images
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+
+        // Simple wallpaper test function
+        function testWallpaperSystem() {
+            try {
+                updateDebug('Testing wallpaper system...');
+                
+                // Check if basic elements exist
+                const desktop = document.getElementById('desktop');
+                if (!desktop) {
+                    updateDebug('ERROR: Desktop element not found');
+                    return false;
+                }
+                
+                // Test basic wallpaper change
+                desktop.classList.add('wallpaper-matrix');
+                updateDebug('Matrix wallpaper applied successfully');
+                
+                // Remove test wallpaper
+                setTimeout(() => {
+                    desktop.classList.remove('wallpaper-matrix');
+                    updateDebug('Test wallpaper removed');
+                }, 2000);
+                
+                return true;
+            } catch (error) {
+                updateDebug('Wallpaper test failed: ' + error.message);
+                return false;
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeSystem);
+        }
+
+        // Simple wallpaper toggle for testing
+        let currentSimpleWallpaper = 0;
+        const simpleWallpapers = [
+            'default',
+            'wallpaper-matrix',
+            'wallpaper-cyberpunk',
+            'wallpaper-retro-wave'
+        ];
+
+        function toggleWallpaper() {
+            const desktop = document.getElementById('desktop');
+            if (!desktop) return;
+            
+            // Remove current wallpaper
+            desktop.className = 'desktop';
+            
+            // Add next wallpaper
+            currentSimpleWallpaper = (currentSimpleWallpaper + 1) % simpleWallpapers.length;
+            const wallpaper = simpleWallpapers[currentSimpleWallpaper];
+            
+            if (wallpaper !== 'default') {
+                desktop.classList.add(wallpaper);
+            }
+            
+            playSound('click');
+            showNotification(`Wallpaper: ${wallpaper}`, 'success');
+            updateDebug(`Simple wallpaper changed to: ${wallpaper}`);
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeSystem);
+        }
+
+        function hideStartMenu() {
+            const startMenu = document.getElementById('startMenu');
+            const startButton = document.getElementById('startButton');
+            if (startMenu) startMenu.classList.remove('show');
+            if (startButton) startButton.classList.remove('active');
+        }
+
+        function toggleStartMenu() {
+            const startMenu = document.getElementById('startMenu');
+            const startButton = document.getElementById('startButton');
+            
+            if (startMenu && startButton) {
+                const isVisible = startMenu.classList.contains('show');
+                
+                if (isVisible) {
+                    hideStartMenu();
+                } else {
+                    startMenu.classList.add('show');
+                    startButton.classList.add('active');
+                }
+                
+                playSound('click');
+            }
+        }
+
+        function restoreWindow(windowId) {
+            const windowData = windows.get(windowId);
+            if (!windowData) return;
+            
+            const windowElement = document.getElementById(windowId);
+            if (windowElement) {
+                windowData.minimized = false;
+                windowElement.style.display = 'block';
+                windowElement.style.opacity = '1';
+                windowElement.style.transform = 'none';
+                
+                setActiveWindow(windowId);
+                updateTaskbar();
+                
+                playSound('open');
+                showNotification(`${windowData.title} restored!`, 'success');
+            }
+        }
+
+        function getHighestZIndex() {
+            let highest = 100;
+            document.querySelectorAll('.window').forEach(window => {
+                const zIndex = parseInt(window.style.zIndex) || 100;
+                if (zIndex > highest) {
+                    highest = zIndex;
+                }
+            });
+            return highest;
+        }
+
+        function showRunDialog() {
+            const runDialog = document.createElement('div');
+            runDialog.className = 'system-dialog run-dialog';
+            runDialog.innerHTML = `
+                <div class="dialog-header">
+                    <span>Run</span>
+                    <span class="dialog-close" onclick="this.parentElement.parentElement.remove()">×</span>
+                </div>
+                <div class="dialog-content">
+                    <p>Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.</p>
+                    <input type="text" id="runInput" placeholder="Type program name here..." />
+                    <div class="dialog-buttons">
+                        <button onclick="executeRunCommand()">OK</button>
+                        <button onclick="this.parentElement.parentElement.remove()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(runDialog);
+            document.getElementById('runInput').focus();
+            playSound('open');
+        }
+
+        function executeRunCommand() {
+            const input = document.getElementById('runInput');
+            const command = input.value.trim();
+            
+            if (command) {
+                showNotification(`Running: ${command}`, 'info');
+                updateDebug(`Run command executed: ${command}`);
+            }
+            
+            // Close dialog
+            const dialog = input.closest('.run-dialog');
+            if (dialog) {
+                dialog.remove();
+            }
+        }
+
+        function handleStartMenuAction(action) {
+            hideStartMenu();
+            
+            switch(action) {
+                case 'home':
+                    openWindow('home', 'home');
+                    break;
+                case 'about':
+                    openWindow('about', 'about');
+                    break;
+                case 'projects':
+                    openWindow('projects', 'projects');
+                    break;
+                case 'contact':
+                    openWindow('contact', 'contact');
+                    break;
+                case 'mycomputer':
+                    openWindow('mycomputer', 'mycomputer');
+                    break;
+                case 'notepad':
+                    openWindow('notepad', 'notepad');
+                    break;
+                case 'calculator':
+                    openWindow('calculator', 'calculator');
+                    break;
+                case 'recycle':
+                    openWindow('recycle', 'recycle');
+                    break;
+                case 'run':
+                    showRunDialog();
+                    break;
+                case 'control':
+                    openControlPanel();
+                    break;
+                case 'wallpaper':
+                    openWallpaperPanel();
+                    break;
+                case 'help':
+                    showNotification('Help system activated!', 'info');
+                    break;
+                case 'restart':
+                    showNotification('System restart initiated!', 'warning');
+                    break;
+                case 'shutdown':
+                    showShutdownScreen();
+                    break;
+                default:
+                    showNotification(`Action: ${action}`, 'info');
+                    break;
+            }
+        }
+        function showShutdownScreen() {
+            const shutdownScreen = document.getElementById('shutdownScreen');
+            if (!shutdownScreen) return;
+        
+            shutdownScreen.style.display = 'flex';
+            playSound('shutdown');
+        
+            // Optional countdown before allowing restart
+            let countdown = 0;
+            const countdownElement = document.createElement('p');
+            countdownElement.innerText = `System will allow restart in ${countdown} seconds...`;
+            countdownElement.style.fontFamily = "'Press Start 2P', monospace";
+            shutdownScreen.appendChild(countdownElement);
+        
+            const timer = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    countdownElement.innerText = `System will allow restart in ${countdown} seconds...`;
+                } else {
+                    countdownElement.innerText = 'Click the button below to restart.';
+                    clearInterval(timer);
+                }
+            }, 1000);
+        
+            const restartButton = document.getElementById('restartButton');
+            restartButton.onclick = () => {
+                shutdownScreen.style.display = 'none';
+                playSound('startup'); // optional
+                showNotification('System restarting...', 'success');
+        
+                setTimeout(() => {
+                    window.location.href = '/'; // default page
+                }, 1000);
+            };
+        }
+        
+        
+        // Database and system status check
+        function checkSystemStatus() {
+            try {
+                updateDebug('Checking system status...');
+                
+                // Check if localStorage is available
+                if (typeof(Storage) !== "undefined") {
+                    updateDebug('localStorage: Available');
+                } else {
+                    updateDebug('localStorage: Not available', null, true);
+                }
+                
+                // Check if all required functions exist
+                const requiredFunctions = [
+                    'openWindow', 'createWindow', 'makeWindowDraggable',
+                    'toggleStartMenu', 'updateTaskbar', 'showNotification'
+                ];
+                
+                let missingFunctions = [];
+                requiredFunctions.forEach(funcName => {
+                    if (typeof window[funcName] !== 'function') {
+                        missingFunctions.push(funcName);
+                    }
+                });
+                
+                if (missingFunctions.length > 0) {
+                    updateDebug(`Missing functions: ${missingFunctions.join(', ')}`, null, true);
+                } else {
+                    updateDebug('All required functions available');
+                }
+                
+                // Check DOM elements
+                const requiredElements = ['desktop', 'startMenu', 'startButton', 'taskbar'];
+                let missingElements = [];
+                requiredElements.forEach(elementId => {
+                    if (!document.getElementById(elementId)) {
+                        missingElements.push(elementId);
+                    }
+                });
+                
+                if (missingElements.length > 0) {
+                    updateDebug(`Missing elements: ${missingElements.join(', ')}`, null, true);
+                } else {
+                    updateDebug('All required elements available');
+                }
+                
+                return missingFunctions.length === 0 && missingElements.length === 0;
+                
+            } catch (error) {
+                updateDebug(`System status check failed: ${error.message}`, null, true);
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPC Dialogue - Pixel Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Retro PC Color Palette */
+            --retro-bg: #0a0a0a;
+            --retro-desktop: #000080;
+            --retro-taskbar: #c0c0c0;
+            --retro-window: #c0c0c0;
+            --retro-border: #808080;
+            --retro-text: #000000;
+            --retro-highlight: #ffffff;
+            --retro-shadow: #404040;
+            --retro-accent: #00ff00;
+            --retro-error: #ff0000;
+            --retro-warning: #ffff00;
+            --retro-info: #0080ff;
+            
+            /* Pixel Portfolio Colors */
+            --pixel-primary: #00ff88;
+            --pixel-secondary: #ff6b6b;
+            --pixel-accent: #4ecdc4;
+            --pixel-warning: #ffd73d;
+            --pixel-success: #51cf66;
+            --pixel-info: #339af0;
+            --pixel-border: #4a4a6a;
+            --pixel-text-dim: #a0a0a0;
+            --pixel-dark: #1a1a2e;
+            --pixel-text: #ffffff;
+            
+            /* Animation Variables */
+            --transition-fast: 0.1s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.4s ease;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'VT323', 'Share Tech Mono', monospace;
+            background: var(--retro-desktop);
+            color: var(--retro-highlight);
+            line-height: 1.4;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CRT Monitor Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+                linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 2px 2px, 2px 2px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlines 0.1s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .nav-back a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--retro-taskbar);
+            color: var(--retro-text);
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            border: 3px outset var(--retro-highlight);
+            transition: all var(--transition-fast);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .nav-back a:hover {
+            border-style: inset;
+            background: var(--retro-highlight);
+            transform: scale(1.05);
+        }
+<style>
+    .contact-section {
+        padding: 4rem 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .dialogue-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--retro-window);
+        border: 3px outset var(--retro-highlight);
+        position: relative;
+        box-shadow: 6px 6px 15px rgba(0,0,0,0.7);
+    }
+
+    .npc-header {
+        background: var(--retro-info);
+        color: var(--retro-highlight);
+        padding: 1rem 2rem;
+        font-family: 'VT323', monospace;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border-bottom: 3px outset var(--retro-highlight);
+    }
+
+    .npc-avatar {
+        width: 40px;
+        height: 40px;
+        background: var(--pixel-dark);
+        border: 2px solid var(--pixel-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .dialogue-content {
+        padding: 3rem;
+    }
+
+    .dialogue-text {
+        font-size: 16px;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        color: var(--pixel-text);
+    }
+
+    .dialogue-options {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .dialogue-option {
+        background: var(--retro-taskbar);
+        color: var(--retro-text);
+        border: 3px outset var(--retro-highlight);
+        padding: 1rem 2rem;
+        font-family: 'VT323', monospace;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .dialogue-option:hover {
+        background: var(--pixel-accent);
+        color: var(--pixel-dark);
+        transform: translateX(10px);
+    }
+
+    .dialogue-option::before {
+        content: "> ";
+        position: absolute;
+        left: 1rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .dialogue-option:hover::before {
+        opacity: 1;
+    }
+
+    .contact-form {
+        display: none;
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .contact-form.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 12px;
+        color: var(--pixel-primary);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 1rem;
+        background: var(--retro-highlight);
+        border: 3px inset var(--retro-shadow);
+        color: var(--retro-text);
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.3s ease;
+        box-shadow: inset 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--pixel-primary);
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .form-submit {
+        font-family: 'VT323', monospace;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 1rem 3rem;
+        background: var(--retro-info);
+        color: var(--retro-highlight);
+        border: 3px outset var(--retro-highlight);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .form-submit:hover {
+        background: var(--pixel-accent);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+    }
+
+    .social-links {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--pixel-border);
+    }
+
+    .social-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .social-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--retro-window);
+        border: 2px outset var(--retro-highlight);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: var(--retro-text);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .social-item:hover {
+        background: var(--pixel-accent);
+        color: var(--pixel-dark);
+        transform: translateY(-3px);
+    }
+
+    .social-icon {
+        font-size: 24px;
+        width: 40px;
+        text-align: center;
+    }
+
+    .contact-info {
+        display: none;
+    }
+
+    .contact-info.active {
+        display: block;
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .typing-indicator {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 1rem 0;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        color: var(--pixel-text-dim);
+    }
+
+    .typing-indicator.active {
+        display: flex;
+    }
+
+    .typing-dots {
+        display: flex;
+        gap: 2px;
+    }
+
+    .typing-dot {
+        width: 4px;
+        height: 4px;
+        background: var(--pixel-primary);
+        animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes typing {
+        0%, 80%, 100% { transform: scale(0.5); opacity: 0.5; }
+        40% { transform: scale(1); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+        .dialogue-content {
+            padding: 2rem 1rem;
+        }
+        
+        .dialogue-options {
+            gap: 0.8rem;
+        }
+        
+        .dialogue-option {
+            padding: 0.8rem 1.5rem;
+            font-size: 10px;
+        }
+        
+        .social-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+    
+
+<section class="contact-section">
+    <div class="container">
+        <div class="dialogue-container">
+            <div class="npc-header">
+                <div class="npc-avatar">👨‍💻</div>
+                <span>NPC_DEVELOPER</span>
+            </div>
+            
+            <div class="dialogue-content">
+                <div id="initial-dialogue">
+                    <p class="dialogue-text typewriter" data-text="Hello, adventurer! Welcome to my digital realm. I'm always excited to connect with fellow explorers of the coding universe. What brings you here today?">
+                        Hello, adventurer! Welcome to my digital realm. I'm always excited to connect with fellow explorers of the coding universe. What brings you here today?
+                    </p>
+                    
+                    <div class="dialogue-options">
+                        <button class="dialogue-option" onclick="showContactForm()">
+                            I want to send you a message
+                        </button>
+                        <button class="dialogue-option" onclick="showContactInfo()">
+                            Show me your contact information
+                        </button>
+                        <button class="dialogue-option" onclick="showSocialLinks()">
+                            Let's connect on social media
+                        </button>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typing-indicator">
+                    <span>NPC_DEVELOPER is typing</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+
+                <div class="contact-form" id="contact-form">
+                    <p class="dialogue-text">
+                        Excellent choice! Please fill out this message scroll, and I'll get back to you faster than a quick sort algorithm!
+                    </p>
+                    
+                    <form method="POST" action="{% url 'pages:contact' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="form-label" for="name">YOUR_NAME:</label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="email">EMAIL_ADDRESS:</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="subject">QUEST_SUBJECT:</label>
+                            <input type="text" id="subject" name="subject" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="message">MESSAGE_CONTENT:</label>
+                            <textarea id="message" name="message" class="form-input form-textarea" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="form-submit">SEND MESSAGE</button>
+                    </form>
+                    
+                    <button class="dialogue-option" onclick="goBack()" style="margin-top: 2rem;">
+                        Go back to dialogue options
+                    </button>
+                </div>
+
+                <div class="contact-info" id="contact-info">
+                    <p class="dialogue-text">
+                        Here are the various ways to reach me in the digital realm:
+                    </p>
+                    
+                    <div class="social-grid">
+                        <div class="social-item">
+                            <span class="social-icon">📧</span>
+                            <div>
+                                <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">EMAIL</div>
+                                <div>your.email@example.com</div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-item">
+                            <span class="social-icon">📱</span>
+                            <div>
+                                <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">PHONE</div>
+                                <div>+91 12345 67890</div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-item">
+                            <span class="social-icon">📍</span>
+                            <div>
+                                <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">LOCATION</div>
+                                <div>Mumbai, Maharashtra</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="dialogue-option" onclick="goBack()" style="margin-top: 2rem;">
+                        Go back to dialogue options
+                    </button>
+                </div>
+
+                <div class="social-links" id="social-links" style="display: none;">
+                    <p class="dialogue-text">
+                        Let's connect across different platforms in the digital multiverse:
+                    </p>
+                    
+                    <div class="social-grid">
+                        <a href="#" class="social-item" target="_blank">
+                            <span class="social-icon">💼</span>
+                            <div>
+                                <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">LINKEDIN</div>
+                                <div>Professional Network</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="social-item" target="_blank">
+                            <span class="social-icon">🐙</span>
+                            <div>
+                                <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">GITHUB</div>
+                                <div>Code Repository</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="social-item" target="_blank">
+                            <span class="social-icon">🐦</span>
+                            <div>
+                                <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">TWITTER</div>
+                                <div>Tech Updates</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="social-item" target="_blank">
+                            <span class="social-icon">📷</span>
+                            <div>
+                                <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">INSTAGRAM</div>
+                                <div>Life & Code</div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <button class="dialogue-option" onclick="goBack()" style="margin-top: 2rem;">
+                        Go back to dialogue options
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function showTypingIndicator(callback) {
+        const indicator = document.getElementById('typing-indicator');
+        indicator.classList.add('active');
+        
+        setTimeout(() => {
+            indicator.classList.remove('active');
+            callback();
+        }, 1500);
+    }
+
+    function showContactForm() {
+        showTypingIndicator(() => {
+            hideAllSections();
+            document.getElementById('contact-form').classList.add('active');
+        });
+    }
+
+    function showContactInfo() {
+        showTypingIndicator(() => {
+            hideAllSections();
+            document.getElementById('contact-info').classList.add('active');
+        });
+    }
+
+    function showSocialLinks() {
+        showTypingIndicator(() => {
+            hideAllSections();
+            document.getElementById('social-links').style.display = 'block';
+            document.getElementById('social-links').classList.add('active');
+        });
+    }
+
+    function hideAllSections() {
+        document.getElementById('initial-dialogue').style.display = 'none';
+        document.getElementById('contact-form').classList.remove('active');
+        document.getElementById('contact-info').classList.remove('active');
+        document.getElementById('social-links').style.display = 'none';
+    }
+
+    function goBack() {
+        showTypingIndicator(() => {
+            hideAllSections();
+            document.getElementById('initial-dialogue').style.display = 'block';
+        });
+    }
+
+    // Form submission handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show success message
+                const submitBtn = form.querySelector('.form-submit');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'MESSAGE SENT!';
+                submitBtn.style.background = 'var(--pixel-accent)';
+                
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = 'var(--pixel-primary)';
+                    form.reset();
+                    
+                    // Show thank you message
+                    showTypingIndicator(() => {
+                        const dialogueText = document.querySelector('#contact-form .dialogue-text');
+                        dialogueText.textContent = 'Thank you for your message, adventurer! I\'ll respond to your quest request soon. May your code compile without errors!';
+                    });
+                }, 2000);
+            });
+        }
+    });
+</script>
+</body>
+</html>
