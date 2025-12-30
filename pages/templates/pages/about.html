@@ -322,21 +322,30 @@
     <div class="container">
         <div class="profile-header">
             <h1 class="profile-title typewriter" data-text="PLAYER PROFILE">PLAYER PROFILE</h1>
-            <p class="profile-subtitle">BCA Graduate | Aspiring Full-Stack Developer</p>
-            
+            {% if profile %}
+            <p class="profile-subtitle">{{ profile.title }}</p>
             <div class="avatar-container">
-                🧑‍💻
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="{{ profile.full_name }}" style="width:100%;height:100%;object-fit:cover;" />
+                {% else %}
+                    🧑‍💻
+                {% endif %}
             </div>
+            {% endif %}
         </div>
 
+        {% if profile %}
         <div class="bio-section pixel-card">
-            <p class="bio-text">
-                Greetings, fellow adventurer! I'm a passionate BCA graduate with a quest for creating innovative web solutions. 
-                My journey through the digital realm has equipped me with diverse technical skills and an insatiable curiosity 
-                for emerging technologies. From crafting tourism websites to exploring full-stack development, 
-                I'm always ready for the next coding challenge!
-            </p>
+            <h3 class="section-title">ABOUT</h3>
+            <p class="bio-text">{{ profile.bio|linebreaks }}</p>
+            <div style="margin-top:1rem; font-size:14px; color: var(--pixel-text-dim);">
+                {% if profile.location %}<div><strong>Location:</strong> {{ profile.location }}</div>{% endif %}
+                {% if profile.email %}<div><strong>Email:</strong> <a href="mailto:{{ profile.email }}">{{ profile.email }}</a></div>{% endif %}
+                {% if profile.phone %}<div><strong>Phone:</strong> {{ profile.phone }}</div>{% endif %}
+                {% if profile.resume_url %}<div><a class="project-link" href="{{ profile.resume_url }}" target="_blank">📄 View Resume</a></div>{% endif %}
+            </div>
         </div>
+        {% endif %}
 
         <div class="skills-grid">
             <div class="skill-category pixel-card">
@@ -408,13 +417,13 @@
             {% endfor %}
         </div>
 
+        {% if social_links %}
         <div class="achievement-badges">
-            <div class="badge">BCA GRADUATE</div>
-            <div class="badge">WEB DEVELOPER</div>
-            <div class="badge">PROBLEM SOLVER</div>
-            <div class="badge">TEAM PLAYER</div>
-            <div class="badge">QUICK LEARNER</div>
+            {% for link in social_links %}
+                <a href="{{ link.url }}" target="_blank" class="badge">{{ link.icon }} {{ link.name }}</a>
+            {% endfor %}
         </div>
+        {% endif %}
     </div>
 </section>
 

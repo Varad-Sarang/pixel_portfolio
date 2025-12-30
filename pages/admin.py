@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserPreference, RunHistory, DesktopItem, Theme
+from .models import UserPreference, RunHistory, DesktopItem, Theme, Profile, SocialLink, ContactMessage, Note
 
 
 @admin.register(UserPreference)
@@ -28,4 +28,34 @@ class ThemeAdmin(admin.ModelAdmin):
 	list_display = ("key", "name", "is_default", "updated_at")
 	list_filter = ("is_default",)
 	search_fields = ("key", "name")
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+	list_display = ("full_name", "title", "location", "updated_at")
+	search_fields = ("full_name", "title", "location", "email")
+	readonly_fields = ("created_at", "updated_at")
+
+
+@admin.register(SocialLink)
+class SocialLinkAdmin(admin.ModelAdmin):
+	list_display = ("name", "url", "icon", "order", "visible")
+	list_editable = ("order", "visible")
+	search_fields = ("name", "url")
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+	list_display = ("subject", "name", "email", "is_read", "created_at")
+	list_filter = ("is_read",)
+	search_fields = ("name", "email", "subject", "message")
+	readonly_fields = ("created_at",)
+
+
+@admin.register(Note)
+class NoteAdmin(admin.ModelAdmin):
+	list_display = ("title", "is_deleted", "updated_at", "created_at")
+	list_filter = ("is_deleted",)
+	search_fields = ("title", "content")
+	readonly_fields = ("created_at", "updated_at")
 

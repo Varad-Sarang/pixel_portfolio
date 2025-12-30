@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle Bin - Pixel Portfolio</title>
+    <style> body{font-family:monospace} .wrap{max-width:900px;margin:40px auto;padding:20px;border:2px solid #ccc;background:#f7f7f7} .item{border:1px solid #aaa;background:#fff;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center} button{padding:6px 10px} </style>
+</head>
+<body>
+    <div class="nav-back" style="position:fixed;top:20px;left:20px;z-index:1000;">
+        <a href="/" style="display:inline-block;padding:8px 12px;background:#c0c0c0;color:#000;border:2px outset #fff;text-decoration:none;font-family:'VT323',monospace;">🏠 BACK TO DESKTOP</a>
+    </div>
+    <div class="wrap">
+        <h1 style="margin-top:0;">🗑️ Recycle Bin</h1>
+        {% if deleted_notes %}
+            {% for n in deleted_notes %}
+            <div class="item">
+                <div>
+                    <strong>{{ n.title }}</strong>
+                    <div style="font-size:12px;color:#666">Deleted: {{ n.updated_at|date:"Y-m-d H:i" }}</div>
+                </div>
+                <form method="post" action="" onsubmit="return restoreNote(event, {{ n.id }})">
+                    {% csrf_token %}
+                    <button type="submit">Restore</button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Recycle Bin is empty.</p>
+        {% endif %}
+    </div>
+    <script>
+        async function restoreNote(e, id){
+            e.preventDefault();
+            const csrftoken = (document.cookie.match(/csrftoken=([^;]+)/)||[])[1]||'';
+            const res = await fetch('/api/notes/', { method:'PATCH', headers:{'Content-Type':'application/json','X-CSRFToken':csrftoken}, body: JSON.stringify({ id, is_deleted: false })});
+            if(res.ok){ location.reload(); } else { alert('Restore failed'); }
+        }
+    </script>
+</body>
+</html>
+
+

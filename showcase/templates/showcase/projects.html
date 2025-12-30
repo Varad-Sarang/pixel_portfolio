@@ -578,7 +578,7 @@
             </div>
             <div class="stat-box">
                 <span class="stat-number">{{ projects|length }}</span>
-                <span>COMPLETED</span>
+                <span>LISTED</span>
             </div>
             <div class="stat-box">
                 <span class="stat-number">∞</span>
@@ -586,13 +586,22 @@
             </div>
         </div>
 
-        <div class="quest-grid">
+        <div style="display:flex;gap:10px;align-items:center;justify-content:center;margin-bottom:1rem;">
+            <input id="projectSearch" placeholder="Search projects" style="padding:8px 12px;min-width:260px;border:2px inset var(--retro-highlight);background:#fff;color:#000;" />
+            <select id="statusFilter" style="padding:8px 12px;border:2px inset var(--retro-highlight);">
+                <option value="">All</option>
+                <option value="completed">Completed</option>
+                <option value="in_progress">In Progress</option>
+                <option value="planned">Planned</option>
+            </select>
+        </div>
+        <div class="quest-grid" id="projectsGrid">
             {% for project in projects %}
             <div class="quest-card" {% if forloop.first %}style="grid-column: span 2;"{% endif %} data-project-id="{{ project.id }}">
                 <div class="quest-status {{ project.status }}">{{ project.status|upper }}</div>
                 <div class="quest-image">
                     {% if project.image %}
-                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy">
                     {% else %}
                         {% if "tourism" in project.title|lower %}🏝️
                         {% elif "portfolio" in project.title|lower %}💼
@@ -633,6 +642,26 @@
             </div>
             {% endfor %}
         </div>
+        <script>
+            (function(){
+                const search = document.getElementById('projectSearch');
+                const filter = document.getElementById('statusFilter');
+                const grid = document.getElementById('projectsGrid');
+                function apply(){
+                    const q = (search.value||'').toLowerCase();
+                    const st = filter.value;
+                    Array.from(grid.children).forEach(card=>{
+                        const name = (card.querySelector('.quest-name')?.textContent||'').toLowerCase();
+                        const status = (card.querySelector('.quest-status')?.textContent||'').toLowerCase().replace(/\s+/g,'_');
+                        const okQ = !q || name.includes(q);
+                        const okS = !st || status.includes(st);
+                        card.style.display = (okQ && okS) ? '' : 'none';
+                    });
+                }
+                if(search) search.addEventListener('input', apply);
+                if(filter) filter.addEventListener('change', apply);
+            })();
+        </script>
     </div>
 </section>
 

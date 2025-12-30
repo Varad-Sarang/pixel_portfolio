@@ -452,7 +452,7 @@
             border-top: 2px outset var(--retro-highlight);
             display: flex;
             align-items: center;
-            z-index: 1000;
+            z-index: 10000;
             box-shadow: 0 -2px 4px rgba(0,0,0,0.3);
         }
 
@@ -1089,27 +1089,7 @@
     </style>
 </head> 
 <body>
-
-
-    <!-- Taskbar -->
-
-    <div id="shutdownScreen" class="shutdown-screen">
-        <div class="shutdown-text">⚠️ Shutting down...</div>
-        <p>Click the button below to restart the system.</p>
-        <button id="restartButton" style="
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 20px;
-            font-family: 'Press Start 2P', monospace;
-            color: var(--retro-accent);
-            background: var(--retro-bg-darker);
-            border: 2px solid var(--retro-accent);
-        ">Restart</button>
-    </div>
     
-
-    <div id="taskbar"></div>
 
     <div class="desktop" id="desktop"></div>
 
@@ -1218,6 +1198,10 @@
         <div class="context-menu-item" data-action="wallpaper">🎨 Change Wallpaper</div>
         <div class="context-menu-item" data-action="properties">📋 Properties</div>
         <div class="context-menu-item" data-action="new-folder">📁 New Folder</div>
+        <div class="context-menu-item" onclick="createFromTemplate('house')">🏠 New Folder: House</div>
+        <div class="context-menu-item" onclick="createFromTemplate('docs')">📄 New Folder: Documents</div>
+        <div class="context-menu-item" onclick="createFromTemplate('pics')">🖼️ New Folder: Pictures</div>
+        <div class="context-menu-item" onclick="createFromTemplate('link_projects')">🔗 Shortcut: Projects</div>
         <div class="context-menu-item" data-action="arrange">📐 Arrange Icons</div>
     </div>
 
@@ -1329,7 +1313,6 @@
 
     <script>
 
-        
         
         let debugState = {
             progress: 0,
@@ -1495,9 +1478,20 @@
                 const content = window.querySelector('.window-content');
                 if (!content) return;
         
-                // Try dynamic fetch from Django
+                // Try dynamic fetch from Django (map logical type to route)
                 content.innerHTML = "<p>Loading...</p>";
-                fetch(`/${type}/`)
+                const routeMap = {
+                    home: '/',
+                    projects: '/projects/',
+                    about: '/about/',
+                    contact: '/contact/',
+                    notepad: '/notepad/',
+                    calculator: '/calculator/',
+                    mycomputer: '/mycomputer/',
+                    recycle: '/recycle/'
+                };
+                const path = routeMap[type] || `/${type}/`;
+                fetch(path)
                     .then(res => {
                         if (!res.ok) throw new Error("No Django route");
                         return res.text();
@@ -1684,33 +1678,37 @@
                 currentWindow.style.zIndex = getHighestZIndex() + 1;
             }
             
+            // Track active window for taskbar highlighting
+            activeWindow = windowId;
+
             // Update taskbar
             updateTaskbar();
         }
 
         function updateTaskbar() {
-            const taskbar = document.getElementById('taskbar');
-            if (!taskbar) {
-                updateDebug('updateTaskbar: taskbar element not found', null, true);
+            const tabs = document.getElementById('taskbarTabs');
+            if (!tabs) {
+                updateDebug('updateTaskbar: taskbarTabs element not found', null, true);
                 return;
             }
-        
-            updateDebug('updateTaskbar called. Current windows: ' + JSON.stringify(windows));
-        
-            taskbar.innerHTML = "";
-        
-            // Assuming windows is an object
-            Object.entries(windows).forEach(([windowId, windowData]) => {
-                updateDebug(`Adding taskbar item for: ${windowId}, type: ${windowData.type}, title: ${windowData.title || 'N/A'}`);
-        
-                const taskbarItem = document.createElement("div");
-                taskbarItem.className = "taskbar-window";
-                taskbarItem.innerHTML = `
-                    <span class="taskbar-icon">🪟</span>
-                    <span class="taskbar-title">${windowData.title || windowData.type.toUpperCase()}</span>
-                `;
-                taskbarItem.onclick = () => setActiveWindow(windowId);
-                taskbar.appendChild(taskbarItem);
+
+            // Clear only the tabs region, keep START and clock
+            tabs.innerHTML = "";
+
+            // Iterate Map of windows and render tabs
+            windows.forEach((windowData, windowId) => {
+                const label = windowData.title || (windowData.type ? String(windowData.type).toUpperCase() : windowId);
+                const tab = document.createElement('div');
+                tab.className = 'taskbar-tab' + (windowId === activeWindow ? ' active' : '');
+                tab.textContent = label;
+                tab.onclick = () => {
+                    if (windowData.minimized) {
+                        restoreWindow(windowId);
+                    } else {
+                        setActiveWindow(windowId);
+                    }
+                };
+                tabs.appendChild(tab);
             });
         }
         
@@ -2377,16 +2375,56 @@ Start typing to replace this text...</textarea>
             }
         }
 
-        function notepadSave() {
-            playSound('click');
-            showNotification('File saved successfully!', 'success');
-            updateDebug('Notepad file saved');
+        function getCSRFToken() {
+            const match = document.cookie.match(/csrftoken=([^;]+)/);
+            return match ? match[1] : '';
         }
 
-        function notepadOpen() {
-            playSound('click');
-            showNotification('File opened successfully!', 'info');
-            updateDebug('Notepad file opened');
+        async function notepadSave() {
+            try {
+                playSound('click');
+                const textarea = document.getElementById('notepadText');
+                const content = textarea ? textarea.value : '';
+                const title = 'Note ' + new Date().toLocaleString();
+                const res = await fetch('/api/notes/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: JSON.stringify({ title, content })
+                });
+                if (!res.ok) throw new Error('Save failed');
+                showNotification('Note saved!', 'success');
+                updateDebug('Notepad note saved via API');
+            } catch (e) {
+                showNotification('Save failed (offline or CSRF).', 'error');
+                updateDebug('Notepad save error: ' + e.message, null, true);
+            }
+        }
+
+        async function notepadOpen() {
+            try {
+                playSound('click');
+                const res = await fetch('/api/notes/');
+                if (!res.ok) throw new Error('Fetch failed');
+                const data = await res.json();
+                const latest = (data.results || [])[0];
+                if (latest) {
+                    const textarea = document.getElementById('notepadText');
+                    if (textarea) {
+                        textarea.value = latest.content || '';
+                        updateNotepadStats();
+                    }
+                    showNotification('Loaded latest note.', 'info');
+                } else {
+                    showNotification('No notes yet.', 'info');
+                }
+                updateDebug('Notepad loaded via API');
+            } catch (e) {
+                showNotification('Open failed (offline).', 'error');
+                updateDebug('Notepad open error: ' + e.message, null, true);
+            }
         }
 
         function notepadNew() {
@@ -2556,396 +2594,15 @@ Start typing to replace this text...</textarea>
 
         // Theme presets for this template
         const CP_THEMES = {
-            // Retro
-            'retro-98': { 
-                name: 'Retro 98', 
-                vars: { 
-                    '--retro-bg':'#0a0a0a',
-                    '--retro-desktop':'#000080',
-                    '--retro-taskbar':'#c0c0c0',
-                    '--retro-window':'#c0c0c0',
-                    '--retro-border':'#808080',
-                    '--retro-text':'#000000',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#404040',
-                    '--retro-info':'#0080ff' 
-                }, 
-                cat:'Retro' 
-            },
-            'retro-olive': { 
-                name: 'Retro Olive', 
-                vars: { 
-                    '--retro-bg':'#10120f',
-                    '--retro-desktop':'#3a3f2b',
-                    '--retro-taskbar':'#798252',
-                    '--retro-window':'#a7b074',
-                    '--retro-border':'#5f6644',
-                    '--retro-text':'#0b0b0b',
-                    '--retro-highlight':'#f8f8e7',
-                    '--retro-shadow':'#2f3323',
-                    '--retro-info':'#4e6b2e' 
-                }, 
-                cat:'Retro' 
-            },
-            'retro-amber': { 
-                name: 'Retro Amber CRT', 
-                vars: { 
-                    '--retro-bg':'#000000',
-                    '--retro-desktop':'#1a1200',
-                    '--retro-taskbar':'#4a3b00',
-                    '--retro-window':'#2a2100',
-                    '--retro-border':'#6b5200',
-                    '--retro-text':'#ffbf00',
-                    '--retro-highlight':'#ffc933',
-                    '--retro-shadow':'#332600',
-                    '--retro-info':'#ffbf00' 
-                }, 
-                cat:'Retro' 
-            },
-        
-            // Modern
-            'modern-mint': { 
-                name: 'Modern Mint', 
-                vars: { 
-                    '--retro-bg':'#0d1117',
-                    '--retro-desktop':'#0b3d3d',
-                    '--retro-taskbar':'#1f6f6f',
-                    '--retro-window':'#163a3a',
-                    '--retro-border':'#2aa198',
-                    '--retro-text':'#e6fffb',
-                    '--retro-highlight':'#c2fff6',
-                    '--retro-shadow':'#0a2a2a',
-                    '--retro-info':'#2ec4b6',
-                    '--window-background':'rgba(22,58,58,0.55)',
-                    '--taskbar-background':'rgba(31,111,111,0.55)',
-                    '--menu-background':'rgba(22,58,58,0.55)',
-                    '--window-backdrop':'blur(10px) saturate(120%)',
-                    '--panel-backdrop':'blur(10px) saturate(120%)'
-                }, 
-                cat:'Modern' 
-            },
-            'modern-glass': { 
-                name: 'Modern Glass', 
-                vars: { 
-                    '--retro-bg':'#0f141a',
-                    '--retro-desktop':'#0b1222',
-                    '--retro-taskbar':'rgba(17,24,39,0.5)',
-                    '--retro-window':'rgba(17,24,39,0.5)',
-                    '--retro-border':'#475569',
-                    '--retro-text':'#e2e8f0',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#0a0f16',
-                    '--retro-info':'#60a5fa',
-                    '--window-background':'rgba(17,24,39,0.55)',
-                    '--taskbar-background':'rgba(17,24,39,0.55)',
-                    '--menu-background':'rgba(17,24,39,0.55)',
-                    '--window-backdrop':'blur(14px) saturate(140%)',
-                    '--panel-backdrop':'blur(14px) saturate(140%)'
-                }, 
-                cat:'Modern' 
-            },
-            'modern-neon': { 
-                name: 'Modern Neon', 
-                vars: { 
-                    '--retro-bg':'#0b0f1a',
-                    '--retro-desktop':'#0f172a',
-                    '--retro-taskbar':'#111827',
-                    '--retro-window':'#111827',
-                    '--retro-border':'#374151',
-                    '--retro-text':'#e5e7eb',
-                    '--retro-highlight':'#93c5fd',
-                    '--retro-shadow':'#0b1020',
-                    '--retro-info':'#60a5fa',
-                    '--window-background':'rgba(17,24,39,0.55)',
-                    '--taskbar-background':'rgba(17,24,39,0.55)',
-                    '--menu-background':'rgba(17,24,39,0.55)',
-                    '--window-backdrop':'blur(12px) saturate(120%)',
-                    '--panel-backdrop':'blur(12px) saturate(120%)'
-                }, 
-                cat:'Modern' 
-            },
-        
-            // Nostalgia
-            'nostalgia-memes': { 
-                name: 'Nostalgia Memes', 
-                vars: { 
-                    '--retro-bg':'#0a0a0a',
-                    '--retro-desktop':'#003366',
-                    '--retro-taskbar':'#c0d0ff',
-                    '--retro-window':'#dfe8ff',
-                    '--retro-border':'#5577aa',
-                    '--retro-text':'#000000',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#202a40',
-                    '--retro-info':'#3066be' 
-                }, 
-                cat:'Nostalgia',
-                icons:['😂','😹','🐸','😎','🔥','💾','📼','📟']
-            },
-        
-            // Art
-            'art-absurd': { 
-                name: 'Art – Absurd', 
-                vars: { 
-                    '--retro-bg':'#0b0b0b',
-                    '--retro-desktop':'linear-gradient(135deg,#1b1b2f,#162447,#1f4068)',
-                    '--retro-taskbar':'rgba(31,64,104,0.6)',
-                    '--retro-window':'rgba(27,27,47,0.6)',
-                    '--retro-border':'#e43f5a',
-                    '--retro-text':'#f3f3f3',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#0a0a1a',
-                    '--retro-info':'#e43f5a',
-                    '--window-background':'rgba(27,27,47,0.6)',
-                    '--taskbar-background':'rgba(31,64,104,0.6)',
-                    '--menu-background':'rgba(27,27,47,0.6)',
-                    '--window-backdrop':'blur(16px) contrast(110%)',
-                    '--panel-backdrop':'blur(16px) contrast(110%)'
-                }, 
-                cat:'Art' 
-            },
-        
-            // Horror
-            'horror-night': { 
-                name: 'Horror Night', 
-                vars: { 
-                    '--retro-bg':'#1a0a0a',
-                    '--retro-desktop':'#330000',
-                    '--retro-taskbar':'#660000',
-                    '--retro-window':'#990000',
-                    '--retro-border':'#ff0000',
-                    '--retro-text':'#ffffff',
-                    '--retro-highlight':'#ff3333',
-                    '--retro-shadow':'#330000',
-                    '--retro-info':'#990099'
-                }, 
-                cat:'Horror' 
-            },
-        
-            // Happy
-            'happy-sunshine': { 
-                name: 'Happy Sunshine', 
-                vars: { 
-                    '--retro-bg':'#fffbe6',
-                    '--retro-desktop':'#ffeb3b',
-                    '--retro-taskbar':'#ffd700',
-                    '--retro-window':'#ffecb3',
-                    '--retro-border':'#ff9800',
-                    '--retro-text':'#333333',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#cccccc',
-                    '--retro-info':'#ff5722'
-                }, 
-                cat:'Happy' 
-            },
-        
-            // Nature
-            'forest-mist': { 
-                name: 'Forest Mist', 
-                vars: { 
-                    '--retro-bg':'#0b3d0b',
-                    '--retro-desktop':'#1b6b1b',
-                    '--retro-taskbar':'#2e8b57',
-                    '--retro-window':'#3cb371',
-                    '--retro-border':'#006400',
-                    '--retro-text':'#e0f2f1',
-                    '--retro-highlight':'#a8e6cf',
-                    '--retro-shadow':'#014421',
-                    '--retro-info':'#76c7c0'
-                }, 
-                cat:'Nature' 
-            },
-            'ocean-breeze': { 
-                name: 'Ocean Breeze', 
-                vars: { 
-                    '--retro-bg':'#002b3a',
-                    '--retro-desktop':'#005f73',
-                    '--retro-taskbar':'#0a9396',
-                    '--retro-window':'#94d2bd',
-                    '--retro-border':'#001219',
-                    '--retro-text':'#e0f7fa',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#003845',
-                    '--retro-info':'#ee9b00'
-                }, 
-                cat:'Nature' 
-            },
-        
-            // Cyberpunk
-            'cyberpunk-glow': { 
-                name: 'Cyberpunk Glow', 
-                vars: { 
-                    '--retro-bg':'#0d001f',
-                    '--retro-desktop':'#1a00ff',
-                    '--retro-taskbar':'#ff00ff',
-                    '--retro-window':'#3300ff',
-                    '--retro-border':'#00ffff',
-                    '--retro-text':'#f0f0f0',
-                    '--retro-highlight':'#ff66ff',
-                    '--retro-shadow':'#110033',
-                    '--retro-info':'#00ffcc'
-                }, 
-                cat:'Cyberpunk' 
-            },
-        
-            // Sunset
-            'sunset-bliss': { 
-                name: 'Sunset Bliss', 
-                vars: { 
-                    '--retro-bg':'#ff4500',
-                    '--retro-desktop':'#ff6347',
-                    '--retro-taskbar':'#ffa07a',
-                    '--retro-window':'#ff7f50',
-                    '--retro-border':'#ff1493',
-                    '--retro-text':'#ffffff',
-                    '--retro-highlight':'#fffacd',
-                    '--retro-shadow':'#8b0000',
-                    '--retro-info':'#ffdead'
-                }, 
-                cat:'Sunset' 
-            },
-        
-            // Fun
-            'candy-pop': { 
-                name: 'Candy Pop', 
-                vars: { 
-                    '--retro-bg':'#ffe6f0',
-                    '--retro-desktop':'#ff99cc',
-                    '--retro-taskbar':'#ff66b2',
-                    '--retro-window':'#ffb3d9',
-                    '--retro-border':'#ff3399',
-                    '--retro-text':'#330033',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#cc6699',
-                    '--retro-info':'#ff66ff'
-                }, 
-                cat:'Fun', 
-                icons:['🍭','🍬','🍒','🍉','🦄','✨'] 
-            },
-
-            'forest-mist': { 
-                name: 'Forest Mist', 
-                vars: { 
-                    '--retro-bg':'#0b3d0b',        // deep forest
-                    '--retro-desktop':'#1b6b1b',   // mossy green
-                    '--retro-taskbar':'#2e8b57',   // pine
-                    '--retro-window':'#3cb371',    // fresh leaves
-                    '--retro-border':'#006400',    // dark foliage
-                    '--retro-text':'#e0f2f1',      // soft text
-                    '--retro-highlight':'#a8e6cf', // light mist
-                    '--retro-shadow':'#014421',    // deep shadows
-                    '--retro-info':'#76c7c0'       // water/river accents
-                }, 
-                cat:'Nature' 
-            },
-            'ocean-breeze': { 
-                name: 'Ocean Breeze', 
-                vars: { 
-                    '--retro-bg':'#002b3a',        // deep sea
-                    '--retro-desktop':'#005f73',   // waves
-                    '--retro-taskbar':'#0a9396',   // surf
-                    '--retro-window':'#94d2bd',    // foam
-                    '--retro-border':'#001219',    // night ocean
-                    '--retro-text':'#e0f7fa',      // light reflections
-                    '--retro-highlight':'#ffffff', // sun on water
-                    '--retro-shadow':'#003845',    // depth
-                    '--retro-info':'#ee9b00'       // sunset glint
-                }, 
-                cat:'Nature' 
-            },
-        
-            // Cozy & Happy
-            'sunny-morning': {
-                name: 'Sunny Morning',
-                vars: {
-                    '--retro-bg':'#fff9e6',        // soft sunlight
-                    '--retro-desktop':'#fff2b2',   // morning glow
-                    '--retro-taskbar':'#ffd966',   // warmth
-                    '--retro-window':'#fff0a3',    // gentle light
-                    '--retro-border':'#ffcc33',    // accent
-                    '--retro-text':'#333333',      // easy on eyes
-                    '--retro-highlight':'#ffffff', // light reflections
-                    '--retro-shadow':'#e6c266',    // subtle shadows
-                    '--retro-info':'#ff9900'       // cheerful accent
-                },
-                cat:'Happy'
-            },
-        
-            // Dark & Mysterious
-            'horror-night': { 
-                name: 'Horror Night', 
-                vars: { 
-                    '--retro-bg':'#1a0a0a',        // night sky
-                    '--retro-desktop':'#330000',   // deep shadows
-                    '--retro-taskbar':'#660000',   // blood tint
-                    '--retro-window':'#990000',    // danger red
-                    '--retro-border':'#ff0000',    // alert
-                    '--retro-text':'#ffffff',      // ghostly contrast
-                    '--retro-highlight':'#ff3333', // danger highlights
-                    '--retro-shadow':'#330000',    // depth
-                    '--retro-info':'#990099'       // eerie accent
-                }, 
-                cat:'Horror' 
-            },
-        
-            // Futuristic & Cyberpunk
-            'cyberpunk-glow': { 
-                name: 'Cyberpunk Glow', 
-                vars: { 
-                    '--retro-bg':'#0d001f',        // neon night
-                    '--retro-desktop':'#1a00ff',   // neon lights
-                    '--retro-taskbar':'#ff00ff',   // neon accent
-                    '--retro-window':'#3300ff',    // glowing UI
-                    '--retro-border':'#00ffff',    // cyber accents
-                    '--retro-text':'#f0f0f0',      // readable neon
-                    '--retro-highlight':'#ff66ff', // neon glow
-                    '--retro-shadow':'#110033',    // dark depth
-                    '--retro-info':'#00ffcc'       // electric details
-                }, 
-                cat:'Cyberpunk' 
-            },
-        
-            // Playful & Fun
-            'candy-pop': { 
-                name: 'Candy Pop', 
-                vars: { 
-                    '--retro-bg':'#ffe6f0',        // candy pink
-                    '--retro-desktop':'#ff99cc',   // sweet
-                    '--retro-taskbar':'#ff66b2',   // bubblegum
-                    '--retro-window':'#ffb3d9',    // frosting
-                    '--retro-border':'#ff3399',    // accent candy
-                    '--retro-text':'#330033',      // chocolate dark
-                    '--retro-highlight':'#ffffff', // sugar sparkle
-                    '--retro-shadow':'#cc6699',    // soft shadows
-                    '--retro-info':'#ff66ff'       // lollipop pop
-                }, 
-                cat:'Fun', 
-                icons:['🍭','🍬','🍒','🍉','🦄','✨'] 
-            },
-        
-            // Artistic & Abstract
-            'art-absurd': { 
-                name: 'Art – Absurd', 
-                vars: { 
-                    '--retro-bg':'#0b0b0b',       
-                    '--retro-desktop':'linear-gradient(135deg,#1b1b2f,#162447,#1f4068)', 
-                    '--retro-taskbar':'rgba(31,64,104,0.6)',
-                    '--retro-window':'rgba(27,27,47,0.6)',
-                    '--retro-border':'#e43f5a',   
-                    '--retro-text':'#f3f3f3',
-                    '--retro-highlight':'#ffffff',
-                    '--retro-shadow':'#0a0a1a',
-                    '--retro-info':'#e43f5a',
-                    '--window-background':'rgba(27,27,47,0.6)',
-                    '--taskbar-background':'rgba(31,64,104,0.6)',
-                    '--menu-background':'rgba(27,27,47,0.6)',
-                    '--window-backdrop':'blur(16px) contrast(110%)',
-                    '--panel-backdrop':'blur(16px) contrast(110%)'
-                }, 
-                cat:'Art' 
-            }
+            'retro-98': { name: 'Retro 98', vars: { '--retro-bg':'#0a0a0a','--retro-desktop':'#000080','--retro-taskbar':'#c0c0c0','--retro-window':'#c0c0c0','--retro-border':'#808080','--retro-text':'#000000','--retro-highlight':'#ffffff','--retro-shadow':'#404040','--retro-info':'#0080ff' }, cat:'Retro' },
+            'retro-olive': { name: 'Retro Olive', vars: { '--retro-bg':'#10120f','--retro-desktop':'#3a3f2b','--retro-taskbar':'#798252','--retro-window':'#a7b074','--retro-border':'#5f6644','--retro-text':'#0b0b0b','--retro-highlight':'#f8f8e7','--retro-shadow':'#2f3323','--retro-info':'#4e6b2e' }, cat:'Retro' },
+            'retro-amber': { name: 'Retro Amber CRT', vars: { '--retro-bg':'#000000','--retro-desktop':'#1a1200','--retro-taskbar':'#4a3b00','--retro-window':'#2a2100','--retro-border':'#6b5200','--retro-text':'#ffbf00','--retro-highlight':'#ffc933','--retro-shadow':'#332600','--retro-info':'#ffbf00' }, cat:'Retro' },
+            'modern-mint': { name: 'Modern Mint', vars: { '--retro-bg':'#0d1117','--retro-desktop':'#0b3d3d','--retro-taskbar':'#1f6f6f','--retro-window':'#163a3a','--retro-border':'#2aa198','--retro-text':'#e6fffb','--retro-highlight':'#c2fff6','--retro-shadow':'#0a2a2a','--retro-info':'#2ec4b6','--window-background':'rgba(22,58,58,0.55)','--taskbar-background':'rgba(31,111,111,0.55)','--menu-background':'rgba(22,58,58,0.55)','--window-backdrop':'blur(10px) saturate(120%)','--panel-backdrop':'blur(10px) saturate(120%)' }, cat:'Modern' },
+            'modern-glass': { name: 'Modern Glass', vars: { '--retro-bg':'#0f141a','--retro-desktop':'#0b1222','--retro-taskbar':'rgba(17,24,39,0.5)','--retro-window':'rgba(17,24,39,0.5)','--retro-border':'#475569','--retro-text':'#e2e8f0','--retro-highlight':'#ffffff','--retro-shadow':'#0a0f16','--retro-info':'#60a5fa','--window-background':'rgba(17,24,39,0.55)','--taskbar-background':'rgba(17,24,39,0.55)','--menu-background':'rgba(17,24,39,0.55)','--window-backdrop':'blur(14px) saturate(140%)','--panel-backdrop':'blur(14px) saturate(140%)' }, cat:'Modern' },
+            'modern-neon': { name: 'Modern Neon', vars: { '--retro-bg':'#0b0f1a','--retro-desktop':'#0f172a','--retro-taskbar':'#111827','--retro-window':'#111827','--retro-border':'#374151','--retro-text':'#e5e7eb','--retro-highlight':'#93c5fd','--retro-shadow':'#0b1020','--retro-info':'#60a5fa','--window-background':'rgba(17,24,39,0.55)','--taskbar-background':'rgba(17,24,39,0.55)','--menu-background':'rgba(17,24,39,0.55)','--window-backdrop':'blur(12px) saturate(120%)','--panel-backdrop':'blur(12px) saturate(120%)' }, cat:'Modern' },
+            'nostalgia-memes': { name: 'Nostalgia Memes', vars: { '--retro-bg':'#0a0a0a','--retro-desktop':'#003366','--retro-taskbar':'#c0d0ff','--retro-window':'#dfe8ff','--retro-border':'#5577aa','--retro-text':'#000000','--retro-highlight':'#ffffff','--retro-shadow':'#202a40','--retro-info':'#3066be' }, cat:'Nostalgia', icons:['😂','😹','🐸','😎','🔥','💾','📼','📟'] },
+            'art-absurd': { name: 'Art – Absurd', vars: { '--retro-bg':'#0b0b0b','--retro-desktop':'linear-gradient(135deg,#1b1b2f,#162447,#1f4068)','--retro-taskbar':'rgba(31,64,104,0.6)','--retro-window':'rgba(27,27,47,0.6)','--retro-border':'#e43f5a','--retro-text':'#f3f3f3','--retro-highlight':'#ffffff','--retro-shadow':'#0a0a1a','--retro-info':'#e43f5a','--window-background':'rgba(27,27,47,0.6)','--taskbar-background':'rgba(31,64,104,0.6)','--menu-background':'rgba(27,27,47,0.6)','--window-backdrop':'blur(16px) contrast(110%)','--panel-backdrop':'blur(16px) contrast(110%)' }, cat:'Art' },
         };
-        
 
         function applyThemeVars(vars){ Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v)); }
 
@@ -3287,21 +2944,87 @@ Start typing to replace this text...</textarea>
             
             switch(action) {
                 case 'refresh':
-                    showNotification('Desktop refreshed!', 'success');
+                    location.reload();
                     break;
                 case 'wallpaper':
                     openWallpaperPanel();
                     break;
                 case 'properties':
-                    showNotification('Desktop properties opened!', 'info');
+                    openDesktopProperties();
                     break;
                 case 'new-folder':
-                    showNotification('New folder created!', 'success');
+                    createNewFolder();
                     break;
                 case 'arrange':
-                    showNotification('Icons arranged!', 'success');
+                    arrangeDesktopIcons();
                     break;
             }
+        }
+
+        function openDesktopProperties(){
+            const dialog = document.createElement('div');
+            dialog.className = 'system-dialog';
+            dialog.innerHTML = `
+                <div class="dialog-header">
+                    <span>Desktop Properties</span>
+                    <span class="dialog-close" onclick="this.parentElement.parentElement.remove()">×</span>
+                </div>
+                <div class="dialog-content">
+                    <p><strong>Wallpaper:</strong> ${currentWallpaper}</p>
+                    <p><strong>Theme:</strong> ${localStorage.getItem('pp_theme_key') || 'retro-98'}</p>
+                    <p><strong>Windows Open:</strong> ${document.querySelectorAll('.window').length}</p>
+                </div>
+            `;
+            document.body.appendChild(dialog);
+        }
+
+        async function createNewFolder(){
+            try {
+                const csrftoken = (document.cookie.match(/csrftoken=([^;]+)/)||[])[1]||'';
+                const res = await fetch('/api/desktop-items/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                    body: JSON.stringify({ label: 'New Folder', item_type: 'folder', pos_x: 80, pos_y: 320 })
+                });
+                const data = await res.json();
+                if(res.ok){
+                    renderDesktopItem(data);
+                    showNotification('New folder created!', 'success');
+                } else {
+                    showNotification('Failed to create folder', 'error');
+                }
+            } catch (e) {
+                showNotification('Failed to create folder', 'error');
+            }
+        }
+
+        function renderDesktopItem(item){
+            const desktop = document.getElementById('desktop');
+            if(!desktop) return;
+            const icon = document.createElement('div');
+            icon.className = 'desktop-icon';
+            icon.style.top = (item.pos_y||100) + 'px';
+            icon.style.left = (item.pos_x||100) + 'px';
+            icon.dataset.itemId = item.id;
+            icon.innerHTML = `
+                <div class="icon">📁</div>
+                <div class="icon-label">${item.label}</div>
+            `;
+            icon.addEventListener('dblclick', ()=> showNotification(`${item.label} opened`, 'info'));
+            desktop.appendChild(icon);
+        }
+
+        function arrangeDesktopIcons(){
+            const icons = Array.from(document.querySelectorAll('.desktop-icon'));
+            const startX = 80, startY = 80, gapX = 140, gapY = 120, maxY = window.innerHeight - 180;
+            let x = startX, y = startY;
+            icons.forEach(icon => {
+                icon.style.left = x + 'px';
+                icon.style.top = y + 'px';
+                y += gapY;
+                if(y > maxY){ y = startY; x += gapX; }
+            });
+            showNotification('Icons arranged!', 'success');
         }
 
         function toggleDebugPanel() {
@@ -3739,43 +3462,20 @@ Start typing to replace this text...</textarea>
                     break;
             }
         }
+
         function showShutdownScreen() {
             const shutdownScreen = document.getElementById('shutdownScreen');
-            if (!shutdownScreen) return;
-        
-            shutdownScreen.style.display = 'flex';
-            playSound('shutdown');
-        
-            // Optional countdown before allowing restart
-            let countdown = 0;
-            const countdownElement = document.createElement('p');
-            countdownElement.innerText = `System will allow restart in ${countdown} seconds...`;
-            countdownElement.style.fontFamily = "'Press Start 2P', monospace";
-            shutdownScreen.appendChild(countdownElement);
-        
-            const timer = setInterval(() => {
-                countdown--;
-                if (countdown > 0) {
-                    countdownElement.innerText = `System will allow restart in ${countdown} seconds...`;
-                } else {
-                    countdownElement.innerText = 'Click the button below to restart.';
-                    clearInterval(timer);
-                }
-            }, 1000);
-        
-            const restartButton = document.getElementById('restartButton');
-            restartButton.onclick = () => {
-                shutdownScreen.style.display = 'none';
-                playSound('startup'); // optional
-                showNotification('System restarting...', 'success');
-        
+            if (shutdownScreen) {
+                shutdownScreen.style.display = 'flex';
+                playSound('shutdown');
+                
                 setTimeout(() => {
-                    window.location.href = '/'; // default page
-                }, 1000);
-            };
+                    showNotification('Shutdown cancelled - system remains active', 'info');
+                    shutdownScreen.style.display = 'none';
+                }, 3000);
+            }
         }
-        
-        
+
         // Database and system status check
         function checkSystemStatus() {
             try {

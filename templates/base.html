@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Pixel Portfolio{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/retro.css' %}">
+    <link rel="stylesheet" href="{% static 'css/quest.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+{% block content %}{% endblock %}
+
+<script src="{% static 'js/effects.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
