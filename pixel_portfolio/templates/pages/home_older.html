@@ -1,210 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retro Desktop Mockup</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WebLLM – Minimal Chat</title>
   <style>
-    body {
-      margin: 0;
-      background: #000080;
-      font-family: monospace;
-      color: white;
-      height: 100vh;
-      overflow: hidden;
+    :root { --bg:#f6f7fb; --panel:#ffffff; --text:#1f2937; --muted:#6b7280; --brand:#2563eb; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    header { padding: 14px 16px; background: #0f172a; color: #e5e7eb; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    header h1 { font-size: 16px; margin:0; font-weight:600; }
+    header .row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-left:auto; }
+    select, button { border:1px solid #d1d5db; background:#fff; border-radius:8px; padding:8px 10px; font-size:14px; }
+    button.primary { background: var(--brand); color:#fff; border-color: var(--brand); }
+    main { height: calc(100vh - 60px); display:flex; flex-direction:column; max-width: 1000px; margin: 0 auto; padding: 12px; gap:12px; }
+    #status { background:#0f172a; color:#cbd5e1; border-radius:10px; padding:10px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px; white-space:pre-wrap; max-height:120px; overflow:auto; }
+    #chat { flex:1; overflow:auto; background: var(--panel); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:10px; border:1px solid #e5e7eb; }
+    .msg { max-width: 80%; padding:10px 12px; border-radius:12px; line-height:1.35; white-space:pre-wrap; }
+    .user { align-self:flex-end; background:#e0f2fe; }
+    .ai { align-self:flex-start; background:#f1f5f9; }
+    #inputBar { display:flex; gap:10px; }
+    #prompt { flex:1; resize: none; min-height:46px; max-height:140px; padding:10px 12px; border-radius:10px; border:1px solid #d1d5db; }
+    .muted { color: var(--muted); font-size: 12px; }
+    .row-gap { display:flex; gap:8px; align-items:center; }
+
+        /* Typing cursor animation */
+    .cursor {
+      animation: blink 1s step-start infinite;
     }
-    /* Desktop Icons */
-    .desktop-icon {
-      position: absolute;
-      width: 80px;
-      text-align: center;
-      cursor: pointer;
+    @keyframes blink {
+      50% { opacity: 0; }
     }
-    .desktop-icon img {
-      width: 40px;
-      display: block;
-      margin: 0 auto 5px;
+
+    /* Animated brain thoughts */
+    .thought {
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      font-size: 12px;
+      color: var(--muted);
     }
-    /* Taskbar */
-    .taskbar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 40px;
-      background: #c0c0c0;
-      border-top: 2px outset white;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
+    .thought.fade {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .start-button {
-      background: #c0c0c0;
-      border: 2px outset white;
-      padding: 4px 10px;
-      margin-right: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .taskbar-tabs {
-      flex: 1;
-      display: flex;
-      gap: 5px;
-    }
-    .taskbar-tab {
-      background: #c0c0c0;
-      border: 2px outset white;
-      padding: 4px 8px;
-      cursor: pointer;
-    }
-    .clock {
-      font-weight: bold;
-    }
-    /* Windows */
-    .window {
-      position: absolute;
-      top: 100px;
-      left: 100px;
-      width: 400px;
-      height: 300px;
-      background: #e0e0e0;
-      border: 2px outset white;
-      display: flex;
-      flex-direction: column;
-    }
-    .window-header {
-      background: #000080;
-      color: white;
-      padding: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: move;
-    }
-    .window-content {
-      flex: 1;
-      background: white;
-      color: black;
-      padding: 10px;
-      overflow: auto;
-    }
-    .window-control {
-      cursor: pointer;
-      padding: 0 6px;
-    }
+
+
   </style>
 </head>
 <body>
+  <header>
+    <h1>WebLLM – Minimal Chat</h1>
+    <div class="row">
+      <label for="model" class="muted">Model</label>
+      <select id="model">
+        <option value="gemma-2b-it-q4f16_1-MLC" selected>gemma-2b-it-q4f16_1-MLC (small, recommended)</option>
+        <option value="RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC">RedPajama-INCITE-Chat-3B (larger)</option>
+      </select>
+      <button id="reload" title="Reload selected model">Load Model</button>
+      <button id="clear" title="Clear chat history">Clear Chat</button>
+    </div>
+  </header>
 
-  <!-- Desktop Icons -->
-  <div class="desktop-icon" style="top:80px; left:80px;" onclick="openWindow('home')">
-    <img src="https://img.icons8.com/ios-filled/50/ffffff/home.png"/>
-    <span>Home</span>
-  </div>
+  <main>
+    <div id="status">Status: waiting to initialize…</div>
 
-  <div class="desktop-icon" style="top:80px; left:180px;" onclick="openWindow('projects')">
-    <img src="https://img.icons8.com/ios-filled/50/ffffff/code.png"/>
-    <span>Projects</span>
-  </div>
+    <div id="chat" aria-live="polite" aria-label="Chat transcript"></div>
 
-  <div class="desktop-icon" style="top:80px; left:280px;" onclick="openWindow('about')">
-    <img src="https://img.icons8.com/ios-filled/50/ffffff/info.png"/>
-    <span>About</span>
-  </div>
+    <div id="inputBar">
+      <textarea id="prompt" placeholder="Type your message and press Enter…" aria-label="Message"></textarea>
+      <div class="row-gap">
+        <button id="send" class="primary">Send</button>
+      </div>
+    </div>
+    <div class="muted">Tip: First load can take a while (model download & GPU shader compile). Subsequent loads are faster due to caching.</div>
+  </main>
 
-  <div class="desktop-icon" style="top:80px; left:380px;" onclick="openWindow('contact')">
-    <img src="https://img.icons8.com/ios-filled/50/ffffff/contacts.png"/>
-    <span>Contact</span>
-  </div>
+  <script type="module">
+    // --- Imports ---
+    let webllm;
+    try {
+      webllm = await import("https://esm.run/@mlc-ai/web-llm");
+    } catch (e) {
+      appendStatus("❌ Failed to import @mlc-ai/web-llm from CDN.\n" + (e?.message || e));
+      throw e;
+    }
 
-  <!-- Taskbar -->
-  <div class="taskbar">
-    <div class="start-button" onclick="alert('Start menu coming soon!')">START</div>
-    <div class="taskbar-tabs" id="taskbarTabs"></div>
-    <div class="clock" id="clock">00:00</div>
-  </div>
+    // --- DOM refs ---
+    const statusEl = document.getElementById("status");
+    const chatEl   = document.getElementById("chat");
+    const promptEl = document.getElementById("prompt");
+    const sendBtn  = document.getElementById("send");
+    const reloadBtn= document.getElementById("reload");
+    const clearBtn = document.getElementById("clear");
+    const modelSel = document.getElementById("model");
 
-  <script>
-    let windowCount = 0;
-    let windows = {};
+    // --- State ---
+    let engine = null;
+    let loading = false;
+    // Keep conversation for better context
+    const messages = [];
 
-    function openWindow(type) {
-      const id = "win" + (++windowCount);
-      const win = document.createElement("div");
-      win.className = "window";
-      win.id = id;
+    // --- Helpers ---
+    function appendStatus(line) {
+      const sep = statusEl.textContent?.trim() ? "\n" : "";
+      statusEl.textContent = (statusEl.textContent || "") + sep + line;
+      statusEl.scrollTop = statusEl.scrollHeight;
+    }
+    function setBusy(isBusy, text) {
+      loading = isBusy;
+      sendBtn.disabled = isBusy || !engine;
+      reloadBtn.disabled = isBusy;
+      modelSel.disabled = isBusy;
+      promptEl.disabled = isBusy || !engine;
+      if (text) appendStatus(text);
+    }
+    function addMsg(role, text) {
+      const div = document.createElement("div");
+      div.className = `msg ${role}`;
+      div.textContent = text;
+      chatEl.appendChild(div);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+    function clearChat() {
+      messages.length = 0;
+      chatEl.innerHTML = "";
+      appendStatus("— chat cleared —");
+    }
 
-      // Header
-      const header = document.createElement("div");
-      header.className = "window-header";
-      header.innerHTML = `<span>${type.toUpperCase()}</span><span class="window-control" onclick="closeWindow('${id}')">X</span>`;
-      win.appendChild(header);
+    // --- Model loader ---
+    async function loadModel(modelId) {
+      if (!webllm?.CreateMLCEngine) {
+        appendStatus("❌ webllm.CreateMLCEngine not found. Check package version.");
+        return;
+      }
 
-      // Content
-      const content = document.createElement("div");
-      content.className = "window-content";
-      content.innerHTML = "<p>Loading...</p>";
-      win.appendChild(content);
+      if (!navigator.gpu) {
+        appendStatus("⚠️ WebGPU not available in this browser. Try Chrome/Edge with chrome://flags → enable WebGPU.");
+      }
 
-      document.body.appendChild(win);
-      windows[id] = { type };
-
-      updateTaskbar();
-      makeDraggable(win, header);
-
-      // Fetch dynamic content from Django
-      fetch(`/${type}/`)
-        .then(res => res.text())
-        .then(html => {
-          content.innerHTML = html;
-        })
-        .catch(err => {
-          content.innerHTML = `<p style="color:red;">Error loading ${type}</p>`;
-          console.error(err);
+      try {
+        setBusy(true, `⏳ Loading model: ${modelId}`);
+        engine = await webllm.CreateMLCEngine(modelId, {
+          initProgressCallback: (p) => {
+            if (p?.text) appendStatus("Loading: " + p.text);
+          },
         });
+        setBusy(false, "✅ Model ready!");
+        // enable chat controls
+        sendBtn.disabled = false;
+        promptEl.disabled = false;
+      } catch (e) {
+        setBusy(false);
+        appendStatus("❌ Engine initialization failed:\n" + (e?.message || e));
+        console.error("Engine init error:", e);
+        engine = null;
+      }
     }
 
-    function closeWindow(id) {
-      document.getElementById(id)?.remove();
-      delete windows[id];
-      updateTaskbar();
+    // --- Chat ---
+    async function sendMessage() {
+      const text = promptEl.value.trim();
+      if (!text || !engine || loading) return;
+
+      addMsg("user", text);
+      messages.push({ role: "user", content: text });
+      promptEl.value = "";
+      promptEl.focus();
+
+      try {
+        setBusy(true);
+        // Use full message history for better context
+        const resp = await engine.chat.completions.create({ messages });
+        const reply = resp?.choices?.[0]?.message?.content ?? "(no reply)";
+        addMsg("ai", reply);
+        messages.push({ role: "assistant", content: reply });
+      } catch (e) {
+        const msg = "❌ Chat error: " + (e?.message || e);
+        addMsg("ai", msg);
+        appendStatus(msg);
+        console.error("Chat error:", e);
+      } finally {
+        setBusy(false);
+      }
     }
 
-    function updateTaskbar() {
-      const tabs = document.getElementById("taskbarTabs");
-      tabs.innerHTML = "";
-      Object.keys(windows).forEach(id => {
-        const tab = document.createElement("div");
-        tab.className = "taskbar-tab";
-        tab.innerText = windows[id].type;
-        tab.onclick = () => {
-          document.getElementById(id).style.zIndex = Date.now();
-        };
-        tabs.appendChild(tab);
-      });
-    }
+    // --- Events ---
+    sendBtn.addEventListener("click", sendMessage);
+    promptEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    reloadBtn.addEventListener("click", async () => {
+      if (loading) return;
+      engine = null;
+      sendBtn.disabled = true;
+      promptEl.disabled = true;
+      appendStatus("— reloading model —");
+      await loadModel(modelSel.value);
+    });
+    clearBtn.addEventListener("click", clearChat);
 
-    function makeDraggable(win, header) {
-      let offsetX = 0, offsetY = 0, dragging = false;
-      header.onmousedown = e => {
-        dragging = true;
-        offsetX = e.clientX - win.offsetLeft;
-        offsetY = e.clientY - win.offsetTop;
-      };
-      document.onmousemove = e => {
-        if (dragging) {
-          win.style.left = (e.clientX - offsetX) + "px";
-          win.style.top = (e.clientY - offsetY) + "px";
-        }
-      };
-      document.onmouseup = () => dragging = false;
-    }
-
-    // Clock
-    setInterval(() => {
-      document.getElementById("clock").innerText =
-        new Date().toLocaleTimeString();
-    }, 1000);
+    // --- Boot ---
+    appendStatus("Status: Initializing…");
+    await loadModel(modelSel.value);
   </script>
 </body>
 </html>

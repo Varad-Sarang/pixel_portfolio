@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notepad - Pixel Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="nav-back" style="position:fixed;top:20px;left:20px;z-index:1000;">
+        <a href="/" style="display:inline-block;padding:8px 12px;background:#c0c0c0;color:#000;border:2px outset #fff;text-decoration:none;font-family:'VT323',monospace;">🏠 BACK TO DESKTOP</a>
+    </div>
+    <div style="max-width:900px;margin:40px auto;padding:20px;border:2px solid #ccc;background:#f7f7f7;font-family:monospace;">
+        <h1 style="margin-top:0;">📝 Notepad (Advanced)</h1>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+            <div style="flex:2;">
+                <textarea id="notepadText" style="width:100%;height:400px;padding:10px;box-sizing:border-box;"></textarea>
+                <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+                    <button onclick="notepadOpen()">Open latest</button>
+                    <button onclick="notepadSave()">Save</button>
+                    <button onclick="createNew()">New</button>
+                    <button onclick="softDelete()">Move to Recycle Bin</button>
+                </div>
+            </div>
+            <div style="flex:1; border:1px solid #bbb; background:#fff; padding:10px; max-height:430px; overflow:auto;">
+                <div style="font-weight:bold; margin-bottom:8px;">Recent Notes</div>
+                <div id="notesList" style="font-size:14px; display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getCSRFToken(){ const m=document.cookie.match(/csrftoken=([^;]+)/); return m?m[1]:''; }
+        async function loadList(){
+            const res = await fetch('/api/notes/');
+            if(!res.ok) return;
+            const data = await res.json();
+            const list = document.getElementById('notesList');
+            list.innerHTML = '';
+            (data.results||[]).forEach(n=>{
+                const a = document.createElement('a');
+                a.href = '#'; a.textContent = n.title; a.onclick = (e)=>{ e.preventDefault(); openById(n.id); };
+                list.appendChild(a);
+            });
+        }
+        async function openById(id){
+            const res = await fetch('/api/notes/');
+            const data = await res.json();
+            const note = (data.results||[]).find(x=>x.id===id);
+            if(note){ document.getElementById('notepadText').value = note.content || ''; currentId = id; }
+        }
+        async function notepadOpen(){
+            const res = await fetch('/api/notes/');
+            if(!res.ok) return alert('Load failed');
+            const data = await res.json();
+            const latest = (data.results||[])[0];
+            if(latest){ document.getElementById('notepadText').value = latest.content || ''; currentId = latest.id; }
+        }
+        let currentId = null;
+        async function notepadSave(){
+            const content = document.getElementById('notepadText').value;
+            const title = 'Note ' + new Date().toLocaleString();
+            const payload = currentId ? { id: currentId, content } : { title, content };
+            const method = currentId ? 'PATCH' : 'POST';
+            const res = await fetch('/api/notes/',{method,headers:{'Content-Type':'application/json','X-CSRFToken':getCSRFToken()},body:JSON.stringify(payload)});
+            if(!res.ok) return alert('Save failed');
+            alert('Saved');
+            loadList();
+        }
+        async function createNew(){ currentId=null; document.getElementById('notepadText').value=''; }
+        async function softDelete(){ if(!currentId) return alert('Open or save a note first'); const res = await fetch('/api/notes/',{method:'PATCH',headers:{'Content-Type':'application/json','X-CSRFToken':getCSRFToken()},body:JSON.stringify({id:currentId,is_deleted:true})}); if(res.ok){ alert('Moved to Recycle Bin'); currentId=null; document.getElementById('notepadText').value=''; loadList(); } else { alert('Delete failed'); } }
+        loadList();
+    </script>
+</body>
+</html>
+
+

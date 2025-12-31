@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator - Pixel Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body { font-family: monospace; }
+        .wrap { max-width: 360px; margin: 40px auto; padding: 20px; border: 2px solid #ccc; background: #f7f7f7; }
+        .screen { text-align: right; border:1px solid #999; padding:10px; background:#fff; font-size: 24px; min-height: 36px; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        button { padding: 12px 10px; font-size: 16px; }
+        .span2 { grid-column: span 2; }
+        .row { display:flex; gap:8px; margin-top:10px; align-items:center; }
+        input { padding:6px 8px; width:100%; }
+    </style>
+    </head>
+<body>
+    <div class="nav-back" style="position:fixed;top:20px;left:20px;z-index:1000;">
+        <a href="/" style="display:inline-block;padding:8px 12px;background:#c0c0c0;color:#000;border:2px outset #fff;text-decoration:none;font-family:'VT323',monospace;">🏠 BACK TO DESKTOP</a>
+    </div>
+    <div class="wrap">
+        <h1 style="margin-top:0;">🔢 Calculator</h1>
+        <div class="screen" id="calcDisplay">0</div>
+        <div class="row">
+            <input id="expr" placeholder="Type expression e.g. (2+3)*4" />
+            <button onclick="evalExpr()">Eval</button>
+        </div>
+        <div class="grid">
+            <button onclick="c()">C</button>
+            <button onclick="op('/')">/</button>
+            <button onclick="op('*')">×</button>
+            <button onclick="back()">←</button>
+
+            <button onclick="d('7')">7</button>
+            <button onclick="d('8')">8</button>
+            <button onclick="d('9')">9</button>
+            <button onclick="eq()">=</button>
+
+            <button onclick="d('4')">4</button>
+            <button onclick="d('5')">5</button>
+            <button onclick="d('6')">6</button>
+            <button onclick="op('-')">−</button>
+
+            <button onclick="d('1')">1</button>
+            <button onclick="d('2')">2</button>
+            <button onclick="d('3')">3</button>
+            <button onclick="op('+')">+</button>
+
+            <button class="span2" onclick="d('0')">0</button>
+            <button onclick="d('.')">.</button>
+        </div>
+    </div>
+    <script>
+        let cur='0', oper=null, prev=null, wait=false;
+        function render(){ document.getElementById('calcDisplay').textContent = cur; }
+        function d(v){ if(wait){ cur=v; wait=false; } else { cur = cur==='0'? v : cur+v; } render(); }
+        function op(o){ oper=o; prev=parseFloat(cur); wait=true; }
+        function c(){ cur='0'; oper=null; prev=null; wait=false; render(); }
+        function back(){ cur = cur.length>1? cur.slice(0,-1) : '0'; render(); }
+        function eq(){ if(oper && prev!==null && !wait){ const a=prev, b=parseFloat(cur); let r=0; switch(oper){case '+':r=a+b;break;case '-':r=a-b;break;case '*':r=a*b;break;case '/':r=b!==0?a/b:'Error';break;} cur=String(r); oper=null; prev=null; wait=true; render(); } }
+        function evalExpr(){ const v=document.getElementById('expr').value; try{ const r=Function('return ('+v+')')(); cur=String(r); render(); } catch(e){ alert('Invalid expression'); } }
+        render();
+    </script>
+</body>
+</html>
+
+

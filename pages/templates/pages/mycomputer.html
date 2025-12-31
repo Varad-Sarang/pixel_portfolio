@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Computer - Pixel Portfolio</title>
+    <style> body{font-family:monospace} .wrap{max-width:900px;margin:40px auto;padding:20px;border:2px solid #ccc;background:#f7f7f7} .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px} .card{border:1px solid #aaa;background:#fff;padding:12px} .btn{display:inline-block;margin-top:8px;padding:8px 12px;border:1px solid #333;background:#eee;text-decoration:none}</style>
+</head>
+<body>
+    <div class="nav-back" style="position:fixed;top:20px;left:20px;z-index:1000;">
+        <a href="/" style="display:inline-block;padding:8px 12px;background:#c0c0c0;color:#000;border:2px outset #fff;text-decoration:none;font-family:'VT323',monospace;">🏠 BACK TO DESKTOP</a>
+    </div>
+    <div class="wrap">
+        <h1 style="margin-top:0;">💻 My Computer</h1>
+        <div class="grid">
+            <div class="card">
+                <h3>Drives</h3>
+                <div>Local Disk (C:) — System Drive</div>
+                <div style="height:8px;background:#0f0;margin:6px 0;position:relative"><div style="position:absolute;left:0;top:0;bottom:0;width:18%;background:#f00"></div></div>
+                <small>Used: 18 GB • Free: 82 GB • Total: 100 GB</small>
+            </div>
+            <div class="card">
+                <h3>Quick Access</h3>
+                <a class="btn" href="/notepad/">📝 Notepad</a>
+                <a class="btn" href="/projects/">🎮 Projects</a>
+                <a class="btn" href="/about/">👤 Profile</a>
+            </div>
+            <div class="card">
+                <h3>Network</h3>
+                <div>Wi‑Fi: Connected</div>
+                <div>IP: 192.168.1.10</div>
+            </div>
+            <div class="card">
+                <h3>System</h3>
+                <div>OS: Pixel Portfolio OS</div>
+                <div>CPU: Retro CPU 486DX</div>
+                <div>Memory: 16 MB</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

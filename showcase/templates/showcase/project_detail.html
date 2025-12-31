@@ -428,7 +428,7 @@
         <div class="project-hero">
             <div class="project-image">
                 {% if project.image %}
-                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy">
                 {% else %}
                     {% if "tourism" in project.title|lower %}🏝️
                     {% elif "portfolio" in project.title|lower %}💼

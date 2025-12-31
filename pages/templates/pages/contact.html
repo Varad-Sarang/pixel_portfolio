@@ -409,7 +409,7 @@
                     </div>
                 </div>
 
-                <div class="contact-form" id="contact-form">
+                <div class="contact-form" id="contact-form" id="dialogue-options" style="display: none;">
                     <p class="dialogue-text">
                         Excellent choice! Please fill out this message scroll, and I'll get back to you faster than a quick sort algorithm!
                     </p>
@@ -439,9 +439,10 @@
                         <button type="submit" class="form-submit">SEND MESSAGE</button>
                     </form>
                     
-                    <button class="dialogue-option" onclick="goBack()" style="margin-top: 2rem;">
-                        Go back to dialogue options
+                    <button class="dialogue-option" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" style="margin-top: 2rem;">
+                        Go back to top
                     </button>
+                    
                 </div>
 
                 <div class="contact-info" id="contact-info">
@@ -454,7 +455,7 @@
                             <span class="social-icon">📧</span>
                             <div>
                                 <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">EMAIL</div>
-                                <div>your.email@example.com</div>
+                                <div> <a href="mailto:varadsarang@gmail.com">varadsarang@gmail.com</a></div>
                             </div>
                         </div>
                         
@@ -462,7 +463,7 @@
                             <span class="social-icon">📱</span>
                             <div>
                                 <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">PHONE</div>
-                                <div>+91 12345 67890</div>
+                                <div>Not Available</div>
                             </div>
                         </div>
                         
@@ -494,7 +495,7 @@
                             </div>
                         </a>
                         
-                        <a href="#" class="social-item" target="_blank">
+                        <a href="https://github.com/Varad-Sarang/pixel_portfolio.git" class="social-item" target="_blank">
                             <span class="social-icon">🐙</span>
                             <div>
                                 <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">GITHUB</div>
@@ -502,7 +503,7 @@
                             </div>
                         </a>
                         
-                        <a href="#" class="social-item" target="_blank">
+                        <a href="https://x.com/VaradSarang" class="social-item" target="_blank">
                             <span class="social-icon">🐦</span>
                             <div>
                                 <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">TWITTER</div>
@@ -510,7 +511,7 @@
                             </div>
                         </a>
                         
-                        <a href="#" class="social-item" target="_blank">
+                        <a href="https://www.instagram.com/_real_varad/" class="social-item" target="_blank">
                             <span class="social-icon">📷</span>
                             <div>
                                 <div class="pixel-font" style="font-size: 10px; margin-bottom: 0.5rem;">INSTAGRAM</div>
@@ -518,10 +519,11 @@
                             </div>
                         </a>
                     </div>
-                    
-                    <button class="dialogue-option" onclick="goBack()" style="margin-top: 2rem;">
-                        Go back to dialogue options
+                    <a href="/"> 
+                    <button class="dialogue-option" onclick="goBack()" style="margin-top: 2rem; background-color: var(--retro-info); color: var(--retro-highlight); border: 3px outset var(--retro-highlight);">
+                       Go back to dialogue options
                     </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -602,6 +604,18 @@
             });
         }
     });
+
+   
+        function goBack() {
+            // Example: hide the contact window and show the dialogue options
+            const contactWindow = document.querySelector('#contact-window');
+            const dialogueOptions = document.querySelector('#dialogue-options');
+        
+            if (contactWindow) contactWindow.style.display = 'none';
+            if (dialogueOptions) dialogueOptions.style.display = 'block';
+        }
+        
+        
 </script>
 </body>
 </html>
